@@ -59,13 +59,13 @@ export function EnterCodeButton() {
             <div className="flex justify-between gap-2">
               <button
                 onClick={handleClose}
-                className="roundedtext-white hover:underline"
+                className="rounded text-white hover:underline"
               >
                 → Cancel
               </button>
               <button
                 onClick={handleSave}
-                className="roundedtext-white hover:underline"
+                className="rounded text-white hover:underline"
               >
                 → Save
               </button>

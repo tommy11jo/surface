@@ -4,9 +4,9 @@ import { JoinWaitlistButton } from "./JoinWaitlistButton";
 
 export function Header() {
   return (
-    <div className="bg-sand flex w-full flex-row items-center justify-between px-10 py-3">
+    <div className="flex w-full flex-row items-center justify-between bg-sand px-2 py-2 sm:px-10">
       <h3 className="text-xl font-semibold">Surface</h3>
-      <div className="flex flex-row gap-4">
+      <div className="flex flex-row gap-2 sm:gap-4">
         <EnterCodeButton />
         <JoinWaitlistButton />
       </div>
