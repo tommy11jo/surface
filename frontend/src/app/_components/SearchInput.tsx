@@ -15,11 +15,12 @@ export type SourceMetadata = {
 type SearchInputProps = {
   setSourceMetadatas: (value: SourceMetadata[]) => void;
 };
-
+const LOADING_STATE = "🟡 Loading...";
+const IDLE_STATE = "🟢 Search";
 export function SearchInput({ setSourceMetadatas }: SearchInputProps) {
   const [query, setQuery] = useState("");
   const [inputRef, setInputRef] = useState<HTMLInputElement | null>(null);
-  const [statusText, setStatusText] = useState("🟢 Search");
+  const [statusText, setStatusText] = useState(IDLE_STATE);
 
   useEffect(() => {
     if (inputRef) inputRef.focus();
@@ -33,7 +34,7 @@ export function SearchInput({ setSourceMetadatas }: SearchInputProps) {
         setStatusText("🔴 Query must be <200 chars.");
         return;
       }
-      setStatusText("🟡 Loading...");
+      setStatusText(LOADING_STATE);
       setSourceMetadatas([]);
       try {
         const startTime = performance.now();
@@ -77,6 +78,7 @@ export function SearchInput({ setSourceMetadatas }: SearchInputProps) {
           onKeyDown={handleKeyDown}
           ref={setInputRef}
           spellCheck={false}
+          disabled={statusText === LOADING_STATE}
           className="w-full rounded-lg border border-gray-500 p-2 pl-10 text-lg focus:outline-none focus:ring-1 focus:ring-gray-400 sm:w-96"
         />
       </div>

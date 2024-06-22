@@ -1,31 +1,65 @@
 import axios from "axios"
-import { search, SafeSearchType } from "duck-duck-scrape"
 import { generateLLMResponse } from "./llmService"
+import SerpApi from "google-search-results-nodejs"
+import {
+  getRerankPrompt,
+  extractRanksFromResponse,
+  orderByScores,
+} from "./rerankService"
+import { SourceMetadata } from "./types"
+import {
+  getWebpageSummaryPrompt,
+  extractSummaryFromResponse,
+  searchByDDGS,
+} from "./summaryService"
+const serpApi = new SerpApi.GoogleSearch(process.env.SERPAPI_KEY)
 
 const NUM_SOURCES_TO_PROCESS = 3
-const NUM_SOURCES_TO_SHOW = 30
 
-export type SourceMetadata = {
-  url: string
-  title: string
-  icon: string
-  hostname: string
-  textContent: string | undefined
-  summary?: string
-}
-
-export const generateSourceMetadatasService = async (query: string) => {
+export const generateSourceMetadatasService = async (
+  query: string,
+  log: boolean = true
+) => {
   if (query.length >= 200) throw new Error("Query must be <200 chars.")
+  const startTime = Date.now()
+
+  const ddgsStartTime = Date.now()
   const sourceMetadatas = await searchByDDGS(query)
+  // const sourceMetadatas = await searchBySerpApi(query)
+  const rerankPrompt = getRerankPrompt(sourceMetadatas, query)
+  const rerankStartTime = Date.now()
+  const rerankResponse = await generateLLMResponse(rerankPrompt)
+  const rerankScores = await extractRanksFromResponse(rerankResponse)
+  const rerankIndices = orderByScores(rerankScores)
+  const rerankedSourceMetadatas = rerankIndices.map(
+    (index) => sourceMetadatas[index]
+  )
+  const rerankEndTime = Date.now()
+  if (log) {
+    const rerankTime = rerankEndTime - rerankStartTime
+    console.log(`Rerank time: ${rerankTime / 1000}s`)
+  }
+  const ddgsEndTime = Date.now()
+  if (log) {
+    const ddgsTime = ddgsEndTime - ddgsStartTime
+    console.log(`Search time: ${ddgsTime / 1000}s`)
+  }
+
+  const textFetchStartTime = Date.now()
   const textContents: (string | undefined)[] = await Promise.all(
-    sourceMetadatas.map((result, i) =>
+    rerankedSourceMetadatas.map((result, i) =>
       i < NUM_SOURCES_TO_PROCESS ? getTextContent(result.url, true) : undefined
     )
   )
+  const textFetchEndTime = Date.now()
+  if (log) {
+    const textFetchTime = textFetchEndTime - textFetchStartTime
+    console.log(`Text fetch time: ${textFetchTime / 1000}s`)
+  }
   textContents.forEach(
-    (textContent, i) => (sourceMetadatas[i].textContent = textContent)
+    (textContent, i) => (rerankedSourceMetadatas[i].textContent = textContent)
   )
-  const sourceMetadatasWithText = sourceMetadatas.filter(
+  const sourceMetadatasWithText = rerankedSourceMetadatas.filter(
     (metadata) => metadata.textContent
   )
 
@@ -33,13 +67,15 @@ export const generateSourceMetadatasService = async (query: string) => {
     getWebpageSummaryPrompt(metadata.textContent!, metadata.hostname)
   )
 
-  const llmStartTime = Date.now()
+  const summaryStartTime = Date.now()
   const llmSummaryResponses = await Promise.all(
     overviewPrompts.map((prompt) => generateLLMResponse(prompt))
   )
-  const llmEndTime = Date.now()
-  const totalTime = llmEndTime - llmStartTime
-  console.log(`Total LLM response time: ${totalTime / 1000}s`)
+  const summaryEndTime = Date.now()
+  if (log) {
+    const summaryTime = summaryEndTime - summaryStartTime
+    console.log(`Summary time: ${summaryTime / 1000}s`)
+  }
 
   const sourceSummaries = llmSummaryResponses
     .map((response) =>
@@ -60,7 +96,7 @@ export const generateSourceMetadatasService = async (query: string) => {
     }
   })
 
-  const sourceMetadatasWithoutOverviews = sourceMetadatas.filter(
+  const sourceMetadatasWithoutOverviews = rerankedSourceMetadatas.filter(
     (metadata) => !metadata.summary
   )
   const updatedMetadatas = [
@@ -68,72 +104,72 @@ export const generateSourceMetadatasService = async (query: string) => {
     ...sourceMetadatasWithoutOverviews,
   ].map(({ textContent, ...rest }) => rest)
 
+  const endTime = Date.now()
+  const totalTime = endTime - startTime
+  console.log(`Total time: ${totalTime / 1000}s`)
   return updatedMetadatas
 }
 
-const INIT_SUMMARY_MARKER = "### Initial Summary"
-const FINAL_SUMMARY_MARKER = "### Final Summary"
-export const getWebpageSummaryPrompt = (
-  sourceText: string,
-  hostname: string
-) => {
-  const approxWordsCutoff = 1000
-  const sentenceRange =
-    sourceText.length > 6 * approxWordsCutoff ? "4-6" : "2-4"
-  const prompt = `Your job is to summarize the text of a webpage on ${hostname}.
-If the text is empty or garbled or blocked by network security, just output "None".
-Otherwise, write your response in this format, applying these descriptions:
-## Summary Attempts
-${INIT_SUMMARY_MARKER}
-{write a precis of the text in ${sentenceRange} sentences.}
-
-${FINAL_SUMMARY_MARKER}
-{rewrite the summary to make it more concise, simple, and entity dense. Make every word count.}
-
-
-Webpage Text:
-${sourceText}
-  `
-  console.log("prompt is ", prompt)
-  return prompt
-}
-
-export const extractSummaryFromResponse = (response: string): string => {
-  const finalSummaryStart = response.lastIndexOf(FINAL_SUMMARY_MARKER)
-  if (finalSummaryStart === -1) {
-    throw new Error("Final summary not found in the response")
-  }
-
-  const summaryStart = finalSummaryStart + FINAL_SUMMARY_MARKER.length
-  return response.slice(summaryStart).trim()
-}
-
-export const searchByDDGS = async (query: string, log: boolean = true) => {
-  const searchResults = await search(query, {
-    safeSearch: SafeSearchType.STRICT,
-  })
-
-  const sourceMetadatas: SourceMetadata[] = searchResults.results.map(
-    (result, i) => ({
-      url: result.url,
-      title: result.title,
-      icon: result.icon,
-      hostname: result.hostname,
-      textContent: undefined,
+export const searchBySerpApi = async (
+  query: string,
+  count: number = 20,
+  log: boolean = true
+): Promise<SourceMetadata[]> => {
+  try {
+    const response = await new Promise<any>((resolve, reject) => {
+      serpApi.json(
+        {
+          q: query,
+          engine: "google",
+          location: "United States",
+          hl: "en",
+          gl: "us",
+          num: count,
+        },
+        (data: any) => {
+          resolve(data)
+        }
+      )
     })
-  )
-  return sourceMetadatas.slice(0, NUM_SOURCES_TO_SHOW)
+
+    const sourceMetadatas: SourceMetadata[] = response.organic_results.map(
+      (result: any) => ({
+        url: result.link,
+        title: result.title,
+        icon: result.favicon,
+        hostname: new URL(result.link).hostname,
+        textContent: result.snippet,
+      })
+    )
+
+    if (log) {
+      console.log(sourceMetadatas)
+    }
+
+    return sourceMetadatas
+  } catch (error) {
+    console.error("Error fetching search results:", error)
+    throw error
+  }
 }
 
 export const getTextContent = async (
   url: string,
   trim: boolean
 ): Promise<string | undefined> => {
-  console.log("url is", url)
+  // r.jina.ai does not work on reddit
+  // use google's cache for reddit, though this is deprecated
+  if (url.includes("reddit.com")) {
+    const result = await fetch(
+      `http://webcache.googleusercontent.com/search?q=cache:${url}`
+    )
+    console.log(result)
+  }
   try {
     const approxWordsCutoff = 3000
     const response = await axios.get(`https://r.jina.ai/${url}`, {
       responseType: "text",
+      timeout: 5000,
     })
 
     let data = response.data

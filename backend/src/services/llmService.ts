@@ -1,8 +1,8 @@
 import axios from "axios"
 const generateFireworkResponse = async (
-  query: string,
+  prompt: string,
   model: string = "accounts/fireworks/models/llama-v3-70b-instruct",
-  log: boolean = true
+  log: boolean = false
 ) => {
   const url = "https://api.fireworks.ai/inference/v1/chat/completions"
   const headers = {
@@ -15,7 +15,7 @@ const generateFireworkResponse = async (
     messages: [
       {
         role: "user",
-        content: query,
+        content: prompt,
       },
     ],
   }
