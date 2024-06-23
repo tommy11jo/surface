@@ -1,8 +1,8 @@
 import { Router } from "express"
-import { generateSourceMetadatas } from "../controllers/searchController"
+import { generateSourceMetadatasEndpoint } from "../controllers/searchController"
 
 const router = Router()
 
-router.post("/search", generateSourceMetadatas)
+router.post("/search", generateSourceMetadatasEndpoint)
 
 export default router

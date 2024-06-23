@@ -21,8 +21,8 @@ You will score each source with two numbers:
 However, if a source is not relevant, then you do not need to score it. Just leave it out.
 If you are unsure, use 5 as the score.
 
-Imagine the user as the average hacker news reader.
-They prefer content that is informative, interesting, or data-driven such as slatestarcodex.
+Imagine the user is a smart hacker news reader.
+They prefer content that is informative, interesting, or data-driven.
 They prefer blogs, forums, or trusted websites that are likely to have relevant content.
 
 Example format:
@@ -36,17 +36,17 @@ Example format:
 <Source 10 info>
 Question: <question>
 Answer:
-### Relevance scores
-## Source 0
+## Relevance scores
+### Source 0
 Content: 4
 User: 6
-## Source 1
+### Source 1
 Content: 10
 User: 7
-## Source 4
+### Source 4
 Content: 9
 User: 3
-## Source 6:
+### Source 6:
 Content: 5
 User: 9
 
@@ -56,7 +56,6 @@ Question: ${query}
 Answer:
 ### Relevance scores
 `
-  console.log("rerank prompt", prompt)
   return prompt
 }
 
@@ -64,7 +63,7 @@ export async function extractRanksFromResponse(
   response: string
 ): Promise<[number, number, number][]> {
   const rerankScores: [number, number, number][] = []
-  const regex = /## Source (\d+)\s+Content:\s*(\d+)\s*User:\s*(\d+)/g
+  const regex = /### Source (\d+)\s+Content:\s*(\d+)\s*User:\s*(\d+)/g
   let match: RegExpExecArray | null
 
   while ((match = regex.exec(response)) !== null) {

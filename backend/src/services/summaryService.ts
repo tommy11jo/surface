@@ -11,15 +11,16 @@ export const getWebpageSummaryPrompt = (
 ) => {
   const approxWordsCutoff = 1000
   const sentenceRange =
-    sourceText.length > 6 * approxWordsCutoff ? "2-6" : "2-4"
+    sourceText.length > 6 * approxWordsCutoff ? "2-4" : "1-2"
   const prompt = `Your job is to summarize the main content of a webpage on ${hostname}.
-Ignore the navigation content.
-
 If the text has a captcha, is blocked, is empty, or is malformed, just output "${FAILURE_WORD}".
-Otherwise, write a summary of the text in ${sentenceRange} sentences.
-The summary should be concise, entity-dense, and informational.
 
-Then, rewrite the summary and improve it if you can.
+Otherwise, write a summary of the text in ${sentenceRange} sentences.
+Write these summaries in the style of Paul Graham.
+Write plainly and concisely, using simple language.
+Be specific and concrete.
+
+Then, rewrite the summary and make it more entity-dense and simple.
 Remove any mention of title or hostname.
 Make every word count.
 

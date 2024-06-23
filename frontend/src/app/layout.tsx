@@ -1,4 +1,5 @@
 import "~/styles/globals.css";
+import { Header } from "./_components/Header";
 
 export const metadata = {
   title: "Surface",
@@ -17,7 +18,12 @@ export default function RootLayout({
 }) {
   return (
     <html lang="en">
-      <body>{children}</body>
+      <body>
+        <main className="flex min-h-screen flex-col items-center bg-lightest-sand text-base text-black sm:text-lg">
+          <Header />
+          {children}
+        </main>
+      </body>
     </html>
   );
 }

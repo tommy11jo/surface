@@ -17,7 +17,8 @@
     "dotenv": "^16.4.5",
     "duck-duck-scrape": "^2.2.5",
     "express": "^4.19.2",
-    "google-search-results-nodejs": "^2.1.0"
+    "google-search-results-nodejs": "^2.1.0",
+    "openai": "^4.52.0"
   },
   "devDependencies": {
     "@types/cors": "^2.8.17",

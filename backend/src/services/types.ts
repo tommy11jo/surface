@@ -3,6 +3,13 @@ export type SourceMetadata = {
   title: string
   icon: string
   hostname: string
-  textContent: string | undefined
+  textContent?: string | undefined
   summary?: string
+}
+
+export type Snippet = {
+  url: string
+  hostname: string
+  content: string
+  theme: string
 }

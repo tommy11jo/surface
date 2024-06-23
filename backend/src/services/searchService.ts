@@ -12,20 +12,28 @@ import {
   extractSummaryFromResponse,
   searchByDDGS,
 } from "./summaryService"
+import { convert } from "html-to-text"
 const serpApi = new SerpApi.GoogleSearch(process.env.SERPAPI_KEY)
 
-const NUM_SOURCES_TO_PROCESS = 3
+const NUM_SOURCES_TO_PROCESS = 4
 
-export const generateSourceMetadatasService = async (
+export const generateSourceMetadatas = async (
   query: string,
+  useSerpApi: boolean = true,
   log: boolean = true
-) => {
+): Promise<SourceMetadata[]> => {
   if (query.length >= 200) throw new Error("Query must be <200 chars.")
   const startTime = Date.now()
 
-  const ddgsStartTime = Date.now()
-  const sourceMetadatas = await searchByDDGS(query)
-  // const sourceMetadatas = await searchBySerpApi(query)
+  const searchStartTime = Date.now()
+  const sourceMetadatas = useSerpApi
+    ? await searchBySerpApi(query)
+    : await searchByDDGS(query)
+  const searchEndTime = Date.now()
+  if (log) {
+    const ddgsTime = searchEndTime - searchStartTime
+    console.log(`Search time: ${ddgsTime / 1000}s`)
+  }
   const rerankPrompt = getRerankPrompt(sourceMetadatas, query)
   const rerankStartTime = Date.now()
   const rerankResponse = await generateLLMResponse(rerankPrompt)
@@ -39,11 +47,6 @@ export const generateSourceMetadatasService = async (
     const rerankTime = rerankEndTime - rerankStartTime
     console.log(`Rerank time: ${rerankTime / 1000}s`)
   }
-  const ddgsEndTime = Date.now()
-  if (log) {
-    const ddgsTime = ddgsEndTime - ddgsStartTime
-    console.log(`Search time: ${ddgsTime / 1000}s`)
-  }
 
   const textFetchStartTime = Date.now()
   const textContents: (string | undefined)[] = await Promise.all(
@@ -56,6 +59,7 @@ export const generateSourceMetadatasService = async (
     const textFetchTime = textFetchEndTime - textFetchStartTime
     console.log(`Text fetch time: ${textFetchTime / 1000}s`)
   }
+
   textContents.forEach(
     (textContent, i) => (rerankedSourceMetadatas[i].textContent = textContent)
   )
@@ -102,7 +106,7 @@ export const generateSourceMetadatasService = async (
   const updatedMetadatas = [
     ...sourceMetadatasWithOverview,
     ...sourceMetadatasWithoutOverviews,
-  ].map(({ textContent, ...rest }) => rest)
+  ]
 
   const endTime = Date.now()
   const totalTime = endTime - startTime
@@ -113,7 +117,7 @@ export const generateSourceMetadatasService = async (
 export const searchBySerpApi = async (
   query: string,
   count: number = 20,
-  log: boolean = true
+  log: boolean = false
 ): Promise<SourceMetadata[]> => {
   try {
     const response = await new Promise<any>((resolve, reject) => {
@@ -153,34 +157,39 @@ export const searchBySerpApi = async (
   }
 }
 
+const MAX_WORDS_PER_SOURCE = 2000
+const GOOGLE_CACHE_ERROR_STR = "Error 404 (Not Found)!!1"
 export const getTextContent = async (
   url: string,
-  trim: boolean
+  trim: boolean,
+  approxWordsCutoff: number = MAX_WORDS_PER_SOURCE
 ): Promise<string | undefined> => {
   // r.jina.ai does not work on reddit
   // use google's cache for reddit, though this is deprecated
   if (url.includes("reddit.com")) {
-    const result = await fetch(
+    const response = await fetch(
       `http://webcache.googleusercontent.com/search?q=cache:${url}`
     )
-    console.log(result)
+    const html = await response.text()
+    if (html.includes(GOOGLE_CACHE_ERROR_STR)) return undefined
+    return htmlToText(html)
   }
   try {
-    const approxWordsCutoff = 3000
     const response = await axios.get(`https://r.jina.ai/${url}`, {
       responseType: "text",
-      timeout: 5000,
+      timeout: 6000,
     })
 
     let data = response.data
     // Remove markdown links, keeping the visible text
-    data = data.replace(/\[([^\]]+)\]\([^)]+\)/g, "$1")
+    data = data.replace(/\[([^\[\]]*)\]\((.*?)\)/gm, "$1")
     // Remove images
-    data = data.replace(/!\[.*?\]\(.*?\)/g, "")
+    data = data.replace(/!\[([^\[\]]*)\]\((.*?)\)/gm, "")
+    data = data.replace(/\[([^\]]+)\]\([^)]+\)/g, "$1")
 
     if (trim && data.length > approxWordsCutoff * 6) {
-      const firstPart = data.slice(0, 9000)
-      const lastPart = data.slice(-9000)
+      const firstPart = data.slice(0, approxWordsCutoff * 3)
+      const lastPart = data.slice(-approxWordsCutoff * 3)
       return firstPart + "\n\n[CONTENT REMOVED]\n\n" + lastPart
     }
 
@@ -192,4 +201,44 @@ export const getTextContent = async (
     )
     return undefined
   }
+}
+
+function htmlToText(html: string, maxWords: number = MAX_WORDS_PER_SOURCE) {
+  const textContent = convert(html, {
+    baseElements: { selectors: ["body"] },
+    formatters: {
+      headingFormatter: function (elem, walk, builder, formatOptions) {
+        builder.openBlock({
+          leadingLineBreaks: formatOptions.leadingLineBreaks || 1,
+        })
+        walk(elem.children, builder)
+        builder.closeBlock({
+          trailingLineBreaks: formatOptions.trailingLineBreaks || 1,
+        })
+      },
+    },
+    selectors: [
+      {
+        selector: "a",
+        options: { ignoreHref: true },
+      },
+      {
+        selector: "img",
+        format: "skip",
+      },
+      {
+        selector: "svg",
+        format: "skip",
+      },
+      { selector: "h1", format: "headingFormatter" },
+      { selector: "h2", format: "headingFormatter" },
+      { selector: "h3", format: "headingFormatter" },
+      { selector: "h4", format: "headingFormatter" },
+      { selector: "h5", format: "headingFormatter" },
+      { selector: "h6", format: "headingFormatter" },
+    ],
+    wordwrap: false,
+  })
+  const trimmedTextContent = textContent.substring(0, maxWords * 6)
+  return trimmedTextContent
 }

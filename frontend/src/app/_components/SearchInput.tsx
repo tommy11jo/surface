@@ -2,25 +2,27 @@
 
 import axios from "axios";
 import { useEffect, useState } from "react";
+import { type SourceMetadata, type Snippet } from "./types";
+import { useRouter } from "next/navigation";
 
-// copied from backend
-export type SourceMetadata = {
-  url: string;
-  title: string;
-  icon: string;
-  hostname: string;
-  textContent: string | undefined;
-  summary?: string;
-};
 type SearchInputProps = {
+  query: string;
+  setQuery: (value: string) => void;
   setSourceMetadatas: (value: SourceMetadata[]) => void;
+  setSnippets: (value: Snippet[]) => void;
 };
+
 const LOADING_STATE = "🟡 Loading...";
 const IDLE_STATE = "🟢 Search";
-export function SearchInput({ setSourceMetadatas }: SearchInputProps) {
-  const [query, setQuery] = useState("");
+export function SearchInput({
+  query,
+  setQuery,
+  setSourceMetadatas,
+  setSnippets,
+}: SearchInputProps) {
   const [inputRef, setInputRef] = useState<HTMLInputElement | null>(null);
   const [statusText, setStatusText] = useState(IDLE_STATE);
+  const router = useRouter();
 
   useEffect(() => {
     if (inputRef) inputRef.focus();
@@ -33,17 +35,24 @@ export function SearchInput({ setSourceMetadatas }: SearchInputProps) {
       if (query.length >= 200) {
         setStatusText("🔴 Query must be <200 chars.");
         return;
+      } else if (query.length === 0) {
+        setStatusText("🔴 Query cannot be empty");
+        return;
       }
       setStatusText(LOADING_STATE);
       setSourceMetadatas([]);
+      setSnippets([]);
       try {
         const startTime = performance.now();
-        const results = await generateSourceMetadatas(query);
+        const { sourceMetadatas, snippets } =
+          await generateSourceMetadatas(query);
         const endTime = performance.now();
         setStatusText(
           `🟢 Complete in ${((endTime - startTime) / 1000).toFixed(2)}s`,
         );
-        setSourceMetadatas(results);
+        setSourceMetadatas(sourceMetadatas);
+        setSnippets(snippets);
+        router.push(`/?example=false&q=${encodeURIComponent(query)}`);
       } catch (error) {
         let errorMessage = "Unknown error occurred.";
         if (error instanceof Error) {
@@ -51,16 +60,18 @@ export function SearchInput({ setSourceMetadatas }: SearchInputProps) {
         }
         setStatusText(`🔴 Error: ${errorMessage}`);
       }
-      setQuery("");
     }
   };
 
   const generateSourceMetadatas = async (query: string) => {
     try {
-      const response = await axios.post("http://localhost:8000/api/search", {
+      const { data } = await axios.post<{
+        sourceMetadatas: SourceMetadata[];
+        snippets: Snippet[];
+      }>("http://localhost:8000/api/search", {
         query,
       });
-      return response.data as SourceMetadata[];
+      return { sourceMetadatas: data.sourceMetadatas, snippets: data.snippets };
     } catch (error) {
       console.error("An error occurred while fetching data:", error);
       throw error;
