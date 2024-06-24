@@ -110,7 +110,7 @@ export const generateSourceMetadatas = async (
 
   const endTime = Date.now()
   const totalTime = endTime - startTime
-  console.log(`Total time: ${totalTime / 1000}s`)
+  console.log(`Total source list time: ${totalTime / 1000}s`)
   return updatedMetadatas
 }
 
@@ -162,7 +162,8 @@ const GOOGLE_CACHE_ERROR_STR = "Error 404 (Not Found)!!1"
 export const getTextContent = async (
   url: string,
   trim: boolean,
-  approxWordsCutoff: number = MAX_WORDS_PER_SOURCE
+  approxWordsCutoff: number = MAX_WORDS_PER_SOURCE,
+  jinaTimeout: number = 9000
 ): Promise<string | undefined> => {
   // r.jina.ai does not work on reddit
   // use google's cache for reddit, though this is deprecated
@@ -177,7 +178,7 @@ export const getTextContent = async (
   try {
     const response = await axios.get(`https://r.jina.ai/${url}`, {
       responseType: "text",
-      timeout: 6000,
+      timeout: jinaTimeout,
     })
 
     let data = response.data

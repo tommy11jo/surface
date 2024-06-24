@@ -4,6 +4,7 @@ export type Snippet = {
   hostname: string;
   content: string;
   theme: string;
+  title: string;
 };
 
 // copied from backend

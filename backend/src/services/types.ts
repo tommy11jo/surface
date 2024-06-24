@@ -10,6 +10,7 @@ export type SourceMetadata = {
 export type Snippet = {
   url: string
   hostname: string
+  title: string
   content: string
   theme: string
 }

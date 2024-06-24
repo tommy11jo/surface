@@ -96,7 +96,7 @@ const generateOpenAIResponse = async (
     return textContent ?? ""
   } catch (error) {
     console.error("Error calling OpenAI API:", error)
-    return null
+    throw error
   }
 }
 
@@ -131,6 +131,6 @@ async function getClaudeResponse(
   }
 }
 // export const generateLLMResponse = getClaudeResponse
-// export const generateLLMResponse = generateOpenAIResponse
-export const generateLLMResponse = generateFireworkResponse
+export const generateLLMResponse = generateOpenAIResponse
+// export const generateLLMResponse = generateFireworkResponse
 // export const generateLLMResponse = generatePerplexityResponse

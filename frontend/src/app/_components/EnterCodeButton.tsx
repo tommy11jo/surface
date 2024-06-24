@@ -42,7 +42,7 @@ export function EnterCodeButton() {
         onClick={handleOpen}
         className="px-4 py-2 font-semibold hover:underline"
       >
-        → Enter Code
+        Enter Code →
       </button>
 
       {isOpen && (
@@ -57,17 +57,11 @@ export function EnterCodeButton() {
               className="mb-4 mt-2 w-full border p-2"
             />
             <div className="flex justify-between gap-2">
-              <button
-                onClick={handleClose}
-                className="rounded text-white hover:underline"
-              >
-                → Cancel
+              <button onClick={handleClose} className="rounded hover:underline">
+                Cancel →
               </button>
-              <button
-                onClick={handleSave}
-                className="rounded text-white hover:underline"
-              >
-                → Save
+              <button onClick={handleSave} className="rounded hover:underline">
+                Save →
               </button>
             </div>
           </div>

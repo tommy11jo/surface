@@ -21,9 +21,9 @@ You will score each source with two numbers:
 However, if a source is not relevant, then you do not need to score it. Just leave it out.
 If you are unsure, use 5 as the score.
 
-Imagine the user is a smart hacker news reader.
+Imagine the user is smart and rational.
 They prefer content that is informative, interesting, or data-driven.
-They prefer blogs, forums, or trusted websites that are likely to have relevant content.
+They prefer blogs, forums, trusted news sites, and expert opinions.
 
 Example format:
 ## Sources

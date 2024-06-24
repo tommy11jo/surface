@@ -4,13 +4,21 @@ import { generateLLMResponse } from "./llmService"
 export async function generateSnippets(
   query: string,
   sourceMetadatas: SourceMetadata[],
-  maxSourcesToConsider: number = 2,
-  maxQuotes: number = 5
+  maxSourcesToConsider: number = 3,
+  // maxSourcesToConsider: number = 2,
+  maxQuotes: number = 5,
+  log: boolean = true
 ) {
   sourceMetadatas = sourceMetadatas.slice(0, maxSourcesToConsider)
-  const snippetPrompt = getOverviewPrompt(query, sourceMetadatas)
-  const snippetResponse = await generateLLMResponse(snippetPrompt)
-  const fuzzyQuotes = extractSnippetsFromResponse(snippetResponse)
+  const overviewPrompt = getOverviewPrompt(query, sourceMetadatas)
+  const overviewStartTime = Date.now()
+  const overviewResponse = await generateLLMResponse(overviewPrompt)
+  const overviewEndTime = Date.now()
+  if (log) {
+    const overviewTime = overviewEndTime - overviewStartTime
+    console.log(`Total overview time: ${overviewTime / 1000}s`)
+  }
+  const fuzzyQuotes = extractSnippetsFromResponse(overviewResponse)
   const snippets: Snippet[] = fuzzyQuotes.map((contentAndIndex) => {
     const [theme, content, index] = contentAndIndex
     if (index >= sourceMetadatas.length)
@@ -18,6 +26,7 @@ export async function generateSnippets(
     return {
       url: sourceMetadatas[index].url,
       hostname: sourceMetadatas[index].hostname,
+      title: sourceMetadatas[index].title,
       content: content,
       theme: theme,
     }
@@ -34,13 +43,19 @@ ${metadata.textContent}
 `
     )
     .join("\n\n")
-  const prompt = `Your job is to generate 2-3 themes or topics from the texts that are relevant to the user's query.
+  const prompt = `Your job is to write a good overview given the user's query.
+Generate 2-3 themes or topics that are directly relevant or are likely of interest.
+
+Themes:
 Each theme is a core point of interest to the user.
 Each theme has 1-3 corresponding snippets.
+
+Snippets:
+Each snippet should contain a unique chunk of insight. 
 Each snippet is self-contained and informational.
 A snippet is typically 1-3 sentences.
 A snippet must be a direct quote, exactly matching the original text.
-Each snippet should contain a chunk of insight. 
+A snippet can contain non-consecutive sentences, by using an elipsis (e.g. <intro context>... <main point>)
 
 Example format:
 ## Provided Sources

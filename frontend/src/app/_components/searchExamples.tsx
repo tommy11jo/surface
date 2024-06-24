@@ -124,6 +124,7 @@ const creatineSnippets = [
     content:
       "The majority of research suggests creatine supplementation is safe when taken at the recommended daily dose.",
     theme: "Creatine's General Safety",
+    title: "Is Creatine Safe? And More Side Effect FAQs",
   },
   {
     url: "https://www.healthline.com/nutrition/creatine-safety-and-side-effects",
@@ -131,6 +132,7 @@ const creatineSnippets = [
     content:
       "The International Society of Sports Nutrition (ISSN) regards creatine as safe and concludes it’s one of the most beneficial sports supplements available.",
     theme: "Creatine's General Safety",
+    title: "Is Creatine Safe? And More Side Effect FAQs",
   },
   {
     url: "https://www.health.harvard.edu/exercise-and-fitness/what-is-creatine-potential-benefits-and-risks-of-this-popular-supplement",
@@ -138,6 +140,7 @@ const creatineSnippets = [
     content:
       "Otherwise, an adult dose of 3 to 5 grams of creatine daily is safe.",
     theme: "Creatine's General Safety",
+    title: "What is creatine? Potential benefits and risks of this ...",
   },
   {
     url: "https://www.healthline.com/nutrition/creatine-safety-and-side-effects",
@@ -145,6 +148,7 @@ const creatineSnippets = [
     content:
       "Despite its research-backed benefits, some people avoid creatine because they worry about potential side effects. These are thought to include kidney damage, liver damage, kidney stones, weight gain, bloating, dehydration, hair loss, muscle cramps, digestive concerns, rhabdomyolysis.",
     theme: "Common Myths and Misconceptions about Creatine",
+    title: "Is Creatine Safe? And More Side Effect FAQs",
   },
   {
     url: "https://www.healthline.com/nutrition/creatine-safety-and-side-effects",
@@ -152,6 +156,7 @@ const creatineSnippets = [
     content:
       "There’s a misconception that creatine is suitable only for adult male athletes. Yet, no research suggests it’s unsuitable in recommended doses for adult females.",
     theme: "Common Myths and Misconceptions about Creatine",
+    title: "Is Creatine Safe? And More Side Effect FAQs",
   },
 ];
 const educationSources = [
@@ -247,6 +252,7 @@ const educationSnippets = [
     content:
       "Caplan—an economist at George Mason University, home of perhaps the most notoriously libertarian economics department on the planet—holds that most of the benefit of education to students (he estimates around 80%, but certainly more than half) is about signalling the students’ preexisting abilities, rather than teaching or improving the students in any way.",
     theme: 'The Central Argument of "The Case Against Education"',
+    title: "Review of Bryan Caplan's The Case Against Education",
   },
   {
     url: "https://www.reddit.com/r/TheMotte/comments/cua2dr/review_the_case_against_education_bryan_caplan/",
@@ -254,6 +260,7 @@ const educationSnippets = [
     content:
       "It marshals an impressive amount and quality of evidence that enormous amounts of the education system are socially wasteful and we’d be better off without them.",
     theme: 'The Central Argument of "The Case Against Education"',
+    title: "Review: The Case Against Education, Bryan Caplan",
   },
   {
     url: "https://www.reddit.com/r/TheMotte/comments/cua2dr/review_the_case_against_education_bryan_caplan/",
@@ -261,6 +268,7 @@ const educationSnippets = [
     content:
       "Most of what we’re taught in school is useless. Most of what we’re taught we forget, and plenty of us never learn enough of most subjects to really forget them. What we do learn and remember is not just mostly useless, we are almost totally incapable of generalizing from it.",
     theme: "The Inefficacy of Current Educational Practices",
+    title: "Review: The Case Against Education, Bryan Caplan",
   },
   {
     url: "https://scottaaronson.blog/?p=3678",
@@ -268,6 +276,7 @@ const educationSnippets = [
     content:
       "In his book, Caplan presents dozens of tables and graphs, but he also repeatedly asks his readers to consult their own memories—exploiting the fact that we all have firsthand experience of school.",
     theme: "The Inefficacy of Current Educational Practices",
+    title: "Review of Bryan Caplan's The Case Against Education",
   },
 ];
 const startupSources = [
@@ -356,6 +365,7 @@ const startupSources = [
     hostname: "www.startupdecisions.com.sg",
   },
 ];
+
 const startupSnippets = [
   {
     url: "https://paulgraham.com/startupideas.html",
@@ -363,6 +373,7 @@ const startupSnippets = [
     content:
       "The way to get startup ideas is not to try to think of startup ideas. It's to look for problems, preferably problems you have yourself.",
     theme: "Focus on Problems, Not Solutions",
+    title: "How to Get Startup Ideas",
   },
   {
     url: "https://www.ycombinator.com/library/8g-how-to-get-startup-ideas",
@@ -370,6 +381,7 @@ const startupSnippets = [
     content:
       "The third mistake is to start with a solution instead of a problem. And I'll give an example. So, imagine you come up with a startup idea \"Uber for plumbers.\" It's an app, you push a button, a plumber shows up. This is a solution. What problem does this solve? I don't know. Maybe it's hard to find plumbers. That might be a real problem, but my point is if you come up with an idea like this, you are starting with a solution.",
     theme: "Focus on Problems, Not Solutions",
+    title: "How to get startup ideas",
   },
   {
     url: "https://paulgraham.com/startupideas.html",
@@ -377,6 +389,7 @@ const startupSnippets = [
     content:
       "The very best startup ideas tend to have three things in common: they're something the founders themselves want, that they themselves can build, and that few others realize are worth doing. Microsoft, Apple, Yahoo, Google, and Facebook all began this way.",
     theme: "Leverage Your Expertise and Experiences",
+    title: "How to Get Startup Ideas",
   },
   {
     url: "https://www.ycombinator.com/library/8g-how-to-get-startup-ideas",
@@ -384,22 +397,741 @@ const startupSnippets = [
     content:
       "You start with what your team is especially good at, and think of ideas that you would have an unfair advantage in executing. The reason this is so effective is that any idea you come up with this way has automatic founder/market fit. You're basically generating all the ideas that have good founder/market fit.",
     theme: "Leverage Your Expertise and Experiences",
+    title: "How to get startup ideas",
   },
 ];
+
+const frenchFriesSources = [
+  {
+    url: "https://www.reddit.com/r/AskCulinary/comments/9zkeqy/whats_the_best_oil_for_flavor_when_deep_frying/",
+    title: "What's the Best oil for flavor when deep frying french fries?",
+    icon: "https://serpapi.com/searches/6678e44196f5d726dd24b45d/images/e9d8875493f0b695f8b1c7c643f3bb08bcab0e12139881c48b78847d837f2481.png",
+    hostname: "www.reddit.com",
+    summary:
+      "Animal fats like duck fat and beef tallow recommended as most flavorful for fries. Peanut oil good for frying but flavor debated. Some suggest cheaper oils with post-fry flavoring. Saturated fats create crispier exterior. Commercial fryers often use vegetable oils due to cost. Double-frying method combines neutral oil and flavored fat.",
+  },
+  {
+    url: "https://www.thedailymeal.com/1417837/best-cooking-oils-for-homemade-french-fries/",
+    title: "14 Of The Best Cooking Oils For Homemade French Fries",
+    icon: "https://serpapi.com/searches/6678e44196f5d726dd24b45d/images/e9d8875493f0b695f8b1c7c643f3bb08f1a9907d5bf25dd42b992d6fc8c7b303.png",
+    hostname: "www.thedailymeal.com",
+    summary:
+      "Cooking oils impact fry taste and health. Soybean and canola are cheap, healthy options. Peanut oil adds flavor. Avocado oil and beef tallow offer unique tastes. Balance flavor, health, and cost when choosing. Each oil has distinct properties affecting fry quality.",
+  },
+  {
+    url: "https://blog.thermoworks.com/sides/homemade-french-fries-choosing-the-best-oil/",
+    title: "Homemade French Fries: Choosing the Best Oil",
+    icon: "https://serpapi.com/searches/6678e44196f5d726dd24b45d/images/e9d8875493f0b695f8b1c7c643f3bb08b794653bf2b8f1b1809d27c2638517c8.png",
+    hostname: "blog.thermoworks.com",
+    summary:
+      "Refined peanut oil vs beef tallow for frying french fries. Peanut oil has high smoke point and neutral flavor. Tallow imparts beefy taste but can foam dangerously. Kitchen tests compared thermal properties and taste. Tallow fries tasted better but safety concerns favor peanut oil. Seeking solution to make tallow frying safer.",
+  },
+  {
+    url: "https://www.foodrepublic.com/1526574/which-oil-to-make-fries/",
+    title: "Which Oil Should You Use To Make French Fries?",
+    icon: "https://serpapi.com/searches/6678e44196f5d726dd24b45d/images/e9d8875493f0b695f8b1c7c643f3bb08dd6789b94bc14bef7f0c5b1c5ea48214.png",
+    hostname: "www.foodrepublic.com",
+  },
+  {
+    url: "https://www.bonappetit.com/story/best-oil-for-frying",
+    title: "This Is the Best Oil for Frying - Bon Appetit",
+    icon: "https://serpapi.com/searches/6678e44196f5d726dd24b45d/images/e9d8875493f0b695f8b1c7c643f3bb088ae29e418a7b51dbb326fc8415b36ec7.png",
+    hostname: "www.bonappetit.com",
+  },
+  {
+    url: "https://www.quora.com/What-kind-of-oil-do-restaurants-use-for-French-fries",
+    title: "What kind of oil do restaurants use for French fries?",
+    icon: "https://serpapi.com/searches/6678e44196f5d726dd24b45d/images/e9d8875493f0b695f8b1c7c643f3bb0811f08b42f7e3fc62a8b984851fecf546.png",
+    hostname: "www.quora.com",
+  },
+  {
+    url: "https://heartscontentfarmhouse.com/deep-fried-french-fries/",
+    title: "How to Make Amazing Homemade Deep-Fried French ...",
+    hostname: "heartscontentfarmhouse.com",
+  },
+  {
+    url: "https://www.theprairiehomestead.com/2013/03/the-best-homemade-french-fries-ever.html",
+    title: "The Best Homemade French Fries. Ever.",
+    icon: "https://serpapi.com/searches/6678e44196f5d726dd24b45d/images/e9d8875493f0b695f8b1c7c643f3bb08db620f891e32cced28eb982d79cdc711.png",
+    hostname: "www.theprairiehomestead.com",
+  },
+];
+
+const frenchFriesSnippets = [
+  {
+    url: "https://www.reddit.com/r/AskCulinary/comments/9zkeqy/whats_the_best_oil_for_flavor_when_deep_frying/",
+    hostname: "www.reddit.com",
+    content: "For flavor? Duck fat, absolutely, hands down. Google it.",
+    theme: "Animal Fats for Flavor",
+    title: "What's the Best oil for flavor when deep frying french fries?",
+  },
+  {
+    url: "https://www.reddit.com/r/AskCulinary/comments/9zkeqy/whats_the_best_oil_for_flavor_when_deep_frying/",
+    hostname: "www.reddit.com",
+    content:
+      "For flavor, lard. Pork is the most available. Reportedly, beef is better, but I have never had enough clean fat to test it.",
+    theme: "Animal Fats for Flavor",
+    title: "What's the Best oil for flavor when deep frying french fries?",
+  },
+  {
+    url: "https://www.thedailymeal.com/1417837/best-cooking-oils-for-homemade-french-fries/",
+    hostname: "www.thedailymeal.com",
+    content:
+      "Beef tallow becomes liquid gold for many French fry enthusiasts — at least those who aren't vegetarian or vegan. The subtle meat flavor it adds to the fries can make a big difference.",
+    theme: "Animal Fats for Flavor",
+    title: "14 Of The Best Cooking Oils For Homemade French Fries",
+  },
+  {
+    url: "https://www.thedailymeal.com/1417837/best-cooking-oils-for-homemade-french-fries/",
+    hostname: "www.thedailymeal.com",
+    content:
+      "Soybean oil has a smoke point — the temperature when the oil begins smoking, breaking down, and potentially developing harmful carcinogens — of 450 F. In other words, it's more than enough for the temps needed to make fries nice and crispy. The oil is also high in polyunsaturated fatty acids, a heart-healthy type of fat, and contains plenty of omega-3 fatty acids and vitamin K as well.",
+    theme: "Vegetable Oils for Practicality and Health",
+    title: "14 Of The Best Cooking Oils For Homemade French Fries",
+  },
+  {
+    url: "https://www.thedailymeal.com/1417837/best-cooking-oils-for-homemade-french-fries/",
+    hostname: "www.thedailymeal.com",
+    content:
+      "Canola oil has several attractive properties for French fry lovers. It has a lot of monounsaturated fats, which make it more stable at high temperatures, and has the least saturated fat of any major cooking oil.",
+    theme: "Vegetable Oils for Practicality and Health",
+    title: "14 Of The Best Cooking Oils For Homemade French Fries",
+  },
+];
+
+const ovenFriesSources = [
+  {
+    url: "https://blog.thermoworks.com/sides/homemade-french-fries-choosing-the-best-oil/",
+    title: "Homemade French Fries: Choosing the Best Oil",
+    icon: "https://serpapi.com/searches/6678e62fb5961e98e22c0824/images/6f82e3fb95727b6c92969674c46f10f0ba6071850c6420d5978135a3f7b26f97.png",
+    hostname: "blog.thermoworks.com",
+    summary:
+      "Article compares peanut oil and beef tallow for frying french fries. Peanut oil has high smoke point and neutral flavor. Tallow imparts beefy taste but can foam dangerously. Kitchen tests evaluated thermal properties and flavor. Peanut oil recommended for safety despite tallow producing tastier fries. Proper oil selection balances heat tolerance, flavor, and safety for optimal results.",
+  },
+  {
+    url: "https://www.quora.com/What-type-of-oil-gives-French-fries-the-best-crispy-texture",
+    title: "What type of oil gives French fries the best crispy texture?",
+    icon: "https://serpapi.com/searches/6678e62fb5961e98e22c0824/images/6f82e3fb95727b6c92969674c46f10f03734e125ea13b1f65e979e2a200ef83b.png",
+    hostname: "www.quora.com",
+    summary:
+      "Oil type matters less than technique for crispy fries. High smoke point oils work well. Key steps: dry potatoes, double fry at different temps, salt after. Some prefer lard. Remove moisture and nail temperatures for best results. Proper method trumps specific oil choice.",
+  },
+  {
+    url: "https://www.quora.com/What-is-your-favorite-oil-for-cooking-French-or-oven-fried-potatoes-peanut-oil-beef-tallow-vegetable-shortening-bacon-grease-or-ghee-butter",
+    title: "What is your favorite oil for cooking French or oven fried ...",
+    icon: "https://serpapi.com/searches/6678e62fb5961e98e22c0824/images/6f82e3fb95727b6c92969674c46f10f0bf203296f916b2098f19e48389b16111.png",
+    hostname: "www.quora.com",
+    summary:
+      "Cooking oils for fried potatoes vary. Olive oil versatile and healthy. Duck fat adds flavor. Butter-coconut combo works for oven fries. Avocado oil good for high heat. Choices depend on taste, health, and cooking method.",
+  },
+  {
+    url: "https://www.foodrepublic.com/1526574/which-oil-to-make-fries/",
+    title: "Which Oil Should You Use To Make French Fries?",
+    icon: "https://serpapi.com/searches/6678e62fb5961e98e22c0824/images/6f82e3fb95727b6c92969674c46f10f0f3ce2d06203785604f256052ccc63966.png",
+    hostname: "www.foodrepublic.com",
+  },
+  {
+    url: "https://www.reddit.com/r/Cooking/comments/nnp4hw/any_tips_on_oven_baked_fries_i_can_never_seem_to/",
+    title: "Any tips on oven baked fries? I can never seem to get them ...",
+    icon: "https://serpapi.com/searches/6678e62fb5961e98e22c0824/images/6f82e3fb95727b6c92969674c46f10f00ff6a65b25d08103bcec79af67548c22.png",
+    hostname: "www.reddit.com",
+  },
+  {
+    url: "https://www.reddit.com/r/foodhacks/comments/xvma4g/whats_your_best_oven_fries_hack_for_crispy/",
+    title: "What's your best oven fries hack for crispy outside and soft ...",
+    icon: "https://serpapi.com/searches/6678e62fb5961e98e22c0824/images/6f82e3fb95727b6c92969674c46f10f0780987d59c7928e631a45613147b4b9a.png",
+    hostname: "www.reddit.com",
+  },
+];
+
+const ovenFriesSnippets = [
+  {
+    url: "https://blog.thermoworks.com/sides/homemade-french-fries-choosing-the-best-oil/",
+    hostname: "blog.thermoworks.com",
+    content:
+      "We need an oil that can handle the high heat of deep frying and that will give us good tasting fries. We need to consider smoke point and flavor profile.",
+    theme: "High Smoke Point Oils",
+    title: "Homemade French Fries: Choosing the Best Oil",
+  },
+  {
+    url: "https://www.quora.com/What-type-of-oil-gives-French-fries-the-best-crispy-texture",
+    hostname: "www.quora.com",
+    content:
+      "For achieving the best crispy texture when making French fries, many chefs and cooks prefer to use oils with a high smoke point. Oils with high smoke points are more stable at high temperatures and are less likely to break down and impart off-flavors to the fries.",
+    theme: "High Smoke Point Oils",
+    title: "What is your favorite oil for cooking French or oven fried ...",
+  },
+];
+
+const zeroToOneSources = [
+  {
+    url: "https://www.theinvestorspodcast.com/billionaire-book-club-executive-summary/zero-to-one/",
+    title: "Zero to One By Peter Thiel | Chapter by Chapter Book ...",
+    icon: "https://serpapi.com/searches/6678e899224db13cd7c5057f/images/9f28cb178c89cfe393f3e51e9da670c49e13aa0b7aabed8c72e03aadf26866eb.png",
+    hostname: "www.theinvestorspodcast.com",
+    summary:
+      'Peter Thiel\'s "Zero to One" urges entrepreneurs to innovate rather than merely improve existing ideas, highlighting the benefits of vertical progress. He advocates for monopolies to focus on innovation, not rivalry. Key takeaways: prioritize bold ideas, plan proactively, and leverage technology for growth.',
+  },
+  {
+    url: "https://rickkettner.com/zero-to-one-book-summary/",
+    title: "Zero To One by Peter Thiel Book Summary & Review",
+    hostname: "rickkettner.com",
+    summary:
+      "Rick Kettner's review of \"Zero to One\" details Thiel's emphasis on innovation and creating new products. It discusses the value of contrarian thinking, rejecting outdated business dogmas, understanding monopolies, discovering secrets, and fostering optimism. The book is for entrepreneurs and investors seeking to create impactful businesses.",
+  },
+  {
+    url: "https://www.thefastlaneforum.com/community/threads/book-summary-zero-to-one-by-peter-thiel.99979/",
+    title: "Book summary: Zero to One, by Peter Thiel - Fastlane Forum",
+    icon: "https://serpapi.com/searches/6678e899224db13cd7c5057f/images/9f28cb178c89cfe393f3e51e9da670c4f68f322989addf6d165b6fc398b77eda.png",
+    hostname: "www.thefastlaneforum.com",
+  },
+  {
+    url: "https://www.shortform.com/summary/zero-to-one-summary-peter-thiel",
+    title: "Zero to One Book Summary by Peter Thiel",
+    icon: "https://serpapi.com/searches/6678e899224db13cd7c5057f/images/9f28cb178c89cfe393f3e51e9da670c448518a07ffa93a40aacf7e778e7d0b1b.png",
+    hostname: "www.shortform.com",
+  },
+  {
+    url: "https://medium.com/swlh/zero-to-one-by-peter-thiel-review-and-deconstructing-a-bestseller-f64116b757f4",
+    title: "“Zero to One” by Peter Thiel. Review and deconstructing a ...",
+    icon: "https://serpapi.com/searches/6678e899224db13cd7c5057f/images/9f28cb178c89cfe393f3e51e9da670c44ede7e929372b5670fb110418488a86d.png",
+    hostname: "medium.com",
+  },
+  {
+    url: "https://www.grahammann.net/book-notes/zero-to-one-peter-thiel",
+    title: "Zero to One by Peter Thiel - Summary & Notes",
+    icon: "https://serpapi.com/searches/6678e899224db13cd7c5057f/images/9f28cb178c89cfe393f3e51e9da670c47f54ddd0a19acc17b222d240af184896.png",
+    hostname: "www.grahammann.net",
+  },
+  {
+    url: "https://fourminutebooks.com/zero-to-one-summary/",
+    title: "Zero To One Summary",
+    icon: "https://serpapi.com/searches/6678e899224db13cd7c5057f/images/9f28cb178c89cfe393f3e51e9da670c477ff8cfff2e677c22e22aa96d66537be.png",
+    hostname: "fourminutebooks.com",
+  },
+  {
+    url: "https://xdev200200.medium.com/zero-to-one-commentary-summary-3695704017f9",
+    title: "“Zero to One” Summary - XDEV 200",
+    icon: "https://serpapi.com/searches/6678e899224db13cd7c5057f/images/9f28cb178c89cfe393f3e51e9da670c45e444103052f2b7ba505d1fc3d761d75.png",
+    hostname: "xdev200200.medium.com",
+  },
+  {
+    url: "https://www.blinkist.com/en/books/zero-to-one-new-version-en",
+    title: "Zero to One (new version) summary",
+    icon: "https://serpapi.com/searches/6678e899224db13cd7c5057f/images/9f28cb178c89cfe393f3e51e9da670c4cbf3afc15274350aa1ac12ea931eed8b.png",
+    hostname: "www.blinkist.com",
+  },
+  {
+    url: "https://fs.blog/peter-thiel-zero-to-one/",
+    title: "Eight Things I Learned from Peter Thiel's Zero To One",
+    icon: "https://serpapi.com/searches/6678e899224db13cd7c5057f/images/9f28cb178c89cfe393f3e51e9da670c4711eb66f1f452fdbd0b4cd4466088335.png",
+    hostname: "fs.blog",
+  },
+  {
+    url: "https://howdo.com/book-summaries/zero-to-one-summary-and-review/",
+    title: "Zero to One: Summary and Review: Peter Thiel",
+    hostname: "howdo.com",
+  },
+  {
+    url: "https://www.linkedin.com/pulse/book-review1-notes-from-peter-thiel-blake-maters-zero-amrut-joshi-dopmc",
+    title: "Book Review#1- Notes from Peter Thiel and Blake Masters' ...",
+    icon: "https://serpapi.com/searches/6678e899224db13cd7c5057f/images/9f28cb178c89cfe393f3e51e9da670c4e9dc1368519f1028c67ffcd94c873733.png",
+    hostname: "www.linkedin.com",
+  },
+  {
+    url: "https://www.quora.com/What-is-your-review-of-Zero-to-One-2014-book",
+    title: "What is your review of Zero to One (2014 book)?",
+    icon: "https://serpapi.com/searches/6678e899224db13cd7c5057f/images/9f28cb178c89cfe393f3e51e9da670c42a256235a2e1ed4a7699c47bbcb2e22c.png",
+    hostname: "www.quora.com",
+  },
+  {
+    url: "https://www.growthsummary.com/book-summary/zero-to-one/",
+    title: "Zero to One Summary: Every Chapter & Key Takeaway ...",
+    icon: "https://serpapi.com/searches/6678e899224db13cd7c5057f/images/9f28cb178c89cfe393f3e51e9da670c4284f801e73d165986d2668017889a23c.png",
+    hostname: "www.growthsummary.com",
+  },
+];
+
+const zeroToOneSnippets = [
+  {
+    url: "https://www.theinvestorspodcast.com/billionaire-book-club-executive-summary/zero-to-one/",
+    hostname: "www.theinvestorspodcast.com",
+    content:
+      "The next Bill Gates will not build an operating system and the next Mark Zuckerberg will not create a new social network. You won’t learn anything new if you just copy those that have succeeded.",
+    theme: "Unique Insights and Future Challenges",
+    title: "Zero to One By Peter Thiel | Chapter by Chapter Book ...",
+  },
+  {
+    url: "https://rickkettner.com/zero-to-one-book-summary/",
+    hostname: "rickkettner.com",
+    content:
+      "Peter’s answer to this contrarian question is that most people think the future of the world will be defined by globalization, but the truth is that technology matters more. In a world of scarce resources, globalization without new technology is unsustainable.",
+    theme: "Unique Insights and Future Challenges",
+    title: "Zero To One by Peter Thiel Book Summary & Review",
+  },
+  {
+    url: "https://www.theinvestorspodcast.com/billionaire-book-club-executive-summary/zero-to-one/",
+    hostname: "www.theinvestorspodcast.com",
+    content:
+      "Google makes so much money, that it is worth more than 3 times the value of all American airlines combined. Economists explain this by categorizing Google as a monopoly.",
+    theme: "The Importance of Monopoly and Competition",
+    title: "Zero to One By Peter Thiel | Chapter by Chapter Book ...",
+  },
+  {
+    url: "https://rickkettner.com/zero-to-one-book-summary/",
+    hostname: "rickkettner.com",
+    content:
+      "Monopoly businesses can afford to think about things other than making money; non-monopolists can’t. Here 'monopoly' means the kind of company that’s so good at what it does that no other firm can offer a close substitute.",
+    theme: "The Importance of Monopoly and Competition",
+    title: "Zero To One by Peter Thiel Book Summary & Review",
+  },
+];
+
+const calfInjurySources = [
+  {
+    url: "https://newsnetwork.mayoclinic.org/discussion/mayo-clinic-q-and-a-common-calf-muscle-injuries-in-runners-over-40/",
+    title: "Mayo Clinic Q and A: Common calf muscle injuries in ...",
+    icon: "https://serpapi.com/searches/66790106fe41d0876f232b11/images/7385fc170097f0f4fc0d7ed61525376b4491895af679b0710caab6f9064851a4.png",
+    hostname: "newsnetwork.mayoclinic.org",
+    summary:
+      "Runners over 40 frequently face calf muscle injuries needing up to 12 weeks recovery. Gradual running reintroduction, physical therapy, cross-training, and biomechanical evaluations can aid in preventing future injuries.",
+  },
+  {
+    url: "https://www.runnersworld.com/uk/health/injury/a773619/ask-the-physio-calf-tears/",
+    title: "Everything you need to know about calf muscle tears",
+    icon: "https://serpapi.com/searches/66790106fe41d0876f232b11/images/7385fc170097f0f4fc0d7ed61525376b160e6823f1ef6c25d32edf3187a563ff.png",
+    hostname: "www.runnersworld.com",
+    summary:
+      'Calf muscle tears often result from overloading the gastrocnemius, causing sudden pain and a "pop." Immediate treatment: stop running, apply ice. Prevent future tears: do calf raises, identify the injury\'s cause.',
+  },
+  {
+    url: "https://my.clevelandclinic.org/health/diseases/21558-pulled-calf-muscle",
+    title: "Pulled Calf Muscle: Treatment, Symptoms & Recovery",
+    icon: "https://serpapi.com/searches/66790106fe41d0876f232b11/images/7385fc170097f0f4fc0d7ed61525376b1124433b52acbb61204a38d522426f7e.png",
+    hostname: "my.clevelandclinic.org",
+    summary:
+      "A pulled calf muscle occurs when calf muscles are overstretched, ranging from mild strains to severe tears. Common in athletes, treatment includes rest, ice, compression, and elevation; severe cases might need surgery.",
+  },
+  {
+    url: "https://runnersconnect.net/calf-strain-running-injury/",
+    title: "Calf Strains and Runners: Why You Get Them and a 3 ...",
+    icon: "https://serpapi.com/searches/66790106fe41d0876f232b11/images/7385fc170097f0f4fc0d7ed61525376b2fe0ba5b542dd6c8ecef6e0109eb2386.png",
+    hostname: "runnersconnect.net",
+    summary:
+      "Calf strains involve sudden or gradual muscle pain, often in the gastrocnemius or soleus. Key risks include prior injuries, age, and potential lower back issues. Treatment focuses on rest, cross-training, and strengthening; recovery time varies.",
+  },
+  {
+    url: "https://www.physio-network.com/blog/calf-strain-rehab/",
+    title: "How to rehab calf strains in runners",
+    icon: "https://serpapi.com/searches/66790106fe41d0876f232b11/images/7385fc170097f0f4fc0d7ed61525376b2cfbe3d28a287585ffeb3e14cc36e1b8.png",
+    hostname: "www.physio-network.com",
+  },
+  {
+    url: "https://www.kinetic-revolution.com/calf-strain-running/",
+    title: "Can You Run with a Calf Strain? (Fast Recovery Tips)",
+    icon: "https://serpapi.com/searches/66790106fe41d0876f232b11/images/7385fc170097f0f4fc0d7ed61525376ba4a1acda1d54e0e9c87d89012e0efff8.png",
+    hostname: "www.kinetic-revolution.com",
+  },
+  {
+    url: "https://www.pogophysio.com.au/blog/how-to-rehab-calf-strains-in-runners/",
+    title: "How to rehab calf strains in runners | POGO Physio Gold ...",
+    hostname: "www.pogophysio.com.au",
+  },
+  {
+    url: "https://www.medicalnewstoday.com/articles/326431",
+    title: "How to treat, identify, and recover from a pulled calf muscle",
+    icon: "https://serpapi.com/searches/66790106fe41d0876f232b11/images/7385fc170097f0f4fc0d7ed61525376b63b16b69e5a33fddb08236dbdf66799b.png",
+    hostname: "www.medicalnewstoday.com",
+  },
+  {
+    url: "https://fitclubny.com/blog/calf-pain-while-running/",
+    title: "Calf Pain and Running: A Physical Therapist's Guide to ...",
+    icon: "https://serpapi.com/searches/66790106fe41d0876f232b11/images/7385fc170097f0f4fc0d7ed61525376b8336c053d6fd588a974226cd1220b405.png",
+    hostname: "fitclubny.com",
+  },
+  {
+    url: "https://www.hingehealth.com/resources/articles/calf-pain-after-running/",
+    title: "Calf Pain After Running: How to Prevent It",
+    icon: "https://serpapi.com/searches/66790106fe41d0876f232b11/images/7385fc170097f0f4fc0d7ed61525376bbda88b5af5636c4302c112d1a1234102.png",
+    hostname: "www.hingehealth.com",
+  },
+  {
+    url: "https://www.healthhp.com.au/post/4-mistakes-runners-make-with-calf-strains",
+    title: "4 mistakes runners make with calf strains",
+    icon: "https://serpapi.com/searches/66790106fe41d0876f232b11/images/7385fc170097f0f4fc0d7ed61525376b4c0d03ba6db64ac4a18dd9bc0658445d.png",
+    hostname: "www.healthhp.com.au",
+  },
+  {
+    url: "https://www.scmp.com/sport/outdoor/how-guides/article/3216271/pulling-your-calf-muscle-when-running-treatment-and-prevention",
+    title: "Pulling your calf muscle when running: treatment and ...",
+    icon: "https://serpapi.com/searches/66790106fe41d0876f232b11/images/7385fc170097f0f4fc0d7ed61525376bafa0131bcae98074f29ccdf9d29a1b36.png",
+    hostname: "www.scmp.com",
+  },
+  {
+    url: "https://www.running-physio.com/acutecalf/",
+    title: "Managing acute calf tears",
+    hostname: "www.running-physio.com",
+  },
+  {
+    url: "https://www.marathontrainingacademy.com/calf-strain-pull",
+    title: "How to Self-Treat a Calf Strain/Pull",
+    hostname: "www.marathontrainingacademy.com",
+  },
+  {
+    url: "https://my.clevelandclinic.org/health/diseases/21696-torn-calf-muscle",
+    title: "Torn Calf Muscle: Causes, Symptoms, Diagnosis & Treatment",
+    icon: "https://serpapi.com/searches/66790106fe41d0876f232b11/images/7385fc170097f0f4fc0d7ed61525376b602981531d4c0d38f9b04b5b790de863.png",
+    hostname: "my.clevelandclinic.org",
+  },
+  {
+    url: "https://www.ironhorsept.com/blog/calf-pain-from-running",
+    title: "Calf Pain From Running",
+    hostname: "www.ironhorsept.com",
+  },
+];
+
+const calfInjurySnippets = [
+  {
+    url: "https://www.runnersworld.com/uk/health/injury/a773619/ask-the-physio-calf-tears/",
+    hostname: "www.runnersworld.com",
+    content:
+      "If you suspect you may have torn a calf muscle, stop running immediately. Jodie Breach, the Physiotherapy National Lead at Nuffield Health says it's time to reach for the frozen peas. 'Using ice is good,' she explains. 'Some argue that it slows down the healing rates, but this is thought to be negligible.'",
+    theme: "Immediate Action and Treatment for Calf Injuries",
+    title: "Everything you need to know about calf muscle tears",
+  },
+  {
+    url: "https://my.clevelandclinic.org/health/diseases/21558-pulled-calf-muscle",
+    hostname: "my.clevelandclinic.org",
+    content:
+      "Immediate treatment for pulled calf muscles usually includes RICE, which stands for: Rest, Ice, Compression, Elevation... It’s always good to check in with your healthcare provider about any special instructions.",
+    theme: "Immediate Action and Treatment for Calf Injuries",
+    title: "Mayo Clinic Q and A: Common calf muscle injuries in ...",
+  },
+  {
+    url: "https://newsnetwork.mayoclinic.org/discussion/mayo-clinic-q-and-a-common-calf-muscle-injuries-in-runners-over-40/",
+    hostname: "newsnetwork.mayoclinic.org",
+    content:
+      "Another step you can take to help prevent additional injury is to ensure you always incorporate a dynamic warm-up and stretch thoroughly before you start running. It can be as simple as taking a few minutes to walk before you run.",
+    theme: "Immediate Action and Treatment for Calf Injuries",
+    title: "Mayo Clinic Q and A: Common calf muscle injuries in ...",
+  },
+  {
+    url: "https://newsnetwork.mayoclinic.org/discussion/mayo-clinic-q-and-a-common-calf-muscle-injuries-in-runners-over-40/",
+    hostname: "newsnetwork.mayoclinic.org",
+    content:
+      "A general recommendation for returning from this kind of injury is to start at just 15 minutes of running every other day and stay at that level for one week. If you are able to do that without pain, in the second week, move up to 20 minutes of running every other day.",
+    theme: "Long-term Rehabilitation and Return to Running",
+    title: "Mayo Clinic Q and A: Common calf muscle injuries in ...",
+  },
+  {
+    url: "https://www.runnersworld.com/uk/health/injury/a773619/ask-the-physio-calf-tears/",
+    hostname: "www.runnersworld.com",
+    content:
+      "Regular strengthening of the calf muscle is often neglected. Simple calf strengthening exercises your muscle will gradually increase their ability to absorb mechanical load, increasing your resistance to calf tears.",
+    theme: "Long-term Rehabilitation and Return to Running",
+    title: "Everything you need to know about calf muscle tears",
+  },
+];
+
+const keyboardSources = [
+  {
+    url: "https://www.rtings.com/keyboard/reviews/best/ergonomic",
+    title: "The 4 Best Ergonomic Keyboards - Summer 2024",
+    icon: "https://serpapi.com/searches/667929a7fe41d0876f233863/images/97751a965012f42d144849637d5444725cd63efb646a775e8f84f3ec1d22ce75.png",
+    hostname: "www.rtings.com",
+    summary:
+      "Ergonomic keyboards ease wrist pain from extended typing. The Logitech ERGO K860 tops with its comfortable wrist rest and wave-like shape. The budget-friendly Logitech Wave Keys offers compact comfort. For gaming, the ZSA Moonlander provides customization, while the MoErgo Glove80 suits enthusiasts needing wireless and ergonomic flexibility.",
+  },
+  {
+    url: "https://www.engadget.com/best-ergonomic-keyboard-130047982.html",
+    title: "The best ergonomic keyboards for 2024",
+    icon: "https://serpapi.com/searches/667929a7fe41d0876f233863/images/97751a965012f42d144849637d544472bf4665b340915413659066f0b2c1602e.png",
+    hostname: "www.engadget.com",
+    summary:
+      "The article reviews ergonomic keyboards like Logitech Ergo K860, ZSA Voyager, and Kinesis Gaming Freestyle Edge. It explains layouts—Alice, split—features like tenting, negative tilt, programmable keys, and evaluates user suitability for typing, programming, and gaming.",
+  },
+  {
+    url: "https://www.nytimes.com/wirecutter/reviews/comfortable-ergo-keyboard/",
+    title: "The 3 Best Ergonomic Keyboard of 2024",
+    icon: "https://serpapi.com/searches/667929a7fe41d0876f233863/images/97751a965012f42d144849637d544472a0511408e1f0678c4b7eda0144bf12b8.png",
+    hostname: "www.nytimes.com",
+  },
+  {
+    url: "https://www.pcmag.com/picks/the-best-ergonomic-keyboards",
+    title: "The Best Ergonomic Keyboards for 2024",
+    icon: "https://serpapi.com/searches/667929a7fe41d0876f233863/images/97751a965012f42d144849637d544472ac856cdda424edc5df067458f6abbd72.png",
+    hostname: "www.pcmag.com",
+  },
+  {
+    url: "https://apnews.com/buyline-shopping/article/best-ergonomic-keyboards",
+    title: "Best ergonomic keyboards: How to choose the ...",
+    icon: "https://serpapi.com/searches/667929a7fe41d0876f233863/images/97751a965012f42d144849637d5444726b77e4704aa876cd99e9c38135e64545.png",
+    hostname: "apnews.com",
+  },
+  {
+    url: "https://www.cnn.com/cnn-underscored/reviews/best-ergonomic-keyboards",
+    title: "Best ergonomic keyboards of 2024 - CNN",
+    icon: "https://serpapi.com/searches/667929a7fe41d0876f233863/images/97751a965012f42d144849637d54447289d01b137d2e6b345330e3dc20a27b74.png",
+    hostname: "www.cnn.com",
+  },
+  {
+    url: "https://www.popularmechanics.com/technology/gadgets/g39357700/best-ergonomic-keyboards/",
+    title: "The 8 Best Ergonomic Keyboards of 2023",
+    icon: "https://serpapi.com/searches/667929a7fe41d0876f233863/images/97751a965012f42d144849637d54447281e0229d4ad1906e5d24a17f6ad86b67.png",
+    hostname: "www.popularmechanics.com",
+  },
+  {
+    url: "https://wstyler.ucsd.edu/posts/ergo_keyboards.html",
+    title: "Ergonomic Keyboard Mega-Review",
+    hostname: "wstyler.ucsd.edu",
+  },
+  {
+    url: "https://www.nbcnews.com/select/shopping/best-ergonomic-keyboards-ncna1235563",
+    title: "4 best ergonomic keyboard",
+    icon: "https://serpapi.com/searches/667929a7fe41d0876f233863/images/97751a965012f42d144849637d544472ebef078234c59614b4b988c1329ff8ea.png",
+    hostname: "www.nbcnews.com",
+  },
+  {
+    url: "https://www.reddit.com/r/ErgoMechKeyboards/comments/1akj7fs/first_ergonomic_keyboard_advise/",
+    title: "First ergonomic keyboard advise? : r/ErgoMechKeyboards",
+    icon: "https://serpapi.com/searches/667929a7fe41d0876f233863/images/97751a965012f42d144849637d5444722686f428f77e69876b1a6b6b7088263c.png",
+    hostname: "www.reddit.com",
+  },
+  {
+    url: "https://www.youtube.com/watch?v=vBRJIvWxajA",
+    title: "5 Best Ergonomic Keyboards by an Ergonomist",
+    icon: "https://serpapi.com/searches/667929a7fe41d0876f233863/images/97751a965012f42d144849637d54447296e1af09dd41f0af78b84a0c303db29d.png",
+    hostname: "www.youtube.com",
+  },
+  {
+    url: "https://community.keyboard.io/t/first-ergonomic-keyboard-help-choosing-one/1927",
+    title: "First ergonomic keyboard - help choosing one",
+    icon: "https://serpapi.com/searches/667929a7fe41d0876f233863/images/97751a965012f42d144849637d54447289de8ade2f5ac66c3d20ce51d4bbec24.png",
+    hostname: "community.keyboard.io",
+  },
+  {
+    url: "https://candrews.integralblue.com/2023/09/looking-at-some-of-the-most-popular-ergonomic-mechanical-keyboards-and-selecting-one-spoiler-alert-i-picked-the-dactyl-manuform-with-trackball/",
+    title: "I Picked The Dactyl Manuform with Trackball",
+    icon: "https://serpapi.com/searches/667929a7fe41d0876f233863/images/97751a965012f42d144849637d54447229c7389a9bb37ea9bcaa277f7f204c5b.jpeg",
+    hostname: "candrews.integralblue.com",
+  },
+  {
+    url: "https://ergodox-ez.com/",
+    title: "ErgoDox EZ: An Incredible Mechanical Ergonomic Keyboard ...",
+    icon: "https://serpapi.com/searches/667929a7fe41d0876f233863/images/97751a965012f42d144849637d5444729bae5811c9809505da7e860b2c90d622.png",
+    hostname: "ergodox-ez.com",
+  },
+];
+
+const keyboardSnippets = [
+  {
+    url: "https://www.rtings.com/keyboard/reviews/best/ergonomic",
+    hostname: "www.rtings.com",
+    title: "The 4 Best Ergonomic Keyboards - Summer 2024",
+    content:
+      "Using a keyboard can be uncomfortable and hard on your body. Conventional, straight keyboards require you to bend your wrists in a way that can be painful for some, especially for long periods.",
+    theme: "Introduction to Ergonomic Keyboards",
+  },
+  {
+    url: "https://www.engadget.com/best-ergonomic-keyboard-130047982.html",
+    hostname: "www.engadget.com",
+    title: "The best ergonomic keyboards for 2024",
+    content:
+      "Traditional keyboards keep your arms close together and force you to splay your hands outward. After a while, that can feel straining. By shifting the orientation of the keys, ergonomic keyboards can keep your upper body in a more neutral position, preventing you from twisting or over-extending your hands and arms.",
+    theme: "Introduction to Ergonomic Keyboards",
+  },
+  {
+    url: "https://www.rtings.com/keyboard/reviews/best/ergonomic",
+    hostname: "www.rtings.com",
+    title: "The 4 Best Ergonomic Keyboards - Summer 2024",
+    content:
+      "For most people looking for an ergonomic keyboard, we recommend the Logitech ERGO K860. It has a very comfortable plush wrist rest and a wave-like shape...This shape aligns your hands, wrists, and elbows in a neutral position that isn't as taxing on your body as a conventional keyboard.",
+    theme: "Top Recommendation for Beginners",
+  },
+  {
+    url: "https://www.engadget.com/best-ergonomic-keyboard-130047982.html",
+    hostname: "www.engadget.com",
+    title: "The best ergonomic keyboards for 2024",
+    content:
+      "Logitech Ergo K860 Wireless Split: Best wireless ergonomic keyboard",
+    theme: "Top Recommendation for Beginners",
+  },
+];
+const glassesSources = [
+  {
+    url: "https://www.forbes.com/sites/forbes-personal-shopper/article/best-prescription-glasses-online/",
+    title: "Best Prescription Glasses Online 2024",
+    icon: "https://serpapi.com/searches/66792d55f26ac6f2736a7db8/images/236f100b83d5772c1261cc7778242a435511edf10bed2b3823eb62c77fb44e39.png",
+    hostname: "www.forbes.com",
+    summary:
+      "Buying prescription glasses online saves money and offers convenience. GlassesUSA excels with diverse styles, virtual try-on, and prescription renewal. Eyebuydirect offers affordable glasses, and Warby Parker stands out for its style. Expert feedback and testing informed the best options across categories.",
+  },
+  {
+    url: "https://www.nytimes.com/wirecutter/reviews/best-places-to-buy-glasses-online/",
+    title: "The Best Places to Buy Glasses Online",
+    icon: "https://serpapi.com/searches/66792d55f26ac6f2736a7db8/images/236f100b83d5772c1261cc7778242a43e3019739c47850b0fb09ab160c9590b3.png",
+    hostname: "www.nytimes.com",
+    summary:
+      "The article evaluates online glasses retailers, recommending Eyebuydirect and Zenni Optical for cost and quality. It outlines the benefits and requirements of online shopping and advises attention to prescription accuracy, especially with complex lenses.",
+  },
+  {
+    url: "https://www.cbsnews.com/essentials/where-to-buy-cheap-prescription-glasses/",
+    title: "Best places to buy cheap prescription glasses online",
+    icon: "https://serpapi.com/searches/66792d55f26ac6f2736a7db8/images/236f100b83d5772c1261cc7778242a4304b5a54ebc6476a98855f52d8b08b289.png",
+    hostname: "www.cbsnews.com",
+    summary:
+      "Prescription glasses now cost under $100 with options like GlassesUSA, Zenni Optical, and Warby Parker. These retailers offer various lenses and frames, money-back guarantees, and virtual try-ons, with discounts for students, military, and first responders.",
+  },
+  {
+    url: "https://www.cnet.com/health/personal-care/best-places-to-buy-glasses-online/",
+    title: "Best Places to Buy Glasses Online for 2024",
+    icon: "https://serpapi.com/searches/66792d55f26ac6f2736a7db8/images/236f100b83d5772c1261cc7778242a43fffc56a49e44d34d8a86c0a4e0008131.png",
+    hostname: "www.cnet.com",
+    summary:
+      "Buying glasses online in 2024 is convenient and cost-effective. Key considerations include customer reviews, product range, price transparency, and shipping. Zenni is best for budget, Warby Parker for shopping experience, EyeBuyDirect for fast delivery. Prices range from under $100 to $400 for premium pairs.",
+  },
+  {
+    url: "https://www.reddit.com/r/Frugal/comments/113pvmc/where_to_buy_affordable_prescription_glasses/",
+    title: "where to buy affordable prescription glasses online?",
+    icon: "https://serpapi.com/searches/66792d55f26ac6f2736a7db8/images/236f100b83d5772c1261cc7778242a4327d9cecaf04bc03b12bda400b6320c3f.png",
+    hostname: "www.reddit.com",
+  },
+  {
+    url: "https://www.gq.com/story/where-to-buy-glasses-online",
+    title: "Where to Buy Glasses Online Without Leaving Your Couch",
+    icon: "https://serpapi.com/searches/66792d55f26ac6f2736a7db8/images/236f100b83d5772c1261cc7778242a43dabdb32405ab23a39019df20e8981a08.png",
+    hostname: "www.gq.com",
+  },
+  {
+    url: "https://www.consumerreports.org/health/vision-eye-care/expert-advice-on-buying-eyeglasses-frames-lenses-coatings-a4033707605/",
+    title: "Buy Glasses Like a Pro: Frames, Lenses, Coatings, and More",
+    icon: "https://serpapi.com/searches/66792d55f26ac6f2736a7db8/images/236f100b83d5772c1261cc7778242a43e9fec7897dd953e757d6545d85d2affa.png",
+    hostname: "www.consumerreports.org",
+  },
+  {
+    url: "https://community.clark.com/t/where-is-your-favorite-place-to-buy-eyeglasses/73",
+    title: "Where Is Your Favorite Place To Buy Eyeglasses?",
+    icon: "https://serpapi.com/searches/66792d55f26ac6f2736a7db8/images/236f100b83d5772c1261cc7778242a43ca0355b9decf26d4dd1d749c44a40117.png",
+    hostname: "community.clark.com",
+  },
+  {
+    url: "https://www.quora.com/Is-it-reliable-and-more-affordable-to-buy-prescription-glasses-online",
+    title: "Is it reliable and more affordable to buy prescription ...",
+    icon: "https://serpapi.com/searches/66792d55f26ac6f2736a7db8/images/236f100b83d5772c1261cc7778242a434c9c483e782bf5266a6c7c645ed77347.png",
+    hostname: "www.quora.com",
+  },
+  {
+    url: "https://forum.quartertothree.com/t/where-do-you-get-glasses-online/161077",
+    title: "Where do you get glasses online? - Everything else",
+    icon: "https://serpapi.com/searches/66792d55f26ac6f2736a7db8/images/236f100b83d5772c1261cc7778242a43277ff7bac8f87c1516ff52900ea43c0a.png",
+    hostname: "forum.quartertothree.com",
+  },
+  {
+    url: "https://2peasrefugees.boards.net/thread/139808/where-buy-eye-glasses",
+    title: "Where do you buy (eye) glasses? | 2Peas Refugees",
+    icon: "https://serpapi.com/searches/66792d55f26ac6f2736a7db8/images/236f100b83d5772c1261cc7778242a432ebfd4c69599d6c29d4871486932293d.png",
+    hostname: "2peasrefugees.boards.net",
+  },
+  {
+    url: "https://www.readers.com/",
+    title: "Best Online Reading Glasses Store | Readers.com®",
+    icon: "https://serpapi.com/searches/66792d55f26ac6f2736a7db8/images/236f100b83d5772c1261cc7778242a431cf3c510cc317ba089dd56d85c80b682.png",
+    hostname: "www.readers.com",
+  },
+  {
+    url: "https://sewing.patternreview.com/SewingDiscussions/topic/123948",
+    title: "Prescription glasses online - Sewing Pattern Review",
+    icon: "https://serpapi.com/searches/66792d55f26ac6f2736a7db8/images/236f100b83d5772c1261cc7778242a437e7b82d1561156a470518445ff1a7114.png",
+    hostname: "sewing.patternreview.com",
+  },
+];
+const glassesSnippets = [
+  {
+    url: "https://www.forbes.com/sites/forbes-personal-shopper/article/best-prescription-glasses-online/",
+    hostname: "www.forbes.com",
+    title: "Best Prescription Glasses Online 2024",
+    content:
+      "Eyebuydirect’s wallet-friendly prices make clear vision affordable and accessible. To keep prices down on Eyebuydirect’s own styles, everything from concept to design to manufacturing is done in-house.",
+    theme: "Best Overall Retailers",
+  },
+  {
+    url: "https://www.forbes.com/sites/forbes-personal-shopper/article/best-prescription-glasses-online/",
+    hostname: "www.forbes.com",
+    title: "Best Prescription Glasses Online 2024",
+    content:
+      "GlassesUSA is one of the largest and best online prescription glasses retailers, offering hundreds of designer frames from Ray-Ban, Gucci and Oakley, along with less expensive house brands in every frame style and color you can imagine.",
+    theme: "Best Overall Retailers",
+  },
+  {
+    url: "https://www.cbsnews.com/essentials/where-to-buy-cheap-prescription-glasses/",
+    hostname: "www.cbsnews.com",
+    title: "Best places to buy cheap prescription glasses online",
+    content:
+      "Zenni Optical is known for ultra-low cost frames, which range in price from a mere $6.95 to $59.95 with single-focus, basic prescription lenses included.",
+    theme: "Best Overall Retailers",
+  },
+  {
+    url: "https://www.forbes.com/sites/forbes-personal-shopper/article/best-prescription-glasses-online/",
+    hostname: "www.forbes.com",
+    title: "Best Prescription Glasses Online 2024",
+    content:
+      "Sites like GlassesUSA (our top pick overall) let you renew expired prescriptions with a virtual vision test.",
+    theme: "Special Features and Services",
+  },
+  {
+    url: "https://www.forbes.com/sites/forbes-personal-shopper/article/best-prescription-glasses-online/",
+    hostname: "www.forbes.com",
+    title: "Best Prescription Glasses Online 2024",
+    content:
+      "many online retailers provide virtual try-on features and generous return policies.",
+    theme: "Special Features and Services",
+  },
+];
+
 export const searchExamplesList: SearchExample[] = [
+  {
+    query: "how to get startup ideas",
+    sourceMetadatas: startupSources,
+    snippets: startupSnippets,
+  },
   {
     query: "reviews of a case against education",
     sourceMetadatas: educationSources,
     snippets: educationSnippets,
   },
   {
-    query: "how to get good startup ideas",
-    sourceMetadatas: startupSources,
-    snippets: startupSnippets,
+    query: "overview of zero to one book",
+    sourceMetadatas: zeroToOneSources,
+    snippets: zeroToOneSnippets,
+  },
+  {
+    query: "good first ergonomic keyboard",
+    sourceMetadatas: keyboardSources,
+    snippets: keyboardSnippets,
+  },
+  {
+    query: "best places to buy glasses online",
+    sourceMetadatas: glassesSources,
+    snippets: glassesSnippets,
+  },
+  {
+    query: "how to handle a calf injury from running",
+    sourceMetadatas: calfInjurySources,
+    snippets: calfInjurySnippets,
   },
   {
     query: "is creatine safe",
     sourceMetadatas: creatineSources,
     snippets: creatineSnippets,
+  },
+  {
+    query: "best oil for french fries",
+    sourceMetadatas: frenchFriesSources,
+    snippets: frenchFriesSnippets,
+  },
+  {
+    query: "best oil for oven fries",
+    sourceMetadatas: ovenFriesSources,
+    snippets: ovenFriesSnippets,
   },
 ];
