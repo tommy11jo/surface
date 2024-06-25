@@ -5,11 +5,14 @@ import { generateSourceMetadatasWithSummary } from "../services/summaryService"
 
 export const generateSourceMetadatasEndpoint = async (
   req: Request,
-  res: Response,
-  log: boolean = true
+  res: Response
 ) => {
-  const { query } = req.body
-
+  const log = true
+  const { query, secret } = req.body
+  const validCodes = process.env.SECRET_CODES?.split(",") || []
+  if (!validCodes.includes(secret)) {
+    return res.status(401).json({ message: "Invalid code" })
+  }
   try {
     const startTime = Date.now()
     const sourceMetadatas = await generateRankedSourceMetadatas(query)
@@ -27,8 +30,12 @@ export const generateSourceMetadatasEndpoint = async (
     const sourcesMetadatasNoText = sourceMetadatasWithSummaries.map(
       ({ textContent, ...rest }) => rest
     )
-    res.json({ sourceMetadatas: sourcesMetadatasNoText, snippets, themes })
+    return res.json({
+      sourceMetadatas: sourcesMetadatasNoText,
+      snippets,
+      themes,
+    })
   } catch (error) {
-    res.status(500).json({ error: error.message })
+    return res.status(500).json({ error: error.message })
   }
 }

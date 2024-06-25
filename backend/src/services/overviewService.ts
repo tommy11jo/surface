@@ -38,8 +38,8 @@ Themes:
 Each theme is a core point of interest to the user.
 Each theme has 1-3 corresponding snippets.
 Each theme has a relevance score that is 0-10. 
-A score of 10 means that the theme will directly answer the query.
-A score of 5 means the theme is adjacent and relevant but not essential.
+A score of 10 means that the theme and its snippets will directly answer the query.
+A score of 5 means the theme and its snippets are adjacent but not essential.
 
 Snippets:
 Each snippet should contain a unique chunk of relevant insight. 
@@ -57,19 +57,19 @@ Example format:
 
 ## Relevant themes 
 ### Theme 1: <theme title>
-#### Theme Relevance: <score 0-10>
 #### Snippet 1
 Content: "<snippet content>"
 Source: 1
 #### Snippet 2
 Content: "<snippet content>"
 Source: 3
+#### Theme Relevance: <score 0-10>
 
 ### Theme 2: <theme title>
-#### Theme Relevance: <score 0-10>
 #### Snippet 3
 Content: "<snippet content>"
 Source: 3
+#### Theme Relevance: <score 0-10>
 
 
 Now, let's try it out:
@@ -95,13 +95,13 @@ function extractSnippetsFromResponse(
   const themes: Theme[] = []
 
   const themeRegex =
-    /### Theme \d+: (.*?)\n#### Theme Relevance: (\d+)\n(.*?)(?=\n### (?!#)|\n$)/gs
+    /### Theme \d+: (.*?)\n([\s\S]*?)#### Theme Relevance: (\d+)/g
   let themeMatch
 
   while ((themeMatch = themeRegex.exec(response)) !== null) {
     const theme = themeMatch[1].trim()
-    const relevanceScore = themeMatch[2]
-    const themeContent = themeMatch[3]
+    const relevanceScore = themeMatch[3]
+    const themeContent = themeMatch[2]
     const themeId = randId()
     themes.push({ id: themeId, title: theme, relevanceScore })
 

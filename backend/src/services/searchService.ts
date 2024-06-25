@@ -119,11 +119,12 @@ export const getTextContent = async (
   url: string,
   trim: boolean,
   approxWordsCutoff: number = MAX_WORDS_PER_SOURCE,
-  jinaTimeout: number = 5000
+  jinaTimeout: number = 5000,
+  useOnlyGoogleCache: boolean = true
 ): Promise<string | undefined> => {
   // r.jina.ai does not work on reddit
   // use google's cache for reddit, though this is deprecated
-  if (url.includes("reddit.com")) {
+  if (url.includes("reddit.com") || useOnlyGoogleCache) {
     const response = await fetch(
       `http://webcache.googleusercontent.com/search?q=cache:${url}`
     )
@@ -131,6 +132,7 @@ export const getTextContent = async (
     if (html.includes(GOOGLE_CACHE_ERROR_STR)) return undefined
     return htmlToText(html)
   }
+
   try {
     const response = await axios.get(`https://r.jina.ai/${url}`, {
       responseType: "text",
@@ -138,7 +140,7 @@ export const getTextContent = async (
     })
 
     let data = response.data
-    // Remove markdown links, keeping the visible text
+    // Remove markdown links
     data = data.replace(/\[([^\[\]]*)\]\((.*?)\)/gm, "$1")
     // Remove images
     data = data.replace(/!\[([^\[\]]*)\]\((.*?)\)/gm, "")
