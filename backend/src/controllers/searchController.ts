@@ -1,21 +1,33 @@
 import { type Request, type Response } from "express"
-import { generateSourceMetadatas } from "../services/searchService"
-import { Snippet } from "../services/types"
-import { generateSnippets } from "../services/overviewService"
+import { generateRankedSourceMetadatas } from "../services/searchService"
+import { generateOverview } from "../services/overviewService"
+import { generateSourceMetadatasWithSummary } from "../services/summaryService"
 
 export const generateSourceMetadatasEndpoint = async (
   req: Request,
-  res: Response
+  res: Response,
+  log: boolean = true
 ) => {
   const { query } = req.body
 
   try {
-    const sourceMetadatas = await generateSourceMetadatas(query)
-    const snippets: Snippet[] = await generateSnippets(query, sourceMetadatas)
-    const sourcesMetadatasNoText = sourceMetadatas.map(
+    const startTime = Date.now()
+    const sourceMetadatas = await generateRankedSourceMetadatas(query)
+    const [sourceMetadatasWithSummaries, { snippets, themes }] =
+      await Promise.all([
+        generateSourceMetadatasWithSummary(sourceMetadatas),
+        generateOverview(query, sourceMetadatas),
+      ])
+    const endTime = Date.now()
+    if (log) {
+      const totalTimeInS = (endTime - startTime) / 1000
+      console.log(`Total source metadata generation: ${totalTimeInS}s.`)
+    }
+
+    const sourcesMetadatasNoText = sourceMetadatasWithSummaries.map(
       ({ textContent, ...rest }) => rest
     )
-    res.json({ sourceMetadatas: sourcesMetadatasNoText, snippets })
+    res.json({ sourceMetadatas: sourcesMetadatasNoText, snippets, themes })
   } catch (error) {
     res.status(500).json({ error: error.message })
   }

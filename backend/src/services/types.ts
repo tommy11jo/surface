@@ -12,5 +12,11 @@ export type Snippet = {
   hostname: string
   title: string
   content: string
-  theme: string
+  themeId: string
+}
+
+export type Theme = {
+  id: string
+  title: string
+  relevanceScore: string
 }

@@ -1,14 +1,16 @@
-import { SourceMetadata, Snippet } from "./types"
+import { SourceMetadata, Snippet, Theme } from "./types"
 import { generateLLMResponse } from "./llmService"
-
-export async function generateSnippets(
+import { randId } from "../utils/generateId"
+export async function generateOverview(
   query: string,
   sourceMetadatas: SourceMetadata[],
   maxSourcesToConsider: number = 3,
   // maxSourcesToConsider: number = 2,
-  maxQuotes: number = 5,
   log: boolean = true
-) {
+): Promise<{
+  snippets: Snippet[]
+  themes: Theme[]
+}> {
   sourceMetadatas = sourceMetadatas.slice(0, maxSourcesToConsider)
   const overviewPrompt = getOverviewPrompt(query, sourceMetadatas)
   const overviewStartTime = Date.now()
@@ -16,23 +18,9 @@ export async function generateSnippets(
   const overviewEndTime = Date.now()
   if (log) {
     const overviewTime = overviewEndTime - overviewStartTime
-    console.log(`Total overview time: ${overviewTime / 1000}s`)
+    console.log(`Total overview generation: ${overviewTime / 1000}s`)
   }
-  const fuzzyQuotes = extractSnippetsFromResponse(overviewResponse)
-  const snippets: Snippet[] = fuzzyQuotes.map((contentAndIndex) => {
-    const [theme, content, index] = contentAndIndex
-    if (index >= sourceMetadatas.length)
-      throw Error("Generated source index for snippet is out of bounds.")
-    return {
-      url: sourceMetadatas[index].url,
-      hostname: sourceMetadatas[index].hostname,
-      title: sourceMetadatas[index].title,
-      content: content,
-      theme: theme,
-    }
-  })
-
-  return snippets.slice(0, maxQuotes)
+  return extractSnippetsFromResponse(overviewResponse, sourceMetadatas)
 }
 
 function getOverviewPrompt(query: string, sourceMetadatas: SourceMetadata[]) {
@@ -44,15 +32,18 @@ ${metadata.textContent}
     )
     .join("\n\n")
   const prompt = `Your job is to write a good overview given the user's query.
-Generate 2-3 themes or topics that are directly relevant or are likely of interest.
+Generate 2-4 themes or topics that are directly relevant or likely of interest.
 
 Themes:
 Each theme is a core point of interest to the user.
 Each theme has 1-3 corresponding snippets.
+Each theme has a relevance score that is 0-10. 
+A score of 10 means that the theme will directly answer the query.
+A score of 5 means the theme is adjacent and relevant but not essential.
 
 Snippets:
-Each snippet should contain a unique chunk of insight. 
-Each snippet is self-contained and informational.
+Each snippet should contain a unique chunk of relevant insight. 
+Each snippet is self-contained and informational and directly relevant.
 A snippet is typically 1-3 sentences.
 A snippet must be a direct quote, exactly matching the original text.
 A snippet can contain non-consecutive sentences, by using an elipsis (e.g. <intro context>... <main point>)
@@ -65,7 +56,8 @@ Example format:
 <query>
 
 ## Relevant themes 
-### <Theme 1 Title>
+### Theme 1: <theme title>
+#### Theme Relevance: <score 0-10>
 #### Snippet 1
 Content: "<snippet content>"
 Source: 1
@@ -73,7 +65,8 @@ Source: 1
 Content: "<snippet content>"
 Source: 3
 
-### <Theme 2 Title>
+### Theme 2: <theme title>
+#### Theme Relevance: <score 0-10>
 #### Snippet 3
 Content: "<snippet content>"
 Source: 3
@@ -92,16 +85,25 @@ ${query}
 }
 
 function extractSnippetsFromResponse(
-  response: string
-): [string, string, number][] {
-  const snippets: [string, string, number][] = []
+  response: string,
+  sourceMetadatas: SourceMetadata[]
+): {
+  snippets: Snippet[]
+  themes: Theme[]
+} {
+  const snippets: Snippet[] = []
+  const themes: Theme[] = []
 
-  const themeRegex = /### (.*?)\n(.*?)(?=\n### (?!#)|\n$)/gs
+  const themeRegex =
+    /### Theme \d+: (.*?)\n#### Theme Relevance: (\d+)\n(.*?)(?=\n### (?!#)|\n$)/gs
   let themeMatch
 
   while ((themeMatch = themeRegex.exec(response)) !== null) {
     const theme = themeMatch[1].trim()
-    const themeContent = themeMatch[2]
+    const relevanceScore = themeMatch[2]
+    const themeContent = themeMatch[3]
+    const themeId = randId()
+    themes.push({ id: themeId, title: theme, relevanceScore })
 
     const snippetRegex = /#### Snippet \d+\nContent: "(.*?)"\nSource: (\d+)/g
     let snippetMatch
@@ -109,9 +111,17 @@ function extractSnippetsFromResponse(
     while ((snippetMatch = snippetRegex.exec(themeContent)) !== null) {
       const content = snippetMatch[1]
       const sourceIndex = parseInt(snippetMatch[2], 10)
-      snippets.push([theme, content, sourceIndex])
+      if (sourceIndex >= sourceMetadatas.length)
+        throw Error("Generated source index for snippet is out of bounds.")
+      snippets.push({
+        url: sourceMetadatas[sourceIndex].url,
+        hostname: sourceMetadatas[sourceIndex].hostname,
+        title: sourceMetadatas[sourceIndex].title,
+        content,
+        themeId,
+      })
     }
   }
 
-  return snippets
+  return { snippets, themes }
 }

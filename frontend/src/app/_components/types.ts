@@ -3,8 +3,9 @@ export type Snippet = {
   url: string;
   hostname: string;
   content: string;
-  theme: string;
   title: string;
+  themeId: string;
+  relevanceScore?: number;
 };
 
 // copied from backend
@@ -15,4 +16,10 @@ export type SourceMetadata = {
   icon?: string;
   textContent?: string | undefined;
   summary?: string;
+};
+
+export type Theme = {
+  id: string;
+  title: string;
+  relevanceScore: number;
 };

@@ -7,23 +7,19 @@ import {
   orderByScores,
 } from "./rerankService"
 import { SourceMetadata } from "./types"
-import {
-  getWebpageSummaryPrompt,
-  extractSummaryFromResponse,
-  searchByDDGS,
-} from "./summaryService"
+import { searchByDDGS } from "./summaryService"
 import { convert } from "html-to-text"
 const serpApi = new SerpApi.GoogleSearch(process.env.SERPAPI_KEY)
 
 const NUM_SOURCES_TO_PROCESS = 4
 
-export const generateSourceMetadatas = async (
+export const generateRankedSourceMetadatas = async (
   query: string,
-  useSerpApi: boolean = true,
+  useSerpApi: boolean = false,
+  rerank: boolean = false,
   log: boolean = true
 ): Promise<SourceMetadata[]> => {
   if (query.length >= 200) throw new Error("Query must be <200 chars.")
-  const startTime = Date.now()
 
   const searchStartTime = Date.now()
   const sourceMetadatas = useSerpApi
@@ -34,23 +30,30 @@ export const generateSourceMetadatas = async (
     const ddgsTime = searchEndTime - searchStartTime
     console.log(`Search time: ${ddgsTime / 1000}s`)
   }
-  const rerankPrompt = getRerankPrompt(sourceMetadatas, query)
-  const rerankStartTime = Date.now()
-  const rerankResponse = await generateLLMResponse(rerankPrompt)
-  const rerankScores = await extractRanksFromResponse(rerankResponse)
-  const rerankIndices = orderByScores(rerankScores)
-  const rerankedSourceMetadatas = rerankIndices.map(
-    (index) => sourceMetadatas[index]
-  )
-  const rerankEndTime = Date.now()
-  if (log) {
-    const rerankTime = rerankEndTime - rerankStartTime
-    console.log(`Rerank time: ${rerankTime / 1000}s`)
+  let updatedSourceMetadatas: SourceMetadata[]
+  if (rerank) {
+    const rerankPrompt = getRerankPrompt(sourceMetadatas, query)
+    const rerankStartTime = Date.now()
+    const rerankResponse = await generateLLMResponse(rerankPrompt)
+    const rerankScores = await extractRanksFromResponse(rerankResponse)
+    const rerankIndices = orderByScores(rerankScores)
+    const rerankedSourceMetadatas = rerankIndices.map(
+      (index) => sourceMetadatas[index]
+    )
+    const rerankEndTime = Date.now()
+    if (log) {
+      const rerankTime = rerankEndTime - rerankStartTime
+      console.log(`Rerank time: ${rerankTime / 1000}s`)
+    }
+    updatedSourceMetadatas = rerankedSourceMetadatas
+  } else {
+    console.log("[INFO] Reranking is turned off.")
+    updatedSourceMetadatas = sourceMetadatas
   }
 
   const textFetchStartTime = Date.now()
   const textContents: (string | undefined)[] = await Promise.all(
-    rerankedSourceMetadatas.map((result, i) =>
+    updatedSourceMetadatas.map((result, i) =>
       i < NUM_SOURCES_TO_PROCESS ? getTextContent(result.url, true) : undefined
     )
   )
@@ -61,57 +64,9 @@ export const generateSourceMetadatas = async (
   }
 
   textContents.forEach(
-    (textContent, i) => (rerankedSourceMetadatas[i].textContent = textContent)
+    (textContent, i) => (updatedSourceMetadatas[i].textContent = textContent)
   )
-  const sourceMetadatasWithText = rerankedSourceMetadatas.filter(
-    (metadata) => metadata.textContent
-  )
-
-  const overviewPrompts = sourceMetadatasWithText.map((metadata) =>
-    getWebpageSummaryPrompt(metadata.textContent!, metadata.hostname)
-  )
-
-  const summaryStartTime = Date.now()
-  const llmSummaryResponses = await Promise.all(
-    overviewPrompts.map((prompt) => generateLLMResponse(prompt))
-  )
-  const summaryEndTime = Date.now()
-  if (log) {
-    const summaryTime = summaryEndTime - summaryStartTime
-    console.log(`Summary time: ${summaryTime / 1000}s`)
-  }
-
-  const sourceSummaries = llmSummaryResponses
-    .map((response) =>
-      response !== null ? extractSummaryFromResponse(response) : null
-    )
-    .filter((summary) => summary !== null) as string[]
-
-  // do not assume a valid summary
-  // sources like youtube videos might not have summaries or the LLM might not generate the summary correctly
-  const sourceMetadatasWithOverview: SourceMetadata[] = []
-  sourceSummaries.forEach((overview, index) => {
-    if (overview !== null) {
-      sourceMetadatasWithText[index].summary = overview
-      sourceMetadatasWithOverview.push({
-        ...sourceMetadatasWithText[index],
-        summary: overview,
-      })
-    }
-  })
-
-  const sourceMetadatasWithoutOverviews = rerankedSourceMetadatas.filter(
-    (metadata) => !metadata.summary
-  )
-  const updatedMetadatas = [
-    ...sourceMetadatasWithOverview,
-    ...sourceMetadatasWithoutOverviews,
-  ]
-
-  const endTime = Date.now()
-  const totalTime = endTime - startTime
-  console.log(`Total source list time: ${totalTime / 1000}s`)
-  return updatedMetadatas
+  return updatedSourceMetadatas
 }
 
 export const searchBySerpApi = async (
@@ -157,13 +112,14 @@ export const searchBySerpApi = async (
   }
 }
 
-const MAX_WORDS_PER_SOURCE = 2000
+const MAX_WORDS_PER_SOURCE = 1600
+// const MAX_WORDS_PER_SOURCE = 3000
 const GOOGLE_CACHE_ERROR_STR = "Error 404 (Not Found)!!1"
 export const getTextContent = async (
   url: string,
   trim: boolean,
   approxWordsCutoff: number = MAX_WORDS_PER_SOURCE,
-  jinaTimeout: number = 9000
+  jinaTimeout: number = 5000
 ): Promise<string | undefined> => {
   // r.jina.ai does not work on reddit
   // use google's cache for reddit, though this is deprecated

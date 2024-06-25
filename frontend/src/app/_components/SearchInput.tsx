@@ -2,7 +2,7 @@
 
 import axios from "axios";
 import { useEffect, useState } from "react";
-import { type SourceMetadata, type Snippet } from "./types";
+import { type SourceMetadata, type Snippet, type Theme } from "./types";
 import { useRouter } from "next/navigation";
 
 type SearchInputProps = {
@@ -10,15 +10,17 @@ type SearchInputProps = {
   setQuery: (value: string) => void;
   setSourceMetadatas: (value: SourceMetadata[]) => void;
   setSnippets: (value: Snippet[]) => void;
+  setThemes: (value: Theme[]) => void;
 };
 
-const LOADING_STATE = "🟡 Loading...";
-const IDLE_STATE = "🟢 Search";
+const LOADING_STATE = "🟡 Loading (typically 8 to 12 seconds)";
+const IDLE_STATE = "🟢 Search (typically 8 to 12 seconds)";
 export function SearchInput({
   query,
   setQuery,
   setSourceMetadatas,
   setSnippets,
+  setThemes,
 }: SearchInputProps) {
   const [inputRef, setInputRef] = useState<HTMLInputElement | null>(null);
   const [statusText, setStatusText] = useState(IDLE_STATE);
@@ -45,16 +47,18 @@ export function SearchInput({
   const handleSearch = async () => {
     setStatusText(LOADING_STATE);
     setSourceMetadatas([]);
+    setThemes([]);
     setSnippets([]);
     try {
       const startTime = performance.now();
-      const { sourceMetadatas, snippets } =
+      const { sourceMetadatas, snippets, themes } =
         await generateSourceMetadatas(query);
       const endTime = performance.now();
       setStatusText(
         `🟢 Complete in ${((endTime - startTime) / 1000).toFixed(2)}s`,
       );
       setSourceMetadatas(sourceMetadatas);
+      setThemes(themes);
       setSnippets(snippets);
       router.push(`/?example=false&q=${encodeURIComponent(query)}`);
     } catch (error) {
@@ -71,10 +75,15 @@ export function SearchInput({
       const { data } = await axios.post<{
         sourceMetadatas: SourceMetadata[];
         snippets: Snippet[];
+        themes: Theme[];
       }>("http://localhost:8000/api/search", {
         query,
       });
-      return { sourceMetadatas: data.sourceMetadatas, snippets: data.snippets };
+      return {
+        sourceMetadatas: data.sourceMetadatas,
+        snippets: data.snippets,
+        themes: data.themes,
+      };
     } catch (error) {
       console.error("An error occurred while fetching data:", error);
       throw error;
@@ -93,8 +102,7 @@ export function SearchInput({
           ref={setInputRef}
           spellCheck={false}
           disabled={statusText === LOADING_STATE}
-          className="w-full rounded-lg border border-gray-500 p-2 pl-10 text-lg focus:outline-none focus:ring-1 focus:ring-gray-400 sm:w-96"
-          placeholder="⛔ Out of order! To 🐌 and 💲 for prod."
+          className="w-full rounded-lg border border-gray-500 p-2 pl-10 text-sm focus:outline-none focus:ring-1 focus:ring-gray-400 sm:w-96 sm:text-base"
         />
         <button
           onClick={handleSearch}

@@ -31,7 +31,7 @@ const generateFireworkResponse = async (
 
     return textContent
   } catch (error) {
-    console.error("Error calling Firework API:", error.message)
+    console.error("Error calling Firework API:", error)
     return null
   }
 }
@@ -131,6 +131,6 @@ async function getClaudeResponse(
   }
 }
 // export const generateLLMResponse = getClaudeResponse
-export const generateLLMResponse = generateOpenAIResponse
-// export const generateLLMResponse = generateFireworkResponse
+// export const generateLLMResponse = generateOpenAIResponse
+export const generateLLMResponse = generateFireworkResponse
 // export const generateLLMResponse = generatePerplexityResponse

@@ -1,9 +1,62 @@
+import { generateLLMResponse } from "./llmService"
 import { SourceMetadata } from "./types"
 import { search as ddgs, SafeSearchType } from "duck-duck-scrape"
 
 const INIT_SUMMARY_MARKER = "### Initial Summary"
 const FINAL_SUMMARY_MARKER = "### Final Summary"
 const FAILURE_WORD = "GARBLED"
+export const generateSourceMetadatasWithSummary = async (
+  sourceMetadatas: SourceMetadata[],
+  log: boolean = true
+) => {
+  const sourceMetadatasWithText = sourceMetadatas.filter(
+    (metadata) => metadata.textContent
+  )
+
+  const summaryPrompts = sourceMetadatasWithText.map((metadata) =>
+    getWebpageSummaryPrompt(metadata.textContent!, metadata.hostname)
+  )
+
+  const summaryStartTime = Date.now()
+  const llmSummaryResponses = await Promise.all(
+    summaryPrompts.map((prompt) => generateLLMResponse(prompt))
+  )
+  const summaryEndTime = Date.now()
+  if (log) {
+    const summaryTime = summaryEndTime - summaryStartTime
+    console.log(`Summary generation: ${summaryTime / 1000}s`)
+  }
+
+  const sourceSummaries = llmSummaryResponses
+    .map((response) =>
+      response !== null ? extractSummaryFromResponse(response) : null
+    )
+    .filter((summary) => summary !== null) as string[]
+
+  // do not assume a valid summary
+  // sources like youtube videos might not have summaries or the LLM might not generate the summary correctly
+  const sourceMetadatasWithSummaries: SourceMetadata[] = []
+  sourceSummaries.forEach((summary, index) => {
+    if (summary !== null) {
+      sourceMetadatasWithText[index].summary = summary
+      sourceMetadatasWithSummaries.push({
+        ...sourceMetadatasWithText[index],
+        summary: summary,
+      })
+    }
+  })
+
+  const sourceMetadatasWithoutOverviews = sourceMetadatas.filter(
+    (metadata) => !metadata.summary
+  )
+  const updatedMetadatas = [
+    ...sourceMetadatasWithSummaries,
+    ...sourceMetadatasWithoutOverviews,
+  ]
+
+  return updatedMetadatas
+}
+
 export const getWebpageSummaryPrompt = (
   sourceText: string,
   hostname: string,
@@ -16,8 +69,9 @@ export const getWebpageSummaryPrompt = (
 If the text has a captcha, is blocked, is empty, or is malformed, just output "${FAILURE_WORD}".
 
 Otherwise, write a summary of the text in ${sentenceRange} sentences.
-Write these summaries in the style of Paul Graham.
-Write plainly and concisely, using simple language.
+Use telegraphic speech.
+Use simple language.
+Write plainly and concisely.
 Be specific and concrete.
 
 Then, rewrite the summary and make it more entity-dense and simple.
