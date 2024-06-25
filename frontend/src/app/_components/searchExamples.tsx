@@ -799,18 +799,6 @@ const glassesThemes = [
 ];
 export const searchExamplesList: SearchExample[] = [
   {
-    query: "how to get startup ideas",
-    sourceMetadatas: startupSources,
-    snippets: startupSnippets,
-    themes: startupThemes,
-  },
-  {
-    query: "reviews of a case against education",
-    sourceMetadatas: educationSources,
-    snippets: educationSnippets,
-    themes: educationThemes,
-  },
-  {
     query: "good first ergonomic keyboard",
     sourceMetadatas: keyboardSources,
     snippets: keyboardSnippets,
@@ -834,5 +822,17 @@ export const searchExamplesList: SearchExample[] = [
     sourceMetadatas: ovenFriesSources,
     snippets: ovenFriesSnippets,
     themes: ovenFriesThemes,
+  },
+  {
+    query: "reviews of a case against education",
+    sourceMetadatas: educationSources,
+    snippets: educationSnippets,
+    themes: educationThemes,
+  },
+  {
+    query: "how to get startup ideas",
+    sourceMetadatas: startupSources,
+    snippets: startupSnippets,
+    themes: startupThemes,
   },
 ];

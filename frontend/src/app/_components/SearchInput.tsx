@@ -4,6 +4,7 @@ import axios from "axios";
 import { useEffect, useState } from "react";
 import { type SourceMetadata, type Snippet, type Theme } from "./types";
 import { useRouter } from "next/navigation";
+import { useSecretCode } from "../secretContext";
 
 type SearchInputProps = {
   query: string;
@@ -13,8 +14,8 @@ type SearchInputProps = {
   setThemes: (value: Theme[]) => void;
 };
 
-const LOADING_STATE = "🟡 Loading (typically 8 to 12 seconds)";
-const IDLE_STATE = "🟢 Search (typically 8 to 12 seconds)";
+const LOADING_STATE = "🟡 Loading (typically 5 to 9 seconds)";
+const IDLE_STATE = "🟢 Search the web (typically 5 to 9 seconds)";
 export function SearchInput({
   query,
   setQuery,
@@ -22,9 +23,11 @@ export function SearchInput({
   setSnippets,
   setThemes,
 }: SearchInputProps) {
+  const { secretCode } = useSecretCode();
+  const router = useRouter();
+
   const [inputRef, setInputRef] = useState<HTMLInputElement | null>(null);
   const [statusText, setStatusText] = useState(IDLE_STATE);
-  const router = useRouter();
 
   useEffect(() => {
     if (inputRef) inputRef.focus();
@@ -71,13 +74,16 @@ export function SearchInput({
   };
 
   const generateSourceMetadatas = async (query: string) => {
+    const apiPrefix = process.env.NEXT_PUBLIC_API_PREFIX;
+    const searchEndpoint = `${apiPrefix}/api/search`;
     try {
       const { data } = await axios.post<{
         sourceMetadatas: SourceMetadata[];
         snippets: Snippet[];
         themes: Theme[];
-      }>("http://localhost:8000/api/search", {
+      }>(searchEndpoint, {
         query,
+        secret: secretCode,
       });
       return {
         sourceMetadatas: data.sourceMetadatas,

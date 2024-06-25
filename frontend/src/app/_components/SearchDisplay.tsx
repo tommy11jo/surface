@@ -66,10 +66,9 @@ export function SearchDisplay() {
     urlToIndex[metadata.url] = i;
   });
 
-  console.log("sources", sourceMetadatas);
-  console.log("themes", themes);
-  console.log("snippets", snippets);
-
+  // console.log("sources", sourceMetadatas);
+  // console.log("themes", themes);
+  // console.log("snippets", snippets);
   return (
     <div className="flex min-h-screen w-full flex-col py-2">
       <div className="flex w-full flex-col justify-between gap-2 py-4 sm:flex-row">
@@ -81,9 +80,7 @@ export function SearchDisplay() {
           setThemes={setThemes}
         />
         <div className="flex flex-col">
-          <span>
-            🌐 A search interface for high quality, information dense results
-          </span>
+          <span>🌐 High-Quality, Info-Packed Search Results</span>
         </div>
       </div>
       <div className="flex w-full border-b border-solid border-dark-sand"></div>
@@ -157,13 +154,9 @@ export function SearchDisplay() {
             </div>
             <ul className="px-2">
               {themes.map((theme, index) => (
-                <details
-                  key={theme.id}
-                  open={isThemeOpenList[index]}
-                  className="py-3 sm:px-4"
-                >
-                  <summary
-                    className="flex cursor-pointer select-none items-center"
+                <div key={theme.id} className="py-3 sm:px-4">
+                  <div
+                    className="flex cursor-pointer items-center"
                     onClick={(e) => {
                       e.preventDefault();
                       if (isThemeOpenList[index])
@@ -188,33 +181,38 @@ export function SearchDisplay() {
                           : "rotate(0deg)",
                       }}
                     />
-                    <h2 className="inline-block text-xl font-semibold">
+                    <h2 className="no-select inline-block text-xl font-semibold">
                       {theme.title}
                     </h2>
-                  </summary>
-                  {groupedSnippets[theme.id]!.map((snippet) => (
-                    <div key={snippet.content} className="flex w-full flex-col">
-                      <div className="group inline-flex items-baseline pl-4 text-sm sm:pl-8">
-                        <div className="mr-2 inline-flex h-4 w-4 flex-shrink-0 items-center justify-center rounded-full bg-gray-300">
-                          <span>{urlToIndex[snippet.url]}</span>
-                        </div>
+                  </div>
 
-                        <a
-                          href={snippet.url}
-                          className="inline text-gray-500 group-hover:underline"
-                        >
-                          <span>{snippet.hostname}</span>
-                          <span className="pl-1 text-gray-500 group-hover:underline sm:overflow-hidden sm:text-ellipsis sm:whitespace-nowrap">
-                            • {snippet.title}
-                          </span>
-                        </a>
+                  {isThemeOpenList[index] &&
+                    groupedSnippets[theme.id]!.map((snippet) => (
+                      <div
+                        key={snippet.content}
+                        className="flex w-full flex-col"
+                      >
+                        <div className="group inline-flex items-baseline pl-4 text-sm sm:pl-8">
+                          <div className="mr-2 inline-flex h-4 w-4 flex-shrink-0 items-center justify-center rounded-full bg-gray-300">
+                            <span>{urlToIndex[snippet.url]}</span>
+                          </div>
+
+                          <a
+                            href={snippet.url}
+                            className="inline text-gray-500 group-hover:underline"
+                          >
+                            <span>{snippet.hostname}</span>
+                            <span className="pl-1 text-gray-500 group-hover:underline sm:overflow-hidden sm:text-ellipsis sm:whitespace-nowrap">
+                              • {snippet.title}
+                            </span>
+                          </a>
+                        </div>
+                        <div className="flex flex-row">
+                          <span>• {`"${snippet.content}"`}</span>
+                        </div>
                       </div>
-                      <div className="flex flex-row">
-                        <span>• {`"${snippet.content}"`}</span>
-                      </div>
-                    </div>
-                  ))}
-                </details>
+                    ))}
+                </div>
               ))}
             </ul>
           </div>

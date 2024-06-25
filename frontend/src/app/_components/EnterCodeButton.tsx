@@ -1,15 +1,12 @@
 "use client";
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef } from "react";
+import { useSecretCode } from "../secretContext";
 
 export function EnterCodeButton() {
   const [isOpen, setIsOpen] = useState(false);
-  const [code, setCode] = useState("");
   const [tempCode, setTempCode] = useState("");
-
-  useEffect(() => {
-    const curCode = localStorage.getItem("userCode");
-    if (curCode !== null) setCode(curCode);
-  }, []);
+  const inputRef = useRef<HTMLInputElement | null>(null);
+  const { secretCode, setSecretCode } = useSecretCode();
 
   const handleKeyDown = (
     event: React.KeyboardEvent<HTMLInputElement>,
@@ -20,8 +17,11 @@ export function EnterCodeButton() {
     }
   };
 
+  useEffect(() => {
+    if (isOpen) inputRef.current!.focus();
+  }, [isOpen]);
   const handleOpen = () => {
-    setTempCode(code);
+    setTempCode(secretCode);
     setIsOpen(true);
   };
 
@@ -32,7 +32,7 @@ export function EnterCodeButton() {
 
   const handleSave = () => {
     localStorage.setItem("userCode", tempCode);
-    setCode(tempCode);
+    setSecretCode(tempCode);
     setIsOpen(false);
   };
 
@@ -55,6 +55,7 @@ export function EnterCodeButton() {
               onChange={(e) => setTempCode(e.target.value)}
               onKeyDown={handleKeyDown}
               className="mb-4 mt-2 w-full border p-2"
+              ref={inputRef}
             />
             <div className="flex justify-between gap-2">
               <button onClick={handleClose} className="rounded hover:underline">

@@ -1,5 +1,6 @@
 import "~/styles/globals.css";
 import { Header } from "./_components/Header";
+import { SecretCodeProvider } from "./secretContext";
 
 export const metadata = {
   title: "Surface",
@@ -20,8 +21,10 @@ export default function RootLayout({
     <html lang="en">
       <body>
         <main className="flex min-h-screen flex-col items-center bg-lightest-sand text-base text-black sm:text-lg">
-          <Header />
-          {children}
+          <SecretCodeProvider>
+            <Header />
+            {children}
+          </SecretCodeProvider>
         </main>
       </body>
     </html>
