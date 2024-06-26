@@ -1,52 +1,95 @@
 "use client";
 
-import { useEffect, useState } from "react";
-import { SearchInput } from "./SearchInput";
+import { useCallback, useEffect, useRef, useState } from "react";
+import { IDLE_STATE, LOADING_STATE, SearchInput } from "./SearchInput";
 
 import { type SourceMetadata, type Snippet, type Theme } from "./types";
-import { type SearchExample, searchExamplesList } from "./searchExamples";
-import { useRouter, useSearchParams } from "next/navigation";
-import Link from "next/link";
+import { searchExamplesList } from "./searchExamples";
 import { ChevronRight } from "lucide-react";
+import axios from "axios";
+import { useSecretCode } from "../secretContext";
+import { useSearchParams } from "next/navigation";
 
 export function SearchDisplay() {
+  const searchParams = useSearchParams();
+  const encodedQuery = searchParams.get("q") ?? "";
+  const query = decodeURIComponent(encodedQuery);
+  const isExample = searchParams.get("isExample") === "true";
+
+  const { secretCode } = useSecretCode();
+
   const [sourceMetadatas, setSourceMetadatas] = useState<SourceMetadata[]>([]);
   const [snippets, setSnippets] = useState<Snippet[]>([]);
   const [themes, setThemes] = useState<Theme[]>([]);
-
-  const [query, setQuery] = useState("");
-
+  const [tempQuery, setTempQuery] = useState(query ?? "");
+  const [statusText, setStatusText] = useState(IDLE_STATE);
   const [isThemeOpenList, setIsThemeOpenList] = useState<boolean[]>([]);
 
-  const router = useRouter();
-  const searchParams = useSearchParams();
+  const dataFetchedRef = useRef(false);
 
-  const handleSearchExample = (example: SearchExample) => {
-    router.push(`/example=true&q=${encodeURIComponent(example.query)}`);
-  };
-  useEffect(() => {
-    const exampleParam = searchParams.get("example");
-    if (exampleParam === "false") return;
-    const isExample = exampleParam === "true";
-    if (!isExample) {
-      setSourceMetadatas([]);
-      setSnippets([]);
-      setThemes([]);
-      setQuery("");
-      return;
+  const fetchData = useCallback(async () => {
+    if (isExample) {
+      const curExample = searchExamplesList.find(
+        (example) => example.query === query,
+      );
+      if (!curExample) throw Error("Invalid example provided in url");
+      return curExample;
     }
-    const encodedQuery = searchParams.get("q");
-    const decodedQuery =
-      encodedQuery === null ? null : decodeURIComponent(encodedQuery);
-    const curExample = searchExamplesList.find(
-      (example) => example.query === decodedQuery,
-    );
-    if (!curExample) throw Error("Invalid example provided in url");
-    setSourceMetadatas(curExample.sourceMetadatas);
-    setSnippets(curExample.snippets);
-    setThemes(curExample.themes);
-    setQuery(curExample.query);
-  }, [searchParams]);
+
+    if (!secretCode || !query) {
+      return null;
+    }
+
+    setStatusText(LOADING_STATE);
+    const apiPrefix = process.env.NEXT_PUBLIC_API_PREFIX;
+    const searchEndpoint = `${apiPrefix}/api/search`;
+
+    try {
+      const startTime = performance.now();
+      const { data } = await axios.post<{
+        sourceMetadatas: SourceMetadata[];
+        snippets: Snippet[];
+        themes: Theme[];
+      }>(searchEndpoint, {
+        query: query,
+        secret: secretCode,
+      });
+      const endTime = performance.now();
+      setStatusText(
+        `🟢 Complete in ${((endTime - startTime) / 1000).toFixed(2)}s`,
+      );
+      return data;
+    } catch (error) {
+      let errorMessage = "Unknown error occurred.";
+      if (error instanceof Error) {
+        errorMessage = error.message;
+      }
+      setStatusText(`🔴 Error: ${errorMessage}`);
+      throw error;
+    }
+  }, [query, isExample, secretCode]);
+
+  useEffect(() => {
+    if (dataFetchedRef.current) return;
+
+    const loadData = async () => {
+      try {
+        const data = await fetchData();
+        if (data) {
+          setSourceMetadatas(data.sourceMetadatas);
+          setSnippets(data.snippets);
+          setThemes(data.themes);
+          dataFetchedRef.current = true;
+        }
+      } catch (error) {
+        console.error("Error fetching data:", error);
+      }
+    };
+
+    loadData().catch((error) => {
+      console.log("Error loading the data:", error);
+    });
+  }, [fetchData]);
 
   useEffect(() => {
     // TODO: Get LLM to output lower scores and lower this value
@@ -73,37 +116,17 @@ export function SearchDisplay() {
     <div className="flex min-h-screen w-full flex-col py-2">
       <div className="flex w-full flex-col justify-between gap-2 py-4 sm:flex-row">
         <SearchInput
-          query={query}
-          setQuery={setQuery}
-          setSourceMetadatas={setSourceMetadatas}
-          setSnippets={setSnippets}
-          setThemes={setThemes}
+          query={tempQuery}
+          setQuery={setTempQuery}
+          statusText={statusText}
+          setStatusText={setStatusText}
         />
         <div className="flex flex-col">
           <span>🌐 High-Quality, Info-Packed Search Results</span>
         </div>
       </div>
       <div className="flex w-full border-b border-solid border-dark-sand"></div>
-      {sourceMetadatas.length === 0 && query.length === 0 && (
-        <div>
-          <div>
-            <span className="font-semibold">Examples:</span>
-          </div>
-          {searchExamplesList.map((example, index) => {
-            return (
-              <div key={example.query + index}>
-                <Link
-                  href={`?example=true&q=${encodeURIComponent(example.query)}`}
-                  onClick={() => handleSearchExample(example)}
-                  className="text-blue-500 hover:underline"
-                >
-                  → {example.query}
-                </Link>
-              </div>
-            );
-          })}
-        </div>
-      )}
+
       <div className="flex grow flex-col-reverse gap-4 sm:flex-row">
         {sourceMetadatas.length > 0 && (
           <div className="flex w-full flex-col items-center sm:w-1/2">
