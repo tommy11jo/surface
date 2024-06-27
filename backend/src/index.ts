@@ -20,12 +20,10 @@ app.get("/", (_req: Request, res: Response) => {
   return res.send(message)
 })
 
-console.log("Running in node env:", process.env.NODE_ENV)
-console.log("Running in vercel:", process.env.VERCEL_ENV)
 if (process.env.NODE_ENV !== "production") {
   const PORT = process.env.PORT || 8000
   app.listen(PORT, () => {
-    console.log(`Server is running on port ${PORT}`)
+    console.log(`[INFO] Server is running on port ${PORT}`)
   })
 }
 

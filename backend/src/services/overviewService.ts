@@ -18,7 +18,7 @@ export async function generateOverview(
   const overviewEndTime = Date.now()
   if (log) {
     const overviewTime = overviewEndTime - overviewStartTime
-    console.log(`Total overview generation: ${overviewTime / 1000}s`)
+    console.log(`[INFO] Total overview generation: ${overviewTime / 1000}s`)
   }
   return extractSnippetsFromResponse(overviewResponse, sourceMetadatas)
 }
@@ -95,7 +95,7 @@ function extractSnippetsFromResponse(
   const themes: Theme[] = []
 
   const themeRegex =
-    /### Theme \d+: (.*?)\n([\s\S]*?)#### Theme Relevance: (\d+)/g
+    /### Theme \d+: (.*?)\n+([\s\S]*?)#### Theme Relevance: (\d+)/g
   let themeMatch
 
   while ((themeMatch = themeRegex.exec(response)) !== null) {

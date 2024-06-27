@@ -7,15 +7,19 @@ type SearchInputProps = {
   setQuery: (value: string) => void;
   statusText: string;
   setStatusText: (value: string) => void;
+  showRefresh: boolean;
+  secretCode: string;
 };
-export const LOADING_STATE = "🟡 Loading (typically 5 to 9 seconds)";
-export const IDLE_STATE = "🟢 Search the web (typically 5 to 9 seconds)";
+export const LOADING_STATE = "🟡 Loading (typically 7 to 11 seconds)";
+export const IDLE_STATE = "🟢 Search the web (typically 7 to 11 seconds)";
 
 export function SearchInput({
   query,
   setQuery,
   statusText,
   setStatusText,
+  showRefresh,
+  secretCode,
 }: SearchInputProps) {
   const [inputRef, setInputRef] = useState<HTMLInputElement | null>(null);
 
@@ -23,7 +27,7 @@ export function SearchInput({
     if (inputRef) inputRef.focus();
   }, [inputRef]);
 
-  const handleSearch = () => {
+  const handleSearch = (hardRefresh = false) => {
     if (query.length >= 200) {
       setStatusText("🔴 Query must be <200 chars.");
       return;
@@ -32,7 +36,7 @@ export function SearchInput({
       return;
     }
     const encodedQuery = encodeURIComponent(query);
-    window.location.href = `/search?q=${encodedQuery}`;
+    window.location.href = `/search?q=${encodedQuery}&refresh=${hardRefresh}`;
   };
 
   const handleKeyDown = async (
@@ -56,15 +60,26 @@ export function SearchInput({
           spellCheck={false}
           disabled={statusText === LOADING_STATE}
           className="w-full rounded-lg border border-gray-500 p-2 pl-10 text-base focus:outline-none focus:ring-1 focus:ring-gray-400 sm:w-96"
+          placeholder={secretCode ? "Search" : "⛔ Requires code"}
         />
         <button
-          onClick={handleSearch}
+          onClick={() => handleSearch()}
           className="mx-2 flex flex-shrink-0 rounded bg-sand p-2 font-semibold hover:bg-dark-sand"
         >
           Go →
         </button>
       </div>
-      <div className="mt-2 text-base text-gray-400">{statusText}</div>
+      <div className="flex w-full flex-row items-end justify-between">
+        <div className="mt-2 text-base text-gray-400">{statusText}</div>
+        {showRefresh && (
+          <button
+            onClick={() => handleSearch(true)}
+            className="mx-2 inline-flex text-sm font-semibold text-gray-600 hover:underline"
+          >
+            Refresh ↻
+          </button>
+        )}
+      </div>
     </div>
   );
 }

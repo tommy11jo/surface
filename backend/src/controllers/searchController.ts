@@ -6,7 +6,7 @@ import { kv } from "@vercel/kv"
 import crypto from "crypto"
 
 const ONE_DAY_IN_SECONDS = 24 * 60 * 60
-const MAX_SECRET_CODE_USES = 100
+const MAX_SECRET_CODE_USES = 30
 
 function hashKey(key: string): string {
   return crypto.createHash("sha256").update(key).digest("hex")
@@ -16,7 +16,7 @@ export const generateSourceMetadatasEndpoint = async (
   res: Response
 ) => {
   const log = true
-  const { query, secret } = req.body
+  const { query, secret, hardRefresh } = req.body
   const validCodes = process.env.SECRET_CODES?.split(",") || []
 
   if (!validCodes.includes(secret)) {
@@ -32,22 +32,23 @@ export const generateSourceMetadatasEndpoint = async (
   // ideally, i would use bfcache instead but nextjs/vercel prevent that by setting the control headers and allowing me to change them
   // Cons of kv-store approach: requires lot of memory at scale, only persists data for 1-day so "stale" navigations are still slow
   // Proper solution: don't use nextjs (https://stackoverflow.com/questions/76228269/setting-cache-control-header-in-nextjs-app-router)
-  const cacheStartTime = Date.now()
   const cacheKey = `search:${query}`
-  const cachedResult = await kv.get(cacheKey)
+  if (!hardRefresh) {
+    const cacheStartTime = Date.now()
+    const cachedResult = await kv.get(cacheKey)
 
-  if (cachedResult) {
-    return res.json(cachedResult)
+    if (cachedResult) {
+      return res.json(cachedResult)
+    }
+    const cacheEndTime = Date.now()
+    if (log) {
+      const totalCacheTimeInS = (cacheEndTime - cacheStartTime) / 1000
+      console.log(`[INFO] Cache time: ${totalCacheTimeInS}`)
+    }
   }
 
-  // Increment the secret code usage for new (uncached) requests
   await incrementSecretCodeUsage(secret)
 
-  const cacheEndTime = Date.now()
-  if (log) {
-    const totalCacheTimeInS = (cacheEndTime - cacheStartTime) / 1000
-    console.log(`Total cache time: ${totalCacheTimeInS}`)
-  }
   try {
     const startTime = Date.now()
     const sourceMetadatas = await generateRankedSourceMetadatas(query)
@@ -59,7 +60,7 @@ export const generateSourceMetadatasEndpoint = async (
     const endTime = Date.now()
     if (log) {
       const totalTimeInS = (endTime - startTime) / 1000
-      console.log(`Total source metadata generation: ${totalTimeInS}s.`)
+      console.log(`[INFO] Total source metadata generation: ${totalTimeInS}s.`)
     }
 
     const sourcesMetadatasNoText = sourceMetadatasWithSummaries.map(

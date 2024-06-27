@@ -8,14 +8,18 @@ import { searchExamplesList } from "./searchExamples";
 import { ChevronRight } from "lucide-react";
 import axios from "axios";
 import { useSecretCode } from "../secretContext";
-import { useSearchParams } from "next/navigation";
 
-export function SearchDisplay() {
-  const searchParams = useSearchParams();
-  const encodedQuery = searchParams.get("q") ?? "";
-  const query = decodeURIComponent(encodedQuery);
-  const isExample = searchParams.get("isExample") === "true";
+interface SearchDisplayProps {
+  query: string;
+  isExample: boolean;
+  hardRefresh: boolean;
+}
 
+export function SearchDisplay({
+  query,
+  isExample,
+  hardRefresh,
+}: SearchDisplayProps) {
   const { secretCode } = useSecretCode();
 
   const [sourceMetadatas, setSourceMetadatas] = useState<SourceMetadata[]>([]);
@@ -42,6 +46,7 @@ export function SearchDisplay() {
 
     setStatusText(LOADING_STATE);
     const apiPrefix = process.env.NEXT_PUBLIC_API_PREFIX;
+    if (apiPrefix === undefined) throw new Error("Api prefix is undefined");
     const searchEndpoint = `${apiPrefix}/api/search`;
 
     try {
@@ -53,6 +58,7 @@ export function SearchDisplay() {
       }>(searchEndpoint, {
         query: query,
         secret: secretCode,
+        hardRefresh: hardRefresh,
       });
       const endTime = performance.now();
       setStatusText(
@@ -67,8 +73,7 @@ export function SearchDisplay() {
       setStatusText(`🔴 Error: ${errorMessage}`);
       throw error;
     }
-  }, [query, isExample, secretCode]);
-
+  }, [query, isExample, secretCode, hardRefresh]);
   useEffect(() => {
     if (dataFetchedRef.current) return;
 
@@ -92,7 +97,6 @@ export function SearchDisplay() {
   }, [fetchData]);
 
   useEffect(() => {
-    // TODO: Get LLM to output lower scores and lower this value
     setIsThemeOpenList(themes.map((theme) => theme.relevanceScore > 7));
   }, [themes]);
 
@@ -109,9 +113,6 @@ export function SearchDisplay() {
     urlToIndex[metadata.url] = i;
   });
 
-  // console.log("sources", sourceMetadatas);
-  // console.log("themes", themes);
-  // console.log("snippets", snippets);
   return (
     <div className="flex min-h-screen w-full flex-col py-2">
       <div className="flex w-full flex-col justify-between gap-2 py-4 sm:flex-row">
@@ -120,6 +121,8 @@ export function SearchDisplay() {
           setQuery={setTempQuery}
           statusText={statusText}
           setStatusText={setStatusText}
+          showRefresh={sourceMetadatas.length > 0}
+          secretCode={secretCode}
         />
         <div className="flex flex-col">
           <span>🌐 High-Quality, Info-Packed Search Results</span>
@@ -152,10 +155,11 @@ export function SearchDisplay() {
                         <span className="text-base">{metadata.hostname}</span>
                       </div>
                       <div className="text-xl text-blue-500 group-hover:underline">
-                        {/* dangerously set for ddgs library */}
-                        <div
+                        {metadata.title}
+                        {/* dangerously set for ddgs library. */}
+                        {/* <div
                           dangerouslySetInnerHTML={{ __html: metadata.title }}
-                        />
+                        /> */}
                       </div>
                     </a>
                     {metadata.summary && metadata.summary.length > 0 && (
@@ -204,7 +208,7 @@ export function SearchDisplay() {
                           : "rotate(0deg)",
                       }}
                     />
-                    <h2 className="no-select inline-block text-xl font-semibold">
+                    <h2 className="inline-block select-none text-xl font-semibold">
                       {theme.title}
                     </h2>
                   </div>
@@ -215,17 +219,17 @@ export function SearchDisplay() {
                         key={snippet.content}
                         className="flex w-full flex-col"
                       >
-                        <div className="group inline-flex items-baseline pl-4 text-sm sm:pl-8">
+                        <div className="group inline-flex max-w-full items-baseline overflow-hidden pl-4 text-sm sm:pl-8">
                           <div className="mr-2 inline-flex h-4 w-4 flex-shrink-0 items-center justify-center rounded-full bg-gray-300">
                             <span>{urlToIndex[snippet.url]}</span>
                           </div>
 
                           <a
                             href={snippet.url}
-                            className="inline text-gray-500 group-hover:underline"
+                            className="inline truncate text-gray-500 group-hover:underline"
                           >
                             <span>{snippet.hostname}</span>
-                            <span className="pl-1 text-gray-500 group-hover:underline sm:overflow-hidden sm:text-ellipsis sm:whitespace-nowrap">
+                            <span className="pl-1 text-gray-500 group-hover:underline">
                               • {snippet.title}
                             </span>
                           </a>

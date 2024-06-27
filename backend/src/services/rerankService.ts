@@ -22,8 +22,12 @@ However, if a source is not relevant, then you do not need to score it. Just lea
 If you are unsure, use 5 as the score.
 
 Imagine the user is smart and rational.
-They prefer content that is informative, interesting, or data-driven.
-They prefer blogs, forums, trusted news sites, and expert opinions.
+The user prefers content that is informative, interesting, or data-driven.
+The user prefers:
+- well-known blogs or thoughtful personal blogs
+- trusted news sites
+- expert opinions
+- forums like reddit
 
 Example format:
 ## Sources
@@ -59,7 +63,7 @@ Answer:
   return prompt
 }
 
-export async function extractRanksFromResponse(
+export async function extractScores(
   response: string
 ): Promise<[number, number, number][]> {
   const rerankScores: [number, number, number][] = []
@@ -85,3 +89,35 @@ export function orderByScores(scores: [number, number, number][]): number[] {
     .sort((a, b) => b.finalScore - a.finalScore)
     .map((item) => item.source)
 }
+
+export function getRerankPromptAlt(sources: SourceMetadata[], query: string) {
+  return `Rate sources 1-10 for relevance and quality.
+Blogs, trusted news sites, expert opinions, and reddit should score high.
+Act like every word costs you.
+Your explanations should be less short phrases. 
+Each explanation should be less than 7 words.
+
+Example Format: 
+# Source Info
+<info>
+# Query: <query>
+# Ratings:
+## Source1: <Score> (<short explanation>)
+## Source2: <Score> (<short explanation>)
+...
+
+Now, let's try it out:
+${sources.map((s, i) => `## Source${i}: ${s.url} - ${s.title}`).join("\n")}
+# Query: ${query}
+# Ratings:`
+}
+
+export function extractScoresAlt(response: string): number[][] {
+  const ratingsSection = response.split("# Ratings:")[1] || ""
+  const regex = /## Source(\d+):\s*(\d+)/g
+  const matches = [...ratingsSection.matchAll(regex)]
+  return matches.map((match) => [Number(match[1]), Number(match[2])])
+}
+
+export const orderByScoresAlt = (scores: number[][]) =>
+  scores.sort((a, b) => b[1] - a[1]).map((s) => s[0])

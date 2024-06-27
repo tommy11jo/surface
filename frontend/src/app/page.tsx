@@ -3,8 +3,10 @@ import { useState } from "react";
 import { IDLE_STATE, SearchInput } from "./_components/SearchInput";
 import { searchExamplesList } from "./_components/searchExamples";
 import Link from "next/link";
+import { useSecretCode } from "./secretContext";
 
 export default function Home() {
+  const { secretCode } = useSecretCode();
   const [statusText, setStatusText] = useState(IDLE_STATE);
   const [tempQuery, setTempQuery] = useState("");
   return (
@@ -15,6 +17,8 @@ export default function Home() {
           setQuery={setTempQuery}
           statusText={statusText}
           setStatusText={setStatusText}
+          showRefresh={false}
+          secretCode={secretCode}
         />
         <div className="flex flex-col">
           <span>🌐 High-Quality, Info-Packed Search Results</span>

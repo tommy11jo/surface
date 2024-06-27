@@ -90,7 +90,7 @@ const generateOpenAIResponse = async (
     const textContent = chatCompletion.choices[0].message.content
 
     if (log) {
-      console.log(textContent)
+      console.log("llm response", textContent)
     }
 
     return textContent ?? ""
@@ -123,7 +123,7 @@ async function getClaudeResponse(
       },
     })
     const textContent = response.data.content[0].text
-    if (log) console.log(textContent)
+    if (log) console.log("llm response", textContent)
     return textContent
   } catch (error) {
     console.error("Error calling Claude API:", error)

@@ -1,6 +1,5 @@
 import { generateLLMResponse } from "./llmService"
 import { SourceMetadata } from "./types"
-import { search as ddgs, SafeSearchType } from "duck-duck-scrape"
 
 const INIT_SUMMARY_MARKER = "### Initial Summary"
 const FINAL_SUMMARY_MARKER = "### Final Summary"
@@ -24,7 +23,7 @@ export const generateSourceMetadatasWithSummary = async (
   const summaryEndTime = Date.now()
   if (log) {
     const summaryTime = summaryEndTime - summaryStartTime
-    console.log(`Summary generation: ${summaryTime / 1000}s`)
+    console.log(`[INFO] Summary generation: ${summaryTime / 1000}s`)
   }
 
   const sourceSummaries = llmSummaryResponses
@@ -59,8 +58,7 @@ export const generateSourceMetadatasWithSummary = async (
 
 export const getWebpageSummaryPrompt = (
   sourceText: string,
-  hostname: string,
-  log: boolean = false
+  hostname: string
 ) => {
   const approxWordsCutoff = 1000
   const sentenceRange =
@@ -89,7 +87,6 @@ ${FINAL_SUMMARY_MARKER}
 Webpage Text:
 ${sourceText}
   `
-  if (log) console.log("prompt is ", prompt)
   return prompt
 }
 
@@ -102,25 +99,4 @@ export const extractSummaryFromResponse = (response: string): string => {
 
   const summaryStart = finalSummaryStart + FINAL_SUMMARY_MARKER.length
   return response.slice(summaryStart).trim()
-}
-
-export const searchByDDGS = async (
-  query: string,
-  count: number = 20,
-  log: boolean = true
-) => {
-  const searchResults = await ddgs(query, {
-    safeSearch: SafeSearchType.STRICT,
-  })
-
-  const sourceMetadatas: SourceMetadata[] = searchResults.results.map(
-    (result) => ({
-      url: result.url,
-      title: result.title,
-      icon: result.icon,
-      hostname: result.hostname,
-      textContent: undefined,
-    })
-  )
-  return sourceMetadatas.slice(0, count)
 }
