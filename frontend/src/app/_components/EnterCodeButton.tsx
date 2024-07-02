@@ -42,7 +42,7 @@ export function EnterCodeButton() {
         onClick={handleOpen}
         className="px-4 py-2 font-semibold hover:underline"
       >
-        Enter Code →
+        Enter Code
       </button>
 
       {isOpen && (

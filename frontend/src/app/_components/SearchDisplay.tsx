@@ -1,7 +1,7 @@
 "use client";
 
 import { useCallback, useEffect, useRef, useState } from "react";
-import { IDLE_STATE, LOADING_STATE, SearchInput } from "./SearchInput";
+import { LOADING_STATE } from "./SearchInput";
 
 import { type SourceMetadata, type Snippet, type Theme } from "./types";
 import { searchExamplesList } from "./searchExamples";
@@ -13,20 +13,20 @@ interface SearchDisplayProps {
   query: string;
   isExample: boolean;
   hardRefresh: boolean;
+  setStatusText: (value: string) => void;
 }
 
 export function SearchDisplay({
   query,
   isExample,
   hardRefresh,
+  setStatusText,
 }: SearchDisplayProps) {
   const { secretCode } = useSecretCode();
 
   const [sourceMetadatas, setSourceMetadatas] = useState<SourceMetadata[]>([]);
   const [snippets, setSnippets] = useState<Snippet[]>([]);
   const [themes, setThemes] = useState<Theme[]>([]);
-  const [tempQuery, setTempQuery] = useState(query ?? "");
-  const [statusText, setStatusText] = useState(IDLE_STATE);
   const [isThemeOpenList, setIsThemeOpenList] = useState<boolean[]>([]);
 
   const dataFetchedRef = useRef(false);
@@ -73,7 +73,7 @@ export function SearchDisplay({
       setStatusText(`🔴 Error: ${errorMessage}`);
       throw error;
     }
-  }, [query, isExample, secretCode, hardRefresh]);
+  }, [query, isExample, secretCode, hardRefresh, setStatusText]);
   useEffect(() => {
     if (dataFetchedRef.current) return;
 
@@ -115,21 +115,7 @@ export function SearchDisplay({
 
   return (
     <div className="flex min-h-screen w-full flex-col py-2">
-      <div className="flex w-full flex-col justify-between gap-2 py-4 sm:flex-row">
-        <SearchInput
-          query={tempQuery}
-          setQuery={setTempQuery}
-          statusText={statusText}
-          setStatusText={setStatusText}
-          showRefresh={sourceMetadatas.length > 0}
-          secretCode={secretCode}
-        />
-        <div className="flex flex-col">
-          <span>🌐 High-Quality, Info-Packed Search Results</span>
-        </div>
-      </div>
       <div className="flex w-full border-b border-solid border-dark-sand"></div>
-
       <div className="flex grow flex-col-reverse gap-4 sm:flex-row">
         {sourceMetadatas.length > 0 && (
           <div className="flex w-full flex-col items-center sm:w-1/2">

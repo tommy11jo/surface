@@ -3,6 +3,6 @@ import { generateSourceMetadatasEndpoint } from "../controllers/searchController
 
 const router = Router()
 
-router.post("/search", generateSourceMetadatasEndpoint)
+router.post("/", generateSourceMetadatasEndpoint)
 
 export default router

@@ -1,15 +1,17 @@
 "use client";
+
 import React, {
   createContext,
   useContext,
-  useEffect,
   useState,
+  useEffect,
   type ReactNode,
 } from "react";
 
 interface SecretCodeContextType {
   secretCode: string;
   setSecretCode: React.Dispatch<React.SetStateAction<string>>;
+  secretLoading: boolean;
 }
 
 const SecretCodeContext = createContext<SecretCodeContextType | undefined>(
@@ -26,14 +28,24 @@ const useSecretCode = () => {
 
 const SecretCodeProvider = ({ children }: { children: ReactNode }) => {
   const [secretCode, setSecretCode] = useState<string>("");
+  const [secretLoading, setSecretLoading] = useState(true);
 
   useEffect(() => {
-    const curCode = localStorage.getItem("userCode");
-    if (curCode !== null) setSecretCode(curCode);
+    const storedCode = localStorage.getItem("userCode");
+    if (storedCode) {
+      setSecretCode(storedCode);
+    }
+    setSecretLoading(false);
   }, []);
 
+  useEffect(() => {
+    localStorage.setItem("userCode", secretCode);
+  }, [secretCode]);
+
   return (
-    <SecretCodeContext.Provider value={{ secretCode, setSecretCode }}>
+    <SecretCodeContext.Provider
+      value={{ secretCode, setSecretCode, secretLoading }}
+    >
       {children}
     </SecretCodeContext.Provider>
   );

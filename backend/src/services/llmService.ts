@@ -105,7 +105,7 @@ async function getClaudeResponse(
   maxTokens: number = 1000,
   log: boolean = false
 ): Promise<string> {
-  const apiKey = process.env.CLAUDE_API_KEY
+  const apiKey = process.env.ANTHROPIC_API_KEY
   const apiUrl = "https://api.anthropic.com/v1/messages"
 
   const request = {

@@ -20,12 +20,12 @@ export default function RootLayout({
   return (
     <html lang="en">
       <body>
-        <main className="flex min-h-screen flex-col items-center bg-lightest-sand text-base text-black sm:text-lg">
-          <SecretCodeProvider>
-            <Header />
+        <SecretCodeProvider>
+          <Header />
+          <main className="flex min-h-screen flex-col items-center bg-lightest-sand text-base text-black sm:text-lg">
             {children}
-          </SecretCodeProvider>
-        </main>
+          </main>
+        </SecretCodeProvider>
       </body>
     </html>
   );

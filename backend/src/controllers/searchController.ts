@@ -17,7 +17,7 @@ export const generateSourceMetadatasEndpoint = async (
 ) => {
   const log = true
   const { query, secret, hardRefresh } = req.body
-  const validCodes = process.env.SECRET_CODES?.split(",") || []
+  const validCodes = process.env.SECRET_CODES_SEARCH?.split(",") || []
 
   if (!validCodes.includes(secret)) {
     return res.status(401).json({ message: "Invalid code" })
