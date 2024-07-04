@@ -1,6 +1,6 @@
 import axios from "axios"
 import OpenAI from "openai"
-const generateFireworkResponse = async (
+export const generateFireworkResponse = async (
   prompt: string,
   model: string = "accounts/fireworks/models/llama-v3-70b-instruct",
   log: boolean = false
@@ -31,12 +31,19 @@ const generateFireworkResponse = async (
 
     return textContent
   } catch (error) {
-    console.error("Error calling Firework API:", error)
+    if (error.response && error.response.data && error.response.data.error) {
+      console.error(
+        "Error calling Firework API:",
+        error.response.data.error.message
+      )
+    } else {
+      console.error("Error calling Firework API:", error.message)
+    }
     return null
   }
 }
 
-const generatePerplexityResponse = async (
+export const generatePerplexityResponse = async (
   prompt: string,
   model: string = "llama-3-70b-instruct",
   log: boolean = false
@@ -72,7 +79,7 @@ const generatePerplexityResponse = async (
   }
 }
 
-const generateOpenAIResponse = async (
+export const generateOpenAIResponse = async (
   prompt: string,
   model: string = "gpt-4o",
   log: boolean = false
@@ -100,11 +107,11 @@ const generateOpenAIResponse = async (
   }
 }
 
-async function getClaudeResponse(
+export const getClaudeResponse = async (
   prompt: string,
   maxTokens: number = 1000,
   log: boolean = false
-): Promise<string> {
+): Promise<string> => {
   const apiKey = process.env.ANTHROPIC_API_KEY
   const apiUrl = "https://api.anthropic.com/v1/messages"
 
@@ -130,7 +137,4 @@ async function getClaudeResponse(
     throw error
   }
 }
-// export const generateLLMResponse = getClaudeResponse
-// export const generateLLMResponse = generateOpenAIResponse
 export const generateLLMResponse = generateFireworkResponse
-// export const generateLLMResponse = generatePerplexityResponse

@@ -59,7 +59,9 @@ export function SearchInput({
           onKeyDown={handleKeyDown}
           ref={setInputRef}
           spellCheck={false}
-          disabled={statusText === LOADING_STATE}
+          autoComplete="off"
+          autoCorrect="off"
+          autoCapitalize="off"
           className="w-full rounded-lg border border-gray-500 p-2 pl-10 text-base focus:outline-none focus:ring-1 focus:ring-gray-400 sm:w-96"
           placeholder={
             secretCode || secretLoading ? "Search" : "⛔ Requires code"

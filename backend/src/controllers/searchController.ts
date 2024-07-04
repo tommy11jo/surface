@@ -3,14 +3,13 @@ import { generateRankedSourceMetadatas } from "../services/searchService"
 import { generateOverview } from "../services/overviewService"
 import { generateSourceMetadatasWithSummary } from "../services/summaryService"
 import { kv } from "@vercel/kv"
-import crypto from "crypto"
+import {
+  checkSecretCodeValidity,
+  incrementSecretCodeUsage,
+} from "../services/secretService"
 
 const ONE_DAY_IN_SECONDS = 24 * 60 * 60
-const MAX_SECRET_CODE_USES = 30
 
-function hashKey(key: string): string {
-  return crypto.createHash("sha256").update(key).digest("hex")
-}
 export const generateSourceMetadatasEndpoint = async (
   req: Request,
   res: Response
@@ -77,17 +76,4 @@ export const generateSourceMetadatasEndpoint = async (
   } catch (error) {
     return res.status(500).json({ error: error.message })
   }
-}
-
-async function checkSecretCodeValidity(secret: string): Promise<boolean> {
-  const secretKey = `secret:${secret}`
-  const hashedSecretKey = hashKey(secretKey)
-  const usageCount: number = (await kv.get(hashedSecretKey)) || 0
-  return usageCount <= MAX_SECRET_CODE_USES
-}
-
-async function incrementSecretCodeUsage(secret: string): Promise<void> {
-  const secretKey = `secret:${secret}`
-  const hashedSecretKey = hashKey(secretKey)
-  await kv.incr(hashedSecretKey)
 }

@@ -24,6 +24,7 @@ export async function generateOverview(
 }
 
 function getOverviewPrompt(query: string, sourceMetadatas: SourceMetadata[]) {
+  // TODO: maybe add title and hostname for LLM to see
   const sourceMetadatasStr = sourceMetadatas
     .map(
       (metadata, i) => `SOURCE ${i}:

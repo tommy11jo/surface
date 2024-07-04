@@ -1,10 +1,11 @@
+import dotenv from "dotenv"
+dotenv.config()
+
 import express, { Request, Response } from "express"
 import cors from "cors"
 import searchRoutes from "./routes/searchRouter"
 import answerRoutes from "./routes/answerRouter"
-import dotenv from "dotenv"
-
-dotenv.config()
+import verifyRoutes from "./routes/verifyRouter"
 
 const app = express()
 
@@ -14,6 +15,7 @@ app.use(express.urlencoded({ limit: "10kb", extended: true }))
 
 app.use("/api/search", searchRoutes)
 app.use("/api/stream-answer", answerRoutes)
+app.use("/api/verify", verifyRoutes)
 
 app.get("/", (_req: Request, res: Response) => {
   const message = process.env.VERCEL_ENV

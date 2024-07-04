@@ -5,41 +5,42 @@ import { useEffect, useState } from "react";
 type AnswerInputProps = {
   query: string;
   setQuery: (value: string) => void;
-  showRefresh: boolean;
   secretCode: string;
   secretLoading: boolean;
   streamingError: Error | null;
   isStreaming: boolean;
+  statusText: string;
+  setStatusText: (value: string) => void;
 };
 export const LOADING_STATE = "🟡 Loading";
-export const IDLE_STATE = "🟢 Ask anything";
+export const IDLE_STATE = "🟢 Ready";
 
 export function AnswerInput({
   query,
   setQuery,
-  showRefresh,
   secretCode,
   secretLoading,
   streamingError,
   isStreaming,
+  statusText,
+  setStatusText,
 }: AnswerInputProps) {
   const [inputRef, setInputRef] = useState<HTMLInputElement | null>(null);
-  const [statusText, setStatusText] = useState(IDLE_STATE);
 
   useEffect(() => {
     if (inputRef) inputRef.focus();
   }, [inputRef]);
 
-  const handleAnswer = (hardRefresh = false) => {
-    if (query.length >= 200) {
-      setStatusText("🔴 Query must be <200 chars.");
+  const handleAnswer = (retry = false) => {
+    if (query.length >= 1000) {
+      setStatusText("🔴 Query must be <1000 chars.");
       return;
     } else if (query.length === 0) {
       setStatusText("🔴 Query cannot be empty");
       return;
     }
     const encodedQuery = encodeURIComponent(query);
-    window.location.href = `/answer?q=${encodedQuery}&refresh=${hardRefresh}`;
+    window.location.href = `/answer?q=${encodedQuery}&retry=${retry}`;
   };
 
   const handleKeyDown = async (
@@ -57,8 +58,6 @@ export function AnswerInput({
     }
     if (isStreaming) {
       setStatusText(LOADING_STATE);
-    } else {
-      setStatusText(IDLE_STATE);
     }
   }, [streamingError, isStreaming]);
 
@@ -73,7 +72,9 @@ export function AnswerInput({
           onKeyDown={handleKeyDown}
           ref={setInputRef}
           spellCheck={false}
-          disabled={statusText === LOADING_STATE}
+          autoComplete="off"
+          autoCorrect="off"
+          autoCapitalize="off"
           className="w-full rounded-lg border border-gray-500 p-2 pl-10 text-base focus:outline-none focus:ring-1 focus:ring-gray-400 sm:w-96"
           placeholder={secretCode || secretLoading ? "Ask" : "⛔ Requires code"}
         />
@@ -86,14 +87,12 @@ export function AnswerInput({
       </div>
       <div className="flex w-full flex-row items-end justify-between">
         <div className="mt-2 text-base text-gray-400">{statusText}</div>
-        {showRefresh && (
-          <button
-            onClick={() => handleAnswer(true)}
-            className="mx-2 inline-flex text-sm font-semibold text-gray-600 hover:underline"
-          >
-            Refresh ↻
-          </button>
-        )}
+        <button
+          onClick={() => handleAnswer(true)}
+          className="mx-2 inline-flex text-sm font-semibold text-gray-600 hover:underline"
+        >
+          Retry ↻
+        </button>
       </div>
     </div>
   );

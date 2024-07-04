@@ -1,3 +1,4 @@
+// search types
 // copied from backend
 export type Snippet = {
   url: string;
@@ -22,4 +23,28 @@ export type Theme = {
   id: string;
   title: string;
   relevanceScore: number;
+};
+
+// answer types
+export type AnswerSnippet = {
+  url: string;
+  hostname: string;
+  title: string;
+  content: string;
+};
+
+export enum ClaimCategory {
+  Correct,
+  ApproxCorrect,
+  Incorrect,
+  Uncertain,
+  Undefined,
+}
+
+export type ClaimMetadata = {
+  snippets: AnswerSnippet[];
+  category: ClaimCategory;
+  distinctions: string[];
+  content: string;
+  isComplete?: boolean;
 };

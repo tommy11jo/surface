@@ -228,7 +228,7 @@ type BingSearchResult = {
   displayUrl: string
 }
 
-const searchByBing = async (
+export const searchByBing = async (
   query: string,
   count: number = 20,
   log: boolean = false

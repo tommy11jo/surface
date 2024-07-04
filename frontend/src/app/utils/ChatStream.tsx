@@ -29,7 +29,7 @@ export default class ChatStream {
     this.response = "";
   }
 
-  async startStream(query: string): Promise<void> {
+  async startStream(query: string, retry: boolean): Promise<void> {
     if (API_PREFIX === undefined) throw new Error("Api prefix is undefined");
     if (this.numStreams >= 2) throw new Error("Num streams should be max 1");
     this.response = "";
@@ -46,7 +46,7 @@ export default class ChatStream {
       const res = await fetch(streamEndpoint, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ query, secret: this.secretCode }),
+        body: JSON.stringify({ query, secret: this.secretCode, retry }),
         signal: this.abortController.signal,
       });
 
@@ -70,7 +70,6 @@ export default class ChatStream {
           if (line.startsWith("data: ")) {
             const data = line.slice(6);
             if (data === "[DONE]") {
-              console.log("total response", this.response);
               this.isStreaming = false;
               return;
             }
@@ -180,11 +179,13 @@ export default class ChatStream {
     visibleTokens: Token[];
     isStreaming: boolean;
     error: Error | null;
+    response: string;
   } {
     return {
       visibleTokens: this.visibleTokens,
       isStreaming: this.isStreaming,
       error: this.error,
+      response: this.response,
     };
   }
 }

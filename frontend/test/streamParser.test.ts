@@ -38,7 +38,7 @@ describe("ChatStream", () => {
 
     (global.fetch as jest.Mock).mockResolvedValueOnce(mockResponse);
 
-    await chatStream.startStream("test query");
+    await chatStream.startStream("test query", true);
 
     const state = chatStream.getState();
 

@@ -15,13 +15,13 @@ export function TabBar({ activeTab }: TabBarProps) {
       <div className="flex gap-8 font-semibold">
         <Link
           href="/answer"
-          className={`${activeTab === TabType.Answer ? "underline" : ""}`}
+          className={`${activeTab === TabType.Answer ? "underline decoration-gray-500 decoration-dashed" : ""} hover:underline`}
         >
-          Direct Answer
+          Verified Answers
         </Link>
         <Link
           href="/search"
-          className={`${activeTab === TabType.Search ? "underline" : ""}`}
+          className={`${activeTab === TabType.Search ? "underline decoration-gray-500 decoration-dashed" : ""} hover:underline`}
         >
           Search Results
         </Link>
@@ -29,10 +29,10 @@ export function TabBar({ activeTab }: TabBarProps) {
       <div className="mx-4">
         <div className="text-sm text-gray-500 sm:text-base">
           {activeTab === TabType.Answer && (
-            <span>⚡ Quick LLM answers, verified afterwards</span>
+            <span>⚡ Quick AI responses, fact-checked using web sources</span>
           )}
           {activeTab === TabType.Search && (
-            <span>🌐 High-Quality, Info-Packed Search Results</span>
+            <span>🌐 High-quality, info-packed search results</span>
           )}
         </div>
       </div>
