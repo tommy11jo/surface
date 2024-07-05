@@ -11,7 +11,7 @@ export const generateClaimEval = async (
   claim: string,
   context: string,
   numSources: number = 3,
-  approxWordsCutoff: number = 1400,
+  approxWordsCutoff: number = 1200,
   jinaTimeout: number = 7000,
   log = true
 ): Promise<ClaimMetadata | null> => {
@@ -61,19 +61,19 @@ Content: ${metadata.textContent}
   // TODO: for now, i'm not using 'context' at all. need to test this out later.
   const prompt = `Your job is to pinpoint 0 to 2 relevant snippets from the sources.
 Each snippet should **directly** support or counter the claim below.
-If a snippet does not clearly relate to the claim, don't include it!
+If a snippet does not clearly and cleanly add informational value, don't include it!
 
 Then, based on the snippets, you will categorize the claim as one of these four categories:
-- CORRECT
-- INCORRECT
-- SOMEWHAT CORRECT
 - UNCERTAIN
+- CORRECT
+- SOMEWHAT CORRECT
+- INCORRECT
 
 Let's review the four categories:
-- CORRECT - The claim is true. It is not "misleading".
-- INCORRECT - The claim is false or is misleading in some fundamental way.
-- SOMEWHAT CORRECT - The claim is true as a whole but it is slightly misleading, missing a distinction, or moderately inaccurate.
-- UNCERTAIN - The snippet evidence is not clear enough to evaluate the claim.
+- UNCERTAIN - The snippet evidence is not relevant or is not clear enough to evaluate the claim.
+- CORRECT - The claim is true. It is not misleading.
+- SOMEWHAT CORRECT - The claim is true as a whole but is a bit off. It might be slightly misleading or inaccurate.
+- INCORRECT - The claim is false or is misleading in some fundamental way. The snippets directly contradict the claim.
 
 Example format:
 ## Sources

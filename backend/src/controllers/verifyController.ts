@@ -12,7 +12,8 @@ const ONE_DAY_IN_SECONDS = 24 * 60 * 60
 export const generateProofForClaim = async (req: Request, res: Response) => {
   const log = true
   const { claim, context, secret, retry } = req.body
-  const validCodes = process.env.SECRET_CODES_ANSWER?.split(",") || []
+  const validCodes =
+    process.env.SECRET_CODES_ANSWER?.split(",").map((code) => code.trim()) || []
 
   if (secret === "") return res.status(401).json({ message: "Empty code" })
   if (!validCodes.includes(secret)) {
@@ -39,7 +40,6 @@ export const generateProofForClaim = async (req: Request, res: Response) => {
   }
 
   await incrementSecretCodeUsage(secret)
-
   if (log) console.log(`[INFO] Generating eval for claim: ${claim}`)
   const claimEval: ClaimMetadata | null = await generateClaimEval(
     claim,

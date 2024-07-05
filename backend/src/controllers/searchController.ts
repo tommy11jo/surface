@@ -15,7 +15,7 @@ export const generateSourceMetadatasEndpoint = async (
   res: Response
 ) => {
   const log = true
-  const { query, secret, hardRefresh } = req.body
+  const { query, secret, retry } = req.body
   const validCodes = process.env.SECRET_CODES_SEARCH?.split(",") || []
 
   if (!validCodes.includes(secret)) {
@@ -32,7 +32,7 @@ export const generateSourceMetadatasEndpoint = async (
   // Cons of kv-store approach: requires lot of memory at scale, only persists data for 1-day so "stale" navigations are still slow
   // Proper solution: don't use nextjs (https://stackoverflow.com/questions/76228269/setting-cache-control-header-in-nextjs-app-router)
   const cacheKey = `search:${query}`
-  if (!hardRefresh) {
+  if (!retry) {
     const cacheStartTime = Date.now()
     const cachedResult = await kv.get(cacheKey)
 
