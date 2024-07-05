@@ -12,19 +12,22 @@ import { useSecretCode } from "../secretContext";
 interface SearchDisplayProps {
   query: string;
   isExample: boolean;
-  hardRefresh: boolean;
+  retry: boolean;
   setStatusText: (value: string) => void;
+  sourceMetadatas: SourceMetadata[];
+  setSourceMetadatas: (value: SourceMetadata[]) => void;
 }
 
 export function SearchDisplay({
   query,
   isExample,
-  hardRefresh,
+  retry,
   setStatusText,
+  sourceMetadatas,
+  setSourceMetadatas,
 }: SearchDisplayProps) {
   const { secretCode } = useSecretCode();
 
-  const [sourceMetadatas, setSourceMetadatas] = useState<SourceMetadata[]>([]);
   const [snippets, setSnippets] = useState<Snippet[]>([]);
   const [themes, setThemes] = useState<Theme[]>([]);
   const [isThemeOpenList, setIsThemeOpenList] = useState<boolean[]>([]);
@@ -58,7 +61,7 @@ export function SearchDisplay({
       }>(searchEndpoint, {
         query: query,
         secret: secretCode,
-        hardRefresh: hardRefresh,
+        retry,
       });
       const endTime = performance.now();
       setStatusText(
@@ -73,7 +76,7 @@ export function SearchDisplay({
       setStatusText(`🔴 Error: ${errorMessage}`);
       throw error;
     }
-  }, [query, isExample, secretCode, hardRefresh, setStatusText]);
+  }, [query, isExample, secretCode, retry, setStatusText]);
   useEffect(() => {
     if (dataFetchedRef.current) return;
 
@@ -120,7 +123,7 @@ export function SearchDisplay({
         {sourceMetadatas.length > 0 && (
           <div className="flex w-full flex-col items-center sm:w-1/2">
             <div className="flex w-full flex-col py-2">
-              <div className="flex w-full justify-center py-2 underline">
+              <div className="flex w-full justify-center py-2 font-semibold">
                 Results
               </div>
               <ul className="px-2">
@@ -162,7 +165,7 @@ export function SearchDisplay({
         )}
         {snippets.length > 0 && (
           <div className="flex w-full flex-col border-l border-none border-dark-sand sm:w-1/2 sm:border-solid">
-            <div className="flex w-full justify-center py-2 underline">
+            <div className="flex w-full justify-center py-2 font-semibold">
               Overview
             </div>
             <ul className="px-2">

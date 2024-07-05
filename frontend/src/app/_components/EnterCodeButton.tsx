@@ -54,6 +54,10 @@ export function EnterCodeButton() {
               value={tempCode}
               onChange={(e) => setTempCode(e.target.value)}
               onKeyDown={handleKeyDown}
+              spellCheck="false"
+              autoComplete="off"
+              autoCorrect="off"
+              autoCapitalize="off"
               className="mb-4 mt-2 w-full border p-2"
               ref={inputRef}
             />

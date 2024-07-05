@@ -16,7 +16,7 @@ export default function DirectAnswerPage() {
   const query = decodeURIComponent(encodedQuery);
   const isExample = searchParams.get("isExample") === "true";
   const retry = searchParams.get("retry") === "true";
-  const { secretCode, secretLoading } = useSecretCode();
+  const { secretCode } = useSecretCode();
 
   const [tempQuery, setTempQuery] = useState(query);
   const [visibleTokens, setVisibleTokens] = useState<Token[]>([]);
@@ -105,6 +105,8 @@ export default function DirectAnswerPage() {
       setVisibleTokens(state.visibleTokens);
       setIsStreaming(state.isStreaming);
       setError(state.error);
+      if (!state.isStreaming && !state.error)
+        setStatusText("🟢 Initial Answer Complete");
 
       const claims = state.visibleTokens
         .filter((token) => token.type === TokenType.Claim)
@@ -157,16 +159,16 @@ export default function DirectAnswerPage() {
   }, [initiateStream]);
 
   return (
-    <div className="flex w-full max-w-7xl flex-col items-center justify-start px-2 py-6">
+    <div className="flex w-full max-w-7xl flex-col items-center justify-start px-2 py-6 sm:px-12">
       <AnswerInput
         query={tempQuery}
         setQuery={setTempQuery}
         isStreaming={isStreaming}
         streamingError={error}
         secretCode={secretCode}
-        secretLoading={secretLoading}
         statusText={statusText}
         setStatusText={setStatusText}
+        showRetry={visibleTokens.length > 0}
       />
       <AnswerDisplay
         visibleTokens={visibleTokens}

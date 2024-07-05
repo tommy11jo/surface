@@ -9,7 +9,7 @@ export default function SearchLayout({
   return (
     <>
       <TabBar activeTab={TabType.Search} />
-      <main className="flex min-h-screen flex-col items-center bg-lightest-sand text-base text-black sm:text-lg">
+      <main className="flex min-h-screen w-full flex-col items-center bg-lightest-sand text-base text-black sm:text-lg">
         <Suspense>{children}</Suspense>
       </main>
     </>

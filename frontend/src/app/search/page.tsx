@@ -6,19 +6,21 @@ import Link from "next/link";
 import { useSecretCode } from "../secretContext";
 import { useSearchParams } from "next/navigation";
 import { SearchDisplay } from "../_components/SearchDisplay";
+import { type SourceMetadata } from "../_components/types";
 
 export default function SearchPage() {
   const searchParams = useSearchParams();
   const encodedQuery = searchParams.get("q") ?? "";
   const query = decodeURIComponent(encodedQuery);
   const isExample = searchParams.get("isExample") === "true";
-  const hardRefresh = searchParams.get("refresh") === "true";
+  const retry = searchParams.get("retry") === "true";
 
   const { secretCode, secretLoading } = useSecretCode();
+  const [sourceMetadatas, setSourceMetadatas] = useState<SourceMetadata[]>([]);
   const [statusText, setStatusText] = useState(IDLE_STATE);
   const [tempQuery, setTempQuery] = useState("");
   return (
-    <div className="flex w-full max-w-7xl flex-col items-center px-2 py-6">
+    <div className="flex w-full max-w-7xl flex-col items-center px-2 py-6 sm:px-12">
       <SearchInput
         query={tempQuery}
         setQuery={setTempQuery}
@@ -26,14 +28,16 @@ export default function SearchPage() {
         setStatusText={setStatusText}
         secretCode={secretCode}
         secretLoading={secretLoading}
-        showRetry={true}
+        showRetry={sourceMetadatas.length > 0}
       />
       {query !== "" ? (
         <SearchDisplay
           query={query}
           isExample={isExample}
-          hardRefresh={hardRefresh}
+          retry={retry}
           setStatusText={setStatusText}
+          sourceMetadatas={sourceMetadatas}
+          setSourceMetadatas={setSourceMetadatas}
         />
       ) : (
         <div className="flex w-full flex-col items-start">

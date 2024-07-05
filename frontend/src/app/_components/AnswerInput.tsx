@@ -1,16 +1,17 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { type ChangeEvent, useEffect, useRef, type FormEvent } from "react";
+import TextareaAutosize from "react-textarea-autosize";
 
 type AnswerInputProps = {
   query: string;
   setQuery: (value: string) => void;
   secretCode: string;
-  secretLoading: boolean;
   streamingError: Error | null;
   isStreaming: boolean;
   statusText: string;
   setStatusText: (value: string) => void;
+  showRetry: boolean;
 };
 export const LOADING_STATE = "🟡 Loading";
 export const IDLE_STATE = "🟢 Ready";
@@ -19,17 +20,30 @@ export function AnswerInput({
   query,
   setQuery,
   secretCode,
-  secretLoading,
   streamingError,
   isStreaming,
   statusText,
   setStatusText,
+  showRetry,
 }: AnswerInputProps) {
-  const [inputRef, setInputRef] = useState<HTMLInputElement | null>(null);
+  const textareaRef = useRef<HTMLTextAreaElement>(null);
 
   useEffect(() => {
-    if (inputRef) inputRef.focus();
-  }, [inputRef]);
+    if (textareaRef.current) {
+      textareaRef.current.focus();
+    }
+  }, []);
+  useEffect(() => {
+    if (secretCode === "") setStatusText("🔴 Enter a code to use");
+    else setStatusText(IDLE_STATE);
+  }, [secretCode]);
+
+  const handleClear = () => {
+    setQuery("");
+    if (textareaRef.current) {
+      textareaRef.current.focus();
+    }
+  };
 
   const handleAnswer = (retry = false) => {
     if (query.length >= 1000) {
@@ -40,13 +54,20 @@ export function AnswerInput({
       return;
     }
     const encodedQuery = encodeURIComponent(query);
-    window.location.href = `/answer?q=${encodedQuery}&retry=${retry}`;
+    const searchParams = new URLSearchParams({
+      q: encodedQuery,
+      retry: retry.toString(),
+    });
+    window.location.href = `/answer?${searchParams.toString()}`;
   };
 
-  const handleKeyDown = async (
-    event: React.KeyboardEvent<HTMLInputElement>,
-  ) => {
-    if (event.key === "Enter") {
+  const handleSubmit = (event: FormEvent<HTMLFormElement>) => {
+    event.preventDefault();
+    handleAnswer();
+  };
+  const handleKeyDown = (event: React.KeyboardEvent<HTMLTextAreaElement>) => {
+    if (event.key === "Enter" && !event.shiftKey) {
+      event.preventDefault();
       handleAnswer();
     }
   };
@@ -62,37 +83,60 @@ export function AnswerInput({
   }, [streamingError, isStreaming]);
 
   return (
-    <div className="relative flex flex-col items-start">
-      <div className="relative m-0 flex w-full">
-        <span className="absolute left-3 top-2 text-gray-500">🔎</span>
-        <input
-          type="text"
-          value={query}
-          onChange={(e) => setQuery(e.target.value)}
-          onKeyDown={handleKeyDown}
-          ref={setInputRef}
-          spellCheck={false}
-          autoComplete="off"
-          autoCorrect="off"
-          autoCapitalize="off"
-          className="w-full rounded-lg border border-gray-500 p-2 pl-10 text-base focus:outline-none focus:ring-1 focus:ring-gray-400 sm:w-96"
-          placeholder={secretCode || secretLoading ? "Ask" : "⛔ Requires code"}
-        />
-        <button
-          onClick={() => handleAnswer()}
-          className="mx-2 flex flex-shrink-0 rounded bg-sand p-2 font-semibold hover:bg-dark-sand"
-        >
-          Go →
-        </button>
-      </div>
-      <div className="flex w-full flex-row items-end justify-between">
-        <div className="mt-2 text-base text-gray-400">{statusText}</div>
+    <div className="relative flex w-full flex-col items-start">
+      {showRetry && (
         <button
           onClick={() => handleAnswer(true)}
           className="mx-2 inline-flex text-sm font-semibold text-gray-600 hover:underline"
         >
-          Retry ↻
+          ↻ Retry
         </button>
+      )}
+      <div className="relative m-0 flex w-full">
+        <span className="absolute left-3 top-2 text-gray-500">🔎</span>
+        <form onSubmit={handleSubmit} className="m-0 flex w-full">
+          <div className="relative flex grow sm:grow-0">
+            <span className="absolute left-3 top-2 text-gray-500">🔎</span>
+            <TextareaAutosize
+              value={query}
+              onChange={(e: ChangeEvent<HTMLTextAreaElement>) => {
+                setQuery(e.target.value);
+              }}
+              onKeyDown={handleKeyDown}
+              ref={textareaRef}
+              spellCheck={false}
+              autoComplete="off"
+              autoCorrect="off"
+              autoCapitalize="off"
+              className="w-full resize-none overflow-y-auto rounded-lg border border-gray-500 p-2 pl-10 text-base focus:outline-none focus:ring-1 focus:ring-gray-400 sm:w-[30rem]"
+              placeholder="Ask"
+              rows={1}
+              maxRows={8}
+            />
+            {query && (
+              <button
+                type="button"
+                onClick={handleClear}
+                className="absolute right-3 top-2 text-sm text-gray-500 hover:text-gray-700"
+              >
+                <span>X</span>
+              </button>
+            )}
+          </div>
+          <button
+            type="submit"
+            className="ml-2 h-10 flex-shrink-0 whitespace-nowrap rounded bg-sand px-4 font-semibold hover:bg-dark-sand"
+          >
+            Go →
+          </button>
+        </form>
+      </div>
+      <div className="flex w-full flex-row items-end justify-between">
+        <div
+          className={`mt-2 text-base text-gray-400 ${statusText === LOADING_STATE ? "animate-pulse" : ""}`}
+        >
+          {statusText}
+        </div>
       </div>
     </div>
   );

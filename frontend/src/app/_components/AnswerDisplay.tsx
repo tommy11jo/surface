@@ -34,7 +34,7 @@ const categoryWithEmoji = (category: ClaimCategory): string => {
     case ClaimCategory.Uncertain:
       return "uncertain";
     case ClaimCategory.Undefined:
-      return "no data to show";
+      return "unknown";
     default:
       throw new Error("Unknown claim category.");
   }
@@ -149,7 +149,7 @@ export function AnswerDisplay({
         {visibleTokens.length > 0 && (
           <div className="flex w-full flex-col items-center sm:w-1/2">
             <div className="flex w-full flex-col py-2">
-              <div className="flex w-full justify-center py-2 underline">
+              <div className="flex w-full justify-center py-2 font-semibold">
                 Answer
               </div>
               <div className="min-h-[200px] whitespace-pre-line text-wrap">
@@ -160,7 +160,7 @@ export function AnswerDisplay({
         )}
         {hasNonNullClaimMetadata(claimMetadatas) && (
           <div className="flex w-full flex-col border-l border-none border-dark-sand sm:w-1/2 sm:border-solid">
-            <div className="flex w-full justify-center py-2 underline">
+            <div className="flex w-full justify-center py-2 font-semibold">
               Proof
             </div>
             <div className="flex w-full px-2">

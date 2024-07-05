@@ -29,7 +29,7 @@ export function TabBar({ activeTab }: TabBarProps) {
       <div className="mx-4">
         <div className="text-sm text-gray-500 sm:text-base">
           {activeTab === TabType.Answer && (
-            <span>⚡ Quick AI responses, fact-checked using web sources</span>
+            <span>⚡ AI answers, verified using web sources</span>
           )}
           {activeTab === TabType.Search && (
             <span>🌐 High-quality, info-packed search results</span>
