@@ -1,11 +1,14 @@
-FROM oven/bun:1
+FROM node:18
 
 WORKDIR /usr/src/app
 
 COPY package*.json ./
-RUN bun install
+
+RUN npm install
 
 COPY tsconfig.json ./
 COPY src ./src
+
+RUN npm run build
 
 EXPOSE 8000

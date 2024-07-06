@@ -5,13 +5,12 @@ services:
     build: .
     ports:
       - "8000:8000"
-    volumes:
-      - ./src:/usr/src/app/
-    environment:
-      - NODE_ENV=development
     env_file:
       - .env
-    command: ["bun", "run", "index.ts"]
+    command: ["npm", "start"]
+    depends_on:
+      - redis-persistent
+      - redis-cache
 
   redis-persistent:
     image: redis/redis-stack:latest
