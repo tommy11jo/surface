@@ -1,7 +1,7 @@
-import { kv } from "@vercel/kv"
 import crypto from "crypto"
+import { redisPersistentClient } from "../utils/redisClient"
 
-const MAX_SECRET_CODE_USES = 60
+const MAX_SECRET_CODE_USES = 20
 
 function hashKey(key: string): string {
   return crypto.createHash("sha256").update(key).digest("hex")
@@ -12,12 +12,14 @@ export async function checkSecretCodeValidity(
 ): Promise<boolean> {
   const secretKey = `secret:${secret}`
   const hashedSecretKey = hashKey(secretKey)
-  const usageCount: number = (await kv.get(hashedSecretKey)) || 0
+  let usageCountStr = await redisPersistentClient.get(hashedSecretKey)
+  const usageCount: number =
+    usageCountStr === null ? 0 : JSON.parse(usageCountStr)
   return usageCount <= MAX_SECRET_CODE_USES
 }
 
 export async function incrementSecretCodeUsage(secret: string): Promise<void> {
   const secretKey = `secret:${secret}`
   const hashedSecretKey = hashKey(secretKey)
-  await kv.incr(hashedSecretKey)
+  await redisPersistentClient.incr(hashedSecretKey)
 }

@@ -1,0 +1,30 @@
+version: "3.8"
+
+services:
+  app:
+    build: .
+    ports:
+      - "8000:8000"
+    volumes:
+      - ./src:/usr/src/app/
+    environment:
+      - NODE_ENV=development
+    env_file:
+      - .env
+    command: ["bun", "run", "index.ts"]
+
+  redis-persistent:
+    image: redis/redis-stack:latest
+    ports:
+      - "6380:6379"
+    environment:
+      - REDIS_ARGS=--appendonly yes --maxmemory 1gb
+    volumes:
+      - ./local-data:/data
+
+  redis-cache:
+    image: redis/redis-stack:latest
+    ports:
+      - "6379:6379"
+    environment:
+      - REDIS_ARGS=--maxmemory 1gb

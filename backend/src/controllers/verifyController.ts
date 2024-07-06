@@ -5,7 +5,7 @@ import {
 } from "../services/secretService"
 import { ClaimMetadata } from "../services/types"
 import { generateClaimEval } from "../services/claimService"
-import { kv } from "@vercel/kv"
+import { redisCacheClient } from "../utils/redisClient"
 
 const ONE_DAY_IN_SECONDS = 24 * 60 * 60
 
@@ -30,11 +30,12 @@ export const generateProofForClaim = async (req: Request, res: Response) => {
   }
   const cacheKey = `verify:${claim}`
   if (!retry) {
-    const cachedResult = await kv.get(cacheKey)
+    const cachedStr = await redisCacheClient.get(cacheKey)
     if (log) {
       console.log(`[INFO] Found cached claim: ${claim}`)
     }
-    if (cachedResult) {
+    if (cachedStr !== null) {
+      const cachedResult = JSON.parse(cachedStr)
       return res.json(cachedResult)
     }
   }
@@ -45,6 +46,8 @@ export const generateProofForClaim = async (req: Request, res: Response) => {
     claim,
     context
   )
-  await kv.set(cacheKey, claimEval, { ex: ONE_DAY_IN_SECONDS })
+  await redisCacheClient.set(cacheKey, JSON.stringify(claimEval), {
+    EX: ONE_DAY_IN_SECONDS,
+  })
   res.json(claimEval)
 }

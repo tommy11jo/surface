@@ -1,14 +1,16 @@
 import Anthropic from "@anthropic-ai/sdk"
-import { kv } from "@vercel/kv"
 import { type Request, type Response } from "express"
 import {
   checkSecretCodeValidity,
   incrementSecretCodeUsage,
 } from "../services/secretService"
 
+import { redisCacheClient } from "../utils/redisClient"
 const MODEL = "claude-3-5-sonnet-20240620"
 const MAX_TOKENS = 1024
 const STREAM_DELIM = "%$%"
+const ONE_DAY_IN_SECONDS = 60 * 60 * 24
+
 const client = new Anthropic({ apiKey: process.env.ANTHROPIC_API_KEY })
 
 export const generateAnswerStream = async (req: Request, res: Response) => {
@@ -32,26 +34,19 @@ export const generateAnswerStream = async (req: Request, res: Response) => {
   }
   // TODO: add in case where the bot requests realtime data before responding
 
-  // TODO: move off vercel or find solution
-  // response streaming does not work with vercel, it only works locally
-  // vercel can still send back the response all at once, with these helper functions preventing breakage
-  // Issue: https://github.com/vercel/next.js/discussions/47076
-
-  // this was supposed to resolve vercel streaming bug but did not
-  // "X-Content-Type-Options": "nosniff",
-
   try {
-    const cachedKey = `stream-answer:${query}`
+    const cacheKey = `stream-answer:${query}`
     if (!retry) {
-      const cachedResponse = await kv.get(cachedKey)
-      if (cachedResponse) {
+      let cachedResponseStr = await redisCacheClient.get(cacheKey)
+      if (cachedResponseStr !== null) {
+        const cachedReponse = JSON.parse(cachedResponseStr)
         if (log) console.log(`[INFO] Using cached response for query: ${query}`)
         res.writeHead(200, {
           "Content-Type": "text/event-stream",
           "Cache-Control": "no-cache",
           Connection: "keep-alive",
         })
-        res.write(`data: ${cachedResponse}${STREAM_DELIM}`)
+        res.write(`data: ${cachedReponse}${STREAM_DELIM}`)
         res.write(`data: [DONE]${STREAM_DELIM}`)
         return res.end()
       }
@@ -102,8 +97,10 @@ ${query}`
       res.write(`data: ${text}${STREAM_DELIM}`)
     })
 
-    stream.on("end", () => {
-      kv.set(cachedKey, fullResponse)
+    stream.on("end", async () => {
+      await redisCacheClient.set(cacheKey, JSON.stringify(fullResponse), {
+        EX: ONE_DAY_IN_SECONDS,
+      })
       res.write(`data: [DONE]${STREAM_DELIM}`)
       res.end()
     })

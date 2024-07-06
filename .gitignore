@@ -15,3 +15,6 @@ dist
 
 # vercel
 .vercel
+
+backend/local-data
+backend/_config

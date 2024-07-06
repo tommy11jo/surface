@@ -2,11 +2,11 @@ import { type Request, type Response } from "express"
 import { generateRankedSourceMetadatas } from "../services/searchService"
 import { generateOverview } from "../services/overviewService"
 import { generateSourceMetadatasWithSummary } from "../services/summaryService"
-import { kv } from "@vercel/kv"
 import {
   checkSecretCodeValidity,
   incrementSecretCodeUsage,
 } from "../services/secretService"
+import { redisCacheClient } from "../utils/redisClient"
 
 const ONE_DAY_IN_SECONDS = 24 * 60 * 60
 
@@ -34,9 +34,10 @@ export const generateSourceMetadatasEndpoint = async (
   const cacheKey = `search:${query}`
   if (!retry) {
     const cacheStartTime = Date.now()
-    const cachedResult = await kv.get(cacheKey)
+    const cachedStr = await redisCacheClient.get(cacheKey)
 
-    if (cachedResult) {
+    if (cachedStr !== null) {
+      const cachedResult = JSON.parse(cachedStr)
       return res.json(cachedResult)
     }
     const cacheEndTime = Date.now()
@@ -71,7 +72,9 @@ export const generateSourceMetadatasEndpoint = async (
       themes,
     }
 
-    await kv.set(cacheKey, result, { ex: ONE_DAY_IN_SECONDS })
+    await redisCacheClient.set(cacheKey, JSON.stringify(result), {
+      EX: ONE_DAY_IN_SECONDS,
+    })
     return res.json(result)
   } catch (error) {
     return res.status(500).json({ error: error.message })

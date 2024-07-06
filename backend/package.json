@@ -13,7 +13,6 @@
   "license": "ISC",
   "dependencies": {
     "@anthropic-ai/sdk": "^0.24.3",
-    "@vercel/kv": "^2.0.0",
     "axios": "^1.7.2",
     "cors": "^2.8.5",
     "dotenv": "^16.4.5",
@@ -21,7 +20,8 @@
     "express": "^4.19.2",
     "google-search-results-nodejs": "^2.1.0",
     "html-to-text": "^9.0.5",
-    "openai": "^4.52.0"
+    "openai": "^4.52.0",
+    "redis": "^4.6.15"
   },
   "devDependencies": {
     "@types/cors": "^2.8.17",
