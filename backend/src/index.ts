@@ -7,6 +7,7 @@ import searchRoutes from "./routes/searchRouter"
 import answerRoutes from "./routes/answerRouter"
 import verifyRoutes from "./routes/verifyRouter"
 
+const PORT = 8000
 const app = express()
 
 app.use(cors())
@@ -18,17 +19,10 @@ app.use("/api/stream-answer", answerRoutes)
 app.use("/api/verify", verifyRoutes)
 
 app.get("/", (_req: Request, res: Response) => {
-  const message = process.env.VERCEL_ENV
-    ? "Test: express ts on vercel!"
-    : "Test: express locally!"
+  const message = "Surface home test!"
   return res.send(message)
 })
 
-if (process.env.NODE_ENV !== "production") {
-  const PORT = process.env.PORT || 8000
-  app.listen(PORT, () => {
+app.listen(PORT, () => {
     console.log(`[INFO] Server is running on port ${PORT}`)
-  })
-}
-
-export default app
+})
