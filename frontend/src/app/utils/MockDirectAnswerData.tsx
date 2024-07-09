@@ -185,7 +185,6 @@ export const useMockDirectAnswerData = () => {
         },
       ],
       category: ClaimCategory.Correct,
-      distinctions: [],
     },
     {
       content:
@@ -205,7 +204,6 @@ export const useMockDirectAnswerData = () => {
         },
       ],
       category: ClaimCategory.MaybeCorrect,
-      distinctions: [],
     },
   ]);
   return { visibleTokens, setVisibleTokens, claimMetadatas, setClaimMetadatas };

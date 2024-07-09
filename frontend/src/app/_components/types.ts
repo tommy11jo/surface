@@ -44,7 +44,6 @@ export enum ClaimCategory {
 export type ClaimMetadata = {
   snippets: AnswerSnippet[];
   category: ClaimCategory;
-  distinctions: string[];
   content: string;
   isComplete?: boolean;
 };

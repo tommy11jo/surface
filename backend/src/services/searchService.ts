@@ -102,10 +102,9 @@ export const getTextContent = async (
 
     let data = response.data
     // Remove markdown links
-    data = data.replace(/\[([^\[\]]*)\]\((.*?)\)/gm, "$1")
+    data = data.replace(/\[([^\]]+)\]\([^)]+\)/g, "$1")
     // Remove images
     data = data.replace(/!\[([^\[\]]*)\]\((.*?)\)/gm, "")
-    data = data.replace(/\[([^\]]+)\]\([^)]+\)/g, "$1")
 
     if (trim && data.length > approxWordsCutoff * 6) {
       const firstPart = data.slice(0, approxWordsCutoff * 3)

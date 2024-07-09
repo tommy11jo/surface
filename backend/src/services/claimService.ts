@@ -10,8 +10,8 @@ import { generateFireworkResponse, generateLLMResponse } from "./llmService"
 export const generateClaimEval = async (
   toSearch: string,
   claim: string,
-  numSources: number = 2,
-  approxWordsCutoff: number = 1200,
+  numSources: number = 3,
+  approxWordsCutoff: number = 1800,
   jinaTimeout: number = 7000,
   log = true
 ): Promise<ClaimMetadata | null> => {
@@ -83,7 +83,7 @@ Let's review the four categories:
 - UNCERTAIN - The pieces of evidence do not sufficiently prove or disprove the claim. The evidence might be related but it is not direct.
 - CORRECT - The claim is definitely true and is directly proved by very specific evidence.
 - SOMEWHAT CORRECT - The claim is true as a whole but is a bit off. It might be slightly misleading or inaccurate.
-- INCORRECT - The claim is false or is misleading in some fundamental way. The snippets directly contradict the claim. You must be **very confident** to output this.
+- INCORRECT - The claim is false or strongly misleading. The evidence is directly relevant to the situation implied by the claim and the evidence directly contradicts the claim. You must be **very confident** to choose this category.
 
 Example format:
 ## Claim to verify
@@ -118,7 +118,6 @@ ${sourceMetadatasStr}
   return {
     snippets,
     category,
-    distinctions: [],
     content: claim,
   }
 }

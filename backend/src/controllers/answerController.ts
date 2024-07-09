@@ -59,7 +59,7 @@ Write this in a thinking space block like so:
 <thinking> {content} </thinking>
 
 Then, answer the user's query concisely in prose.
-You may also test 0 to 3 claims total, to verify the truth of essential facts and ideas.
+As you respond, you may test 0 to 3 claims total, to verify the truth of essential facts and ideas.
 A claim can be made based on the following example format:
 <claim>This is an example claim <requestCitation googleSearchQuery="example query" /></claim>
 

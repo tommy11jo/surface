@@ -5,9 +5,11 @@ import { AnswerInput, IDLE_STATE } from "../_components/AnswerInput";
 import { useSearchParams } from "next/navigation";
 import { AnswerDisplay } from "../_components/AnswerDisplay";
 import ChatStream, { TokenType, type Token } from "../utils/ChatStream";
-import { type ClaimMetadata, ClaimCategory } from "../_components/types";
+import { type ClaimMetadata } from "../_components/types";
 import { useMockDirectAnswerData } from "../utils/MockDirectAnswerData";
 import axios, { AxiosError } from "axios";
+import { answerExamplesList } from "../_components/answerExamples";
+import Link from "next/link";
 const MAX_NUM_CLAIMS = 7;
 
 export default function DirectAnswerPage() {
@@ -128,7 +130,13 @@ export default function DirectAnswerPage() {
   }, [verifyNewClaims]);
 
   const initiateStream = useCallback(() => {
-    if (query === "" || secretCode === "" || !chatStreamRef.current) return;
+    if (
+      query === "" ||
+      secretCode === "" ||
+      !chatStreamRef.current ||
+      (isExample && !retry)
+    )
+      return;
     try {
       setIsStreaming(true);
       setError(null);
@@ -159,6 +167,19 @@ export default function DirectAnswerPage() {
     };
   }, [initiateStream]);
 
+  useEffect(() => {
+    if (isExample) {
+      const curExample = answerExamplesList.find(
+        (example) => example.query === query,
+      );
+      if (!curExample) throw Error("Invalid example provided in url");
+
+      setTempQuery(curExample.query);
+      setVisibleTokens(curExample.visibleTokens);
+      setClaimMetadatas(curExample.claimMetadatas);
+    }
+  }, [isExample]);
+
   return (
     <div className="flex w-full max-w-7xl flex-col items-center justify-start px-2 py-6 sm:px-12">
       <AnswerInput
@@ -171,10 +192,30 @@ export default function DirectAnswerPage() {
         setStatusText={setStatusText}
         showRetry={visibleTokens.length > 0}
       />
-      <AnswerDisplay
-        visibleTokens={visibleTokens}
-        claimMetadatas={claimMetadatas}
-      />
+      {query !== "" ? (
+        <AnswerDisplay
+          visibleTokens={visibleTokens}
+          claimMetadatas={claimMetadatas}
+        />
+      ) : (
+        <div className="flex w-full flex-col items-start">
+          <div>
+            <span className="font-semibold">Examples:</span>
+          </div>
+          {answerExamplesList.map((example, index) => {
+            return (
+              <div key={example.query + index}>
+                <Link
+                  href={`/answer?isExample=true&q=${encodeURIComponent(example.query)}`}
+                  className="text-blue-500 hover:underline"
+                >
+                  → {example.query}
+                </Link>
+              </div>
+            );
+          })}
+        </div>
+      )}
     </div>
   );
 }

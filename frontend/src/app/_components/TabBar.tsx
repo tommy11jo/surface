@@ -19,12 +19,12 @@ export function TabBar({ activeTab }: TabBarProps) {
         >
           Verified Answers
         </Link>
-        <Link
+        {/* <Link
           href="/search"
           className={`${activeTab === TabType.Search ? "underline decoration-gray-500 decoration-dashed" : ""} hover:underline`}
         >
           Search Results
-        </Link>
+        </Link> */}
       </div>
       <div className="mx-4">
         <div className="text-sm text-gray-500 sm:text-base">
