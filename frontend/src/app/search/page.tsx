@@ -15,7 +15,7 @@ export default function SearchPage() {
   const isExample = searchParams.get("isExample") === "true";
   const retry = searchParams.get("retry") === "true";
 
-  const { secretCode, secretLoading } = useSecretCode();
+  const { secretCode } = useSecretCode();
   const [sourceMetadatas, setSourceMetadatas] = useState<SourceMetadata[]>([]);
   const [statusText, setStatusText] = useState(IDLE_STATE);
   const [tempQuery, setTempQuery] = useState("");
@@ -27,7 +27,6 @@ export default function SearchPage() {
         statusText={statusText}
         setStatusText={setStatusText}
         secretCode={secretCode}
-        secretLoading={secretLoading}
         showRetry={sourceMetadatas.length > 0}
       />
       {query !== "" ? (

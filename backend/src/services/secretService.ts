@@ -1,7 +1,7 @@
 import crypto from "crypto"
 import { redisPersistentClient } from "../utils/redisClient"
 
-const MAX_SECRET_CODE_USES = 20
+const MAX_SECRET_CODE_USES = 50
 
 function hashKey(key: string): string {
   return crypto.createHash("sha256").update(key).digest("hex")

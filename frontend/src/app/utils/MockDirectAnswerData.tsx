@@ -204,7 +204,7 @@ export const useMockDirectAnswerData = () => {
           content: "Snippet 2 content",
         },
       ],
-      category: ClaimCategory.ApproxCorrect,
+      category: ClaimCategory.MaybeCorrect,
       distinctions: [],
     },
   ]);

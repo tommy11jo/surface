@@ -32,7 +32,7 @@ export type AnswerSnippet = {
 
 export enum ClaimCategory {
   Correct,
-  ApproxCorrect,
+  MaybeCorrect,
   Incorrect,
   Undefined,
   Uncertain,

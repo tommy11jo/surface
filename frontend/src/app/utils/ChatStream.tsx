@@ -7,6 +7,7 @@ export enum TokenType {
 export interface Token {
   type: TokenType;
   content: string;
+  searchQuery?: string;
 }
 const API_PREFIX = process.env.NEXT_PUBLIC_API_PREFIX;
 const STREAM_DELIM = "%$%";
@@ -114,11 +115,28 @@ export default class ChatStream {
     const fullChunk = this.remainingChunk + chunk;
     this.remainingChunk = "";
 
-    const processContent = (content: string, type: TokenType) => {
+    const processContent = (
+      content: string,
+      type: TokenType,
+      searchQuery?: string,
+    ) => {
       if (this.continuePreviousToken && tokens.length > 0) {
         tokens[tokens.length - 1]!.content += content;
       } else {
-        tokens.push({ type, content });
+        let query: string;
+        if (type === TokenType.Claim) {
+          if (!searchQuery) {
+            console.error(
+              "Claim found without an an associated search query. Using claim content as the query...",
+            );
+            query = content;
+          } else {
+            query = searchQuery!;
+          }
+          tokens.push({ type, content, searchQuery: query });
+        } else {
+          tokens.push({ type, content });
+        }
       }
       this.continuePreviousToken = false;
     };
@@ -142,18 +160,32 @@ export default class ChatStream {
         }
 
         const content = fullChunk.slice(closingIndex + 1, closingTagIndex);
-        switch (tag) {
-          case "thinking":
-            processContent(content, TokenType.Thinking);
-            break;
-          case "claim":
-            processContent(content, TokenType.Claim);
-            break;
-          default:
-            processContent(
-              fullChunk.slice(i, closingTagIndex + closingTag.length),
-              TokenType.Text,
-            );
+        if (tag === "claim") {
+          const searchQueryMatch = content.match(
+            /<requestCitation googleSearchQuery="([^"]+)" \/>/,
+          );
+          const claimContent = searchQueryMatch
+            ? content.replace(searchQueryMatch[0], "").trim()
+            : content;
+          const searchQuery = searchQueryMatch
+            ? searchQueryMatch[1]
+            : undefined;
+
+          processContent(claimContent, TokenType.Claim, searchQuery);
+        } else {
+          switch (tag) {
+            case "thinking":
+              processContent(content, TokenType.Thinking);
+              break;
+            case "claim":
+              processContent(content, TokenType.Claim);
+              break;
+            default:
+              processContent(
+                fullChunk.slice(i, closingTagIndex + closingTag.length),
+                TokenType.Text,
+              );
+          }
         }
 
         i = closingTagIndex + closingTag.length;
@@ -175,6 +207,7 @@ export default class ChatStream {
 
     return tokens;
   }
+
   getState(): {
     visibleTokens: Token[];
     isStreaming: boolean;

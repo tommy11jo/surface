@@ -44,27 +44,28 @@ export default function DirectAnswerPage() {
     };
   }, [secretCode]);
 
-  const allClaims = useRef<string[]>([]);
+  const allClaims = useRef<Token[]>([]);
 
   const verifyNewClaims = useCallback(
-    async (claims: string[], startIndex: number, response: string) => {
+    async (claimTokens: Token[], startIndex: number, response: string) => {
       if (!secretCode) throw new Error("secret must be setup");
-      if (claims.length > 3)
+      if (claimTokens.length > 3)
         throw new Error("More than 3 claims is not allowed.");
-      const newClaims = claims.slice(startIndex);
+      const newClaims = claimTokens.slice(startIndex);
 
       const apiPrefix = process.env.NEXT_PUBLIC_API_PREFIX;
       if (apiPrefix === undefined) throw new Error("Api prefix is undefined");
       let errorOccurred = false;
       const verifyEndpoint = `${apiPrefix}/api/verify`;
       const claimDatas = await Promise.all(
-        newClaims.map(async (claim) => {
+        newClaims.map(async (claimToken) => {
           try {
             const { data } = await axios.post<ClaimMetadata | null>(
               verifyEndpoint,
               {
-                claim,
+                claim: claimToken.content,
                 context: response,
+                searchQuery: claimToken.searchQuery,
                 secret: secretCode,
                 retry,
               },
@@ -108,9 +109,9 @@ export default function DirectAnswerPage() {
       if (!state.isStreaming && !state.error)
         setStatusText("🟢 Initial Answer Complete");
 
-      const claims = state.visibleTokens
-        .filter((token) => token.type === TokenType.Claim)
-        .map((token) => token.content);
+      const claims = state.visibleTokens.filter(
+        (token) => token.type === TokenType.Claim,
+      );
 
       if (claims.length > allClaims.current.length) {
         verifyNewClaims(claims, allClaims.current.length, state.response);

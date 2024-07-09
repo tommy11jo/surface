@@ -5,22 +5,24 @@ import {
   ClaimCategory,
   SourceMetadata,
 } from "./types"
-import { generateFireworkResponse } from "./llmService"
+import { generateFireworkResponse, generateLLMResponse } from "./llmService"
 
 export const generateClaimEval = async (
+  toSearch: string,
   claim: string,
-  context: string,
-  numSources: number = 3,
+  numSources: number = 2,
   approxWordsCutoff: number = 1200,
   jinaTimeout: number = 7000,
   log = true
 ): Promise<ClaimMetadata | null> => {
   // TODO: maybe add an LLM step to generate a search
+  if (log) console.log(`[INFO] Searching '${toSearch}'`)
   const sourceMetadatas: SourceMetadata[] = await searchByBing(
-    claim,
+    toSearch,
     numSources
   )
-  if (log) console.log(`[INFO] Found ${sourceMetadatas.length} sources.`)
+  if (log)
+    console.log(`[INFO] Fetching text for ${sourceMetadatas.length} sources.`)
   const contentFetchResults = await Promise.all(
     sourceMetadatas.map(async (metadata) => {
       const textContent = await getTextContent(
@@ -59,50 +61,58 @@ Content: ${metadata.textContent}
     .join("\n\n")
 
   // TODO: for now, i'm not using 'context' at all. need to test this out later.
-  const prompt = `Your job is to pinpoint 0 to 2 relevant snippets from the sources.
-Each snippet should **directly** support or counter the claim below.
-If a snippet does not clearly and cleanly add informational value, don't include it!
+  const prompt = `Your job is to help determine whether the provided claim is true or false. 
+Act like every word costs you money. 
+Be purely informational.
 
-Then, based on the snippets, you will categorize the claim as one of these four categories:
+Output 0 to 3 pieces of evidence from the sources that support or counter the provided claim.
+Each piece of evidence should be 1-2 sentences.
+Most pieces of evidence should be a direct quote but paraphasing is allowed when it adds clarity.
+
+You should emphasize evidence that subtly counters the claim or adds nuance.
+Only show evidence that clearly adds informational value.
+If you do not see any directly relevant info, output "No proof found" in the Proof section.
+
+Then, based solely on the pieces of evidence, you will categorize the claim as one of these four categories:
 - UNCERTAIN
 - CORRECT
 - SOMEWHAT CORRECT
 - INCORRECT
 
 Let's review the four categories:
-- UNCERTAIN - The snippet evidence is not relevant or is not clear enough to evaluate the claim.
-- CORRECT - The claim is true. It is not misleading.
+- UNCERTAIN - The pieces of evidence do not sufficiently prove or disprove the claim. The evidence might be related but it is not direct.
+- CORRECT - The claim is definitely true and is directly proved by very specific evidence.
 - SOMEWHAT CORRECT - The claim is true as a whole but is a bit off. It might be slightly misleading or inaccurate.
-- INCORRECT - The claim is false or is misleading in some fundamental way. The snippets directly contradict the claim.
+- INCORRECT - The claim is false or is misleading in some fundamental way. The snippets directly contradict the claim. You must be **very confident** to output this.
 
 Example format:
+## Claim to verify
+<claim>
+
 ## Sources
 <source texts>
-
-## Claim
-<claim>
  
-## Snippets
-### Snippet 1
-Content: "<snippet content>"
+## Proof
+### Evidence 1
+Content: <content>
 Source: 0
 
-### Snippet 2
-Content: "<snippet content>"
+### Evidence 2
+Content: <content>
 Source: 3
 
 ## Category
 <one of the four categories>
 
 Now, let's try it out:
+## Claim to verify
+${claim}
+
 ## Sources
 ${sourceMetadatasStr}
 
-## Claim
-${claim}
-
 `
-  const response = await generateFireworkResponse(prompt)
+  const response = await generateLLMResponse(prompt)
   const { snippets, category } = extractClaimData(response, sourceMetadatas)
 
   return {
@@ -123,12 +133,11 @@ const extractClaimData = (
   const sections = response.split(/^##\s/m).filter((section) => section.trim())
 
   const snippetsSection = sections.find((section) =>
-    section.trim().startsWith("Snippets")
+    section.trim().startsWith("Proof")
   )
 
   if (snippetsSection) {
-    const snippetRegex =
-      /### Snippet \d+\nContent: "([\s\S]*?)"\nSource: (\d+)/g
+    const snippetRegex = /### Evidence \d+\nContent: ([\s\S]*?)\nSource: (\d+)/g
     let match
     while ((match = snippetRegex.exec(snippetsSection)) !== null) {
       const content = match[1].trim()
@@ -159,7 +168,7 @@ const extractClaimData = (
           category = ClaimCategory.Incorrect
           break
         case "SOMEWHAT CORRECT":
-          category = ClaimCategory.ApproxCorrect
+          category = ClaimCategory.MaybeCorrect
           break
         case "UNCERTAIN":
           category = ClaimCategory.Uncertain

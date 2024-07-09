@@ -73,7 +73,7 @@ export const generateRankedSourceMetadatas = async (
   return updatedSourceMetadatas
 }
 
-const MAX_WORDS_PER_SOURCE = 1600
+const MAX_WORDS_PER_SOURCE = 2200
 // const MAX_WORDS_PER_SOURCE = 3000
 const GOOGLE_CACHE_ERROR_STR = "Error 404 (Not Found)!!1"
 export const getTextContent = async (

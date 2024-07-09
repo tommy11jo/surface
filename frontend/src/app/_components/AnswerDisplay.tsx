@@ -27,12 +27,12 @@ const categoryWithEmoji = (category: ClaimCategory): string => {
   switch (category) {
     case ClaimCategory.Correct:
       return "probably correct";
-    case ClaimCategory.ApproxCorrect:
-      return "somewhat correct";
+    case ClaimCategory.MaybeCorrect:
+      return "maybe correct";
     case ClaimCategory.Incorrect:
       return "incorrect";
     case ClaimCategory.Uncertain:
-      return "uncertain";
+      return "unverified";
     case ClaimCategory.Undefined:
       return "unknown";
     default:
@@ -44,8 +44,8 @@ const getCategoryStyle = (category: ClaimCategory): string => {
   switch (category) {
     case ClaimCategory.Correct:
       return "bg-gray-200 underline decoration-dashed decoration-gray-500";
-    case ClaimCategory.ApproxCorrect:
-      return "underline decoration-green-600 decoration-wavy underline-offset-4";
+    case ClaimCategory.MaybeCorrect:
+      return "underline decoration-yellow-400 decoration-wavy underline-offset-4";
     case ClaimCategory.Incorrect:
       return "underline decoration-red-300 decoration-wavy underline-offset-4";
     case ClaimCategory.Uncertain:
@@ -125,7 +125,7 @@ export function AnswerDisplay({
                   </a>
                 </div>
                 <div className="flex flex-row">
-                  <span>• {`"${snippet.content}"`}</span>
+                  <span>• {snippet.content}</span>
                 </div>
               </div>
             ))}

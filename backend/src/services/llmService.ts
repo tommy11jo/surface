@@ -107,7 +107,7 @@ export const generateOpenAIResponse = async (
   }
 }
 
-export const getClaudeResponse = async (
+export const generateClaudeResponse = async (
   prompt: string,
   maxTokens: number = 1000,
   log: boolean = false
@@ -137,4 +137,5 @@ export const getClaudeResponse = async (
     throw error
   }
 }
-export const generateLLMResponse = generateFireworkResponse
+// export const generateLLMResponse = generateFireworkResponse
+export const generateLLMResponse = generateClaudeResponse

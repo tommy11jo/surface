@@ -8,7 +8,6 @@ type SearchInputProps = {
   statusText: string;
   setStatusText: (value: string) => void;
   secretCode: string;
-  secretLoading: boolean;
   showRetry: boolean;
 };
 
@@ -21,7 +20,6 @@ export function SearchInput({
   statusText,
   setStatusText,
   secretCode,
-  secretLoading,
   showRetry,
 }: SearchInputProps) {
   const textareaRef = useRef<HTMLTextAreaElement>(null);
