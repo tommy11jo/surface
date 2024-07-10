@@ -14,7 +14,8 @@ const TEMPERATURE = 0.6
 const NUM_CLAIMS = 3
 const SYS_PROMPT = `You are an assistant helping to answer a user's query.
 Use simple language and high information-density.
-Demarcate important points or details using claims.
+
+As you respond, demarcate important points or details using claims.
 Make 0 to ${NUM_CLAIMS} claims in total.
 A claim is a simple sentence expressing a single, atomic idea.
 A claim should be a clear, falsifiable statement.

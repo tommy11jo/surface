@@ -9,7 +9,8 @@ It also demonstrates an interface and prompting approach for verifying claims in
 This project focuses on mitigating factual errors, which are hard for users to spot and evaluate.
 The status quo is high-effort manual web searches.
 
-See examples [here](https://surface-omega.vercel.app/).
+![Scrape Example](/public/scrape-example.png)
+See more examples on the [website](https://surface-omega.vercel.app/).
 TODO: dev setup
 
 **Prompting Approach**  

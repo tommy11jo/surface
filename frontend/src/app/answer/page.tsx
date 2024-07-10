@@ -185,6 +185,8 @@ export default function DirectAnswerPage() {
     }
   }, [isExample]);
 
+  // console.log("tokens", visibleTokens);
+  // console.log("metas", claimMetadatas);
   return (
     <div className="flex w-full max-w-7xl flex-col items-center justify-start px-2 py-6 sm:px-12">
       <AnswerInput
