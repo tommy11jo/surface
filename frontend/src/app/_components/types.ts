@@ -34,11 +34,9 @@ export type AnswerSnippet = {
 };
 
 export enum ClaimCategory {
-  Correct,
-  MaybeCorrect,
-  Incorrect,
-  Undefined,
-  Uncertain,
+  EvalSupported,
+  EvalUncertain,
+  EvalDoubted,
 }
 
 export type ClaimMetadata = {

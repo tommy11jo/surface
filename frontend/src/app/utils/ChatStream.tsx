@@ -22,7 +22,6 @@ export default class ChatStream {
   private response: string;
 
   private remainingChunk = "";
-  private continuePreviousToken = false;
 
   constructor(secretCode: string) {
     this.secretCode = secretCode;
@@ -75,15 +74,13 @@ export default class ChatStream {
               return;
             }
             this.response += data;
-            const newTokens = this.processChunk(data);
-            this.visibleTokens = [...this.visibleTokens, ...newTokens];
+            this.processChunk(data);
           }
         }
       }
 
       if (buffer) {
-        const newTokens = this.processChunk(buffer);
-        this.visibleTokens = [...this.visibleTokens, ...newTokens];
+        this.processChunk(buffer);
       }
     } catch (error: unknown) {
       if (error instanceof Error) {
@@ -110,9 +107,10 @@ export default class ChatStream {
       this.isStreaming = false;
     }
   }
+  // mutates visible tokens by appending new tokens
   private processChunk(chunk: string): Token[] {
-    const tokens: Token[] = [];
     const fullChunk = this.remainingChunk + chunk;
+    const tokens = this.visibleTokens;
     this.remainingChunk = "";
 
     const processContent = (
@@ -120,25 +118,29 @@ export default class ChatStream {
       type: TokenType,
       searchQuery?: string,
     ) => {
-      if (this.continuePreviousToken && tokens.length > 0) {
-        tokens[tokens.length - 1]!.content += content;
+      let query: string;
+      if (type === TokenType.Claim) {
+        if (!searchQuery) {
+          console.error(
+            "Claim found without an an associated search query. Using claim content as the query...",
+          );
+          query = content;
+        } else {
+          query = searchQuery!;
+        }
+        tokens.push({ type, content, searchQuery: query });
+      } else if (type === TokenType.Thinking) {
+        tokens.push({ type, content });
       } else {
-        let query: string;
-        if (type === TokenType.Claim) {
-          if (!searchQuery) {
-            console.error(
-              "Claim found without an an associated search query. Using claim content as the query...",
-            );
-            query = content;
-          } else {
-            query = searchQuery!;
-          }
-          tokens.push({ type, content, searchQuery: query });
+        if (
+          tokens.length > 0 &&
+          tokens[tokens.length - 1]!.type === TokenType.Text
+        ) {
+          tokens[tokens.length - 1]!.content += content;
         } else {
           tokens.push({ type, content });
         }
       }
-      this.continuePreviousToken = false;
     };
 
     let i = 0;
@@ -172,20 +174,12 @@ export default class ChatStream {
             : undefined;
 
           processContent(claimContent, TokenType.Claim, searchQuery);
+        } else if (tag === "thinking") {
+          processContent(content, TokenType.Thinking);
         } else {
-          switch (tag) {
-            case "thinking":
-              processContent(content, TokenType.Thinking);
-              break;
-            case "claim":
-              processContent(content, TokenType.Claim);
-              break;
-            default:
-              processContent(
-                fullChunk.slice(i, closingTagIndex + closingTag.length),
-                TokenType.Text,
-              );
-          }
+          throw new Error(
+            `Malformed direct answer response chunk: ${fullChunk}`,
+          );
         }
 
         i = closingTagIndex + closingTag.length;
@@ -199,10 +193,6 @@ export default class ChatStream {
           i = nextTagIndex;
         }
       }
-    }
-
-    if (this.remainingChunk.length > 0) {
-      this.continuePreviousToken = true;
     }
 
     return tokens;

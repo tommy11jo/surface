@@ -20,7 +20,7 @@ export default function DirectAnswerPage() {
   const retry = searchParams.get("retry") === "true";
   const { secretCode } = useSecretCode();
 
-  const [tempQuery, setTempQuery] = useState(query);
+  const [tempQuery, setTempQuery] = useState("");
   const [visibleTokens, setVisibleTokens] = useState<Token[]>([]);
   const [claimMetadatas, setClaimMetadatas] = useState<
     (ClaimMetadata | null)[]
@@ -38,6 +38,10 @@ export default function DirectAnswerPage() {
   const intervalIdRef = useRef<number | null>(null);
 
   useEffect(() => {
+    setTempQuery(query);
+  }, [query]);
+
+  useEffect(() => {
     chatStreamRef.current = new ChatStream(secretCode);
     return () => {
       if (chatStreamRef.current) {
@@ -51,8 +55,8 @@ export default function DirectAnswerPage() {
   const verifyNewClaims = useCallback(
     async (claimTokens: Token[], startIndex: number, response: string) => {
       if (!secretCode) throw new Error("secret must be setup");
-      if (claimTokens.length > 3)
-        throw new Error("More than 3 claims is not allowed.");
+      if (claimTokens.length > 5)
+        throw new Error("More than 5 claims is not allowed.");
       const newClaims = claimTokens.slice(startIndex);
 
       const apiPrefix = process.env.NEXT_PUBLIC_API_PREFIX;
@@ -105,13 +109,14 @@ export default function DirectAnswerPage() {
   const updateState = useCallback(() => {
     if (chatStreamRef.current) {
       const state = chatStreamRef.current.getState();
-      setVisibleTokens(state.visibleTokens);
+      const newTokens = [...state.visibleTokens];
+      setVisibleTokens(newTokens);
       setIsStreaming(state.isStreaming);
       setError(state.error);
       if (!state.isStreaming && !state.error)
         setStatusText("🟢 Initial Answer Complete");
 
-      const claims = state.visibleTokens.filter(
+      const claims = newTokens.filter(
         (token) => token.type === TokenType.Claim,
       );
 

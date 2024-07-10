@@ -1,5 +1,5 @@
 import Anthropic from "@anthropic-ai/sdk"
-import { type Request, type Response } from "express"
+import { response, text, type Request, type Response } from "express"
 import {
   checkSecretCodeValidity,
   incrementSecretCodeUsage,
@@ -10,6 +10,19 @@ const MODEL = "claude-3-5-sonnet-20240620"
 const MAX_TOKENS = 1024
 const STREAM_DELIM = "%$%"
 const ONE_DAY_IN_SECONDS = 60 * 60 * 24
+const TEMPERATURE = 0.6
+const NUM_CLAIMS = 3
+const SYS_PROMPT = `You are an assistant helping to answer a user's query.
+Use simple language and high information-density.
+Demarcate important points or details using claims.
+Make 0 to ${NUM_CLAIMS} claims in total.
+A claim is a simple sentence expressing a single, atomic idea.
+A claim should be a clear, falsifiable statement.
+Do your best to make true claims.
+
+A claim can be made based on the following example format:
+<claim>This is an example claim <requestCitation googleSearchQuery="example query" /></claim>
+`
 
 const client = new Anthropic({ apiKey: process.env.ANTHROPIC_API_KEY })
 
@@ -52,24 +65,6 @@ export const generateAnswerStream = async (req: Request, res: Response) => {
       }
     }
 
-    const prompt = `Your job is to concisely answer the user's query. You are wise and rational and have broad expertise.
-
-First, concisely infer what the user most likely wants to learn, given their query.
-Write this in a thinking space block like so:
-<thinking> {content} </thinking>
-
-Then, answer the user's query concisely in prose.
-As you respond, you may test 0 to 3 claims total, to verify the truth of essential facts and ideas.
-A claim can be made based on the following example format:
-<claim>This is an example claim <requestCitation googleSearchQuery="example query" /></claim>
-
-Each claim must be simple sentence.
-Each claim must be atomic. It should contain one simple fact or idea which can be searched easily.
-Each claim must be essential. It should be a crux or a core detail.
-
-query:
-${query}
-`
     let fullResponse = ""
     res.writeHead(200, {
       "Content-Type": "text/event-stream",
@@ -80,9 +75,11 @@ ${query}
     await incrementSecretCodeUsage(secret)
     if (log) console.log(`[INFO] Start stream response for query: ${query}`)
     const stream = client.messages.stream({
-      messages: [{ role: "user", content: prompt }],
+      messages: [{ role: "user", content: query }],
       model: MODEL,
+      system: SYS_PROMPT,
       max_tokens: MAX_TOKENS,
+      temperature: TEMPERATURE,
     })
 
     stream.on("text", (text: string) => {

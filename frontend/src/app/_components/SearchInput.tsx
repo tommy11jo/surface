@@ -89,7 +89,7 @@ export function SearchInput({
             autoComplete="off"
             autoCorrect="off"
             autoCapitalize="off"
-            className="w-full overflow-y-auto rounded-lg border border-gray-500 p-2 pl-10 text-base focus:outline-none focus:ring-1 focus:ring-gray-400 sm:w-[30rem]"
+            className="w-full overflow-y-auto rounded-lg border border-gray-500 p-2 pl-10 pr-7 text-base focus:outline-none focus:ring-1 focus:ring-gray-400 sm:w-[30rem]"
             placeholder="Search"
             rows={1}
             maxRows={8}

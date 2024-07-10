@@ -102,7 +102,7 @@ export function AnswerInput({
             autoComplete="off"
             autoCorrect="off"
             autoCapitalize="off"
-            className="w-full resize-none overflow-y-auto rounded-lg border border-gray-500 p-2 pl-10 pr-5 text-base focus:outline-none focus:ring-1 focus:ring-gray-400 sm:w-[30rem]"
+            className="w-full resize-none overflow-y-auto rounded-lg border border-gray-500 p-2 pl-10 pr-7 text-base focus:outline-none focus:ring-1 focus:ring-gray-400 sm:w-[30rem]"
             placeholder="Ask"
             rows={1}
             maxRows={8}

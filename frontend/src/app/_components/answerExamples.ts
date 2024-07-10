@@ -6,446 +6,19 @@ type AnswerExample = {
   visibleTokens: Token[];
   claimMetadatas: ClaimMetadata[];
 };
-const chargingExample = {
-  query: "can i safely use a macbook charger to charge my iphone",
-  visibleTokens: [
-    {
-      type: 0,
-      content:
-        "\nThe user wants to know if it's safe to use a MacBook charger to charge their iPhone, likely due to concerns about compatibility or potential damage to the device.\n",
-    },
-    {
-      type: 2,
-      content: "\n\nYes",
-    },
-    {
-      type: 2,
-      content: ", you",
-    },
-    {
-      type: 2,
-      content: " can safely use a",
-    },
-    {
-      type: 2,
-      content: " MacBook charger",
-    },
-    {
-      type: 2,
-      content: " to charge your",
-    },
-    {
-      type: 2,
-      content: " iPhone. Apple",
-    },
-    {
-      type: 2,
-      content: " designs",
-    },
-    {
-      type: 2,
-      content: " its",
-    },
-    {
-      type: 2,
-      content: " products",
-    },
-    {
-      type: 2,
-      content: " to be compatible within",
-    },
-    {
-      type: 2,
-      content: " their ecosystem, an",
-    },
-    {
-      type: 2,
-      content: "d this",
-    },
-    {
-      type: 2,
-      content: " includes charging",
-    },
-    {
-      type: 2,
-      content: " capabilities",
-    },
-    {
-      type: 2,
-      content: ". A MacBook",
-    },
-    {
-      type: 2,
-      content: " charger delivers",
-    },
-    {
-      type: 2,
-      content: " more",
-    },
-    {
-      type: 2,
-      content: " power than",
-    },
-    {
-      type: 2,
-      content: " an",
-    },
-    {
-      type: 2,
-      content: " iPhone needs",
-    },
-    {
-      type: 2,
-      content: ", but",
-    },
-    {
-      type: 2,
-      content: " the",
-    },
-    {
-      type: 2,
-      content: " iPhone's",
-    },
-    {
-      type: 2,
-      content: " built-in power",
-    },
-    {
-      type: 2,
-      content: " management",
-    },
-    {
-      type: 2,
-      content: " system will only",
-    },
-    {
-      type: 2,
-      content: " draw",
-    },
-    {
-      type: 2,
-      content: " the",
-    },
-    {
-      type: 2,
-      content: " appropriate",
-    },
-    {
-      type: 2,
-      content: " amount of power require",
-    },
-    {
-      type: 2,
-      content: "d for",
-    },
-    {
-      type: 2,
-      content: " charging",
-    },
-    {
-      type: 2,
-      content: ".",
-    },
-    {
-      type: 2,
-      content: "\n\n",
-    },
-    {
-      type: 1,
-      content:
-        "MacBook chargers are compatible with iPhones and will not damage the device.",
-      searchQuery: "Can MacBook charger be used for iPhone",
-    },
-    {
-      type: 2,
-      content: "\n\nHowever",
-    },
-    {
-      type: 2,
-      content: ", it's important",
-    },
-    {
-      type: 2,
-      content: " to note that while",
-    },
-    {
-      type: 2,
-      content: " it",
-    },
-    {
-      type: 2,
-      content: "'s safe,",
-    },
-    {
-      type: 2,
-      content: " it",
-    },
-    {
-      type: 2,
-      content: " may",
-    },
-    {
-      type: 2,
-      content: " not be the most",
-    },
-    {
-      type: 2,
-      content: " efficient metho",
-    },
-    {
-      type: 2,
-      content: "d.",
-    },
-    {
-      type: 2,
-      content: " The",
-    },
-    {
-      type: 2,
-      content: " Mac",
-    },
-    {
-      type: 2,
-      content: "Book charger is",
-    },
-    {
-      type: 2,
-      content: " larger",
-    },
-    {
-      type: 2,
-      content: " and more",
-    },
-    {
-      type: 2,
-      content: " powerful",
-    },
-    {
-      type: 2,
-      content: " than necessary",
-    },
-    {
-      type: 2,
-      content: " for",
-    },
-    {
-      type: 2,
-      content: " an",
-    },
-    {
-      type: 2,
-      content: " iPhone,",
-    },
-    {
-      type: 2,
-      content: " so it's",
-    },
-    {
-      type: 2,
-      content: " not",
-    },
-    {
-      type: 2,
-      content: " as",
-    },
-    {
-      type: 2,
-      content: " convenient",
-    },
-    {
-      type: 2,
-      content: " for everyday",
-    },
-    {
-      type: 2,
-      content: " use",
-    },
-    {
-      type: 2,
-      content: " or",
-    },
-    {
-      type: 2,
-      content: " travel",
-    },
-    {
-      type: 2,
-      content: ". Additionally, charging",
-    },
-    {
-      type: 2,
-      content: " speeds",
-    },
-    {
-      type: 2,
-      content: " may not",
-    },
-    {
-      type: 2,
-      content: " be faster",
-    },
-    {
-      type: 2,
-      content: " than",
-    },
-    {
-      type: 2,
-      content: " using",
-    },
-    {
-      type: 2,
-      content: " the standar",
-    },
-    {
-      type: 2,
-      content: "d iPhone charger.",
-    },
-  ],
-  claimMetadatas: [
-    {
-      snippets: [
-        {
-          content:
-            "\"While it may sound strange, it's safe to use Apple's higher-powered USB-C chargers, as your iPhone or iPad is what determines the power it receives, not the charger. Apple even does testing with the whole range of its USB-C power adapters.\"",
-          url: "https://9to5mac.com/2024/02/08/fast-charge-iphone-macbook-charger/",
-          hostname: "9to5mac.com",
-          title: "Can you fast charge iPhone with MacBook charger? - 9to5Mac",
-        },
-        {
-          content:
-            '"Apple says the following iOS devices are compatible with its 18W, 20W, 29W, 30W, 61W, 87W, 96W, and 140W adapters for fast charging: iPhone 8/8 Plus and later"',
-          url: "https://9to5mac.com/2024/02/08/fast-charge-iphone-macbook-charger/",
-          hostname: "9to5mac.com",
-          title: "Can you fast charge iPhone with MacBook charger? - 9to5Mac",
-        },
-      ],
-      category: 1,
-      content:
-        "MacBook chargers are compatible with iPhones and will not damage the device.",
-      isComplete: true,
-    },
-  ],
-};
+
 const teaExample = {
   query: "typical amount of caffeine in a cup of tea",
   visibleTokens: [
     {
-      type: 0,
+      type: 2,
       content:
-        "\nThe user likely wants to know the average caffeine content in a standard cup of tea, possibly to compare it with other caffeinated beverages or understand its effects.\n",
-    },
-    {
-      type: 2,
-      content: "\n\nA typical",
-    },
-    {
-      type: 2,
-      content: " cup",
-    },
-    {
-      type: 2,
-      content: " of tea contains about",
-    },
-    {
-      type: 2,
-      content: " 14",
-    },
-    {
-      type: 2,
-      content: "-",
-    },
-    {
-      type: 2,
-      content: "70",
-    },
-    {
-      type: 2,
-      content: " mg of caff",
-    },
-    {
-      type: 2,
-      content: "eine, depending on",
-    },
-    {
-      type: 2,
-      content: " the type of",
-    },
-    {
-      type: 2,
-      content: " tea and brewing",
-    },
-    {
-      type: 2,
-      content: " method. Black",
-    },
-    {
-      type: 2,
-      content: " tea generally",
-    },
-    {
-      type: 2,
-      content: " has",
-    },
-    {
-      type: 2,
-      content: " the highest caff",
-    },
-    {
-      type: 2,
-      content: "eine content, while",
-    },
-    {
-      type: 2,
-      content: " herbal t",
-    },
-    {
-      type: 2,
-      content: "eas usually",
-    },
-    {
-      type: 2,
-      content: " contain",
-    },
-    {
-      type: 2,
-      content: " no",
-    },
-    {
-      type: 2,
-      content: " caffeine at",
-    },
-    {
-      type: 2,
-      content: " all.",
-    },
-    {
-      type: 2,
-      content: " Green",
-    },
-    {
-      type: 2,
-      content: " an",
-    },
-    {
-      type: 2,
-      content: "d white teas fall",
-    },
-    {
-      type: 2,
-      content: " somewhere",
-    },
-    {
-      type: 2,
-      content: " in between.",
-    },
-    {
-      type: 2,
-      content: "\n\n",
+        "Here's some information about the typical amount of caffeine in a cup of tea:\n\n",
     },
     {
       type: 1,
       content:
-        "An average 8-ounce (240 ml) cup of black tea contains 47 mg of caffeine.",
+        "An average 8-ounce (240 ml) cup of black tea contains about 47 mg of caffeine",
       searchQuery: "average caffeine content in black tea",
     },
     {
@@ -455,120 +28,13 @@ const teaExample = {
     {
       type: 1,
       content:
-        "Green tea typically contains 25-35 mg of caffeine per 8-ounce cup.",
+        "Green tea typically has less caffeine, with about 28 mg per 8-ounce cup",
       searchQuery: "caffeine content in green tea",
     },
     {
       type: 2,
-      content: "\n\nThe",
-    },
-    {
-      type: 2,
-      content: " caff",
-    },
-    {
-      type: 2,
-      content: "eine content in tea",
-    },
-    {
-      type: 2,
-      content: " is",
-    },
-    {
-      type: 2,
-      content: " generally lower than that",
-    },
-    {
-      type: 2,
-      content: " of",
-    },
-    {
-      type: 2,
-      content: " coffee, which",
-    },
-    {
-      type: 2,
-      content: " can",
-    },
-    {
-      type: 2,
-      content: " range from 95",
-    },
-    {
-      type: 2,
-      content: "-200 mg",
-    },
-    {
-      type: 2,
-      content: " per ",
-    },
-    {
-      type: 2,
-      content: "8-oun",
-    },
-    {
-      type: 2,
-      content: "ce cup.",
-    },
-    {
-      type: 2,
-      content: " Factors",
-    },
-    {
-      type: 2,
-      content: " such",
-    },
-    {
-      type: 2,
-      content: " as ste",
-    },
-    {
-      type: 2,
-      content: "eping time, water",
-    },
-    {
-      type: 2,
-      content: " temperature, and the",
-    },
-    {
-      type: 2,
-      content: " specific tea blen",
-    },
-    {
-      type: 2,
-      content: "d can",
-    },
-    {
-      type: 2,
-      content: " all",
-    },
-    {
-      type: 2,
-      content: " affect",
-    },
-    {
-      type: 2,
-      content: " the final",
-    },
-    {
-      type: 2,
-      content: " caffeine content",
-    },
-    {
-      type: 2,
-      content: " in",
-    },
-    {
-      type: 2,
-      content: " your",
-    },
-    {
-      type: 2,
-      content: " cup",
-    },
-    {
-      type: 2,
-      content: ".",
+      content:
+        "\n\nIt's important to note that caffeine content can vary depending on factors like:\n\n1. Type of tea (black, green, white, oolong)\n2. Brewing time\n3. Water temperature\n4. Amount of tea leaves used\n\nFor comparison, an average 8-ounce cup of coffee contains about 95 mg of caffeine, which is generally higher than most teas.",
     },
   ],
   claimMetadatas: [
@@ -609,353 +75,20 @@ const chatEnergyExample = {
   query: "energy per query for gpt-4",
   visibleTokens: [
     {
-      type: 0,
+      type: 2,
       content:
-        "\nThe user likely wants to know the amount of energy consumed for a single query or interaction with the GPT-4 language model.\n",
-    },
-    {
-      type: 2,
-      content: "\n\nThe",
-    },
-    {
-      type: 2,
-      content: " exact",
-    },
-    {
-      type: 2,
-      content: " energy",
-    },
-    {
-      type: 2,
-      content: " consumption per",
-    },
-    {
-      type: 2,
-      content: " query for",
-    },
-    {
-      type: 2,
-      content: " GPT-4",
-    },
-    {
-      type: 2,
-      content: " is not publicly",
-    },
-    {
-      type: 2,
-      content: " disclose",
-    },
-    {
-      type: 2,
-      content: "d by Open",
-    },
-    {
-      type: 2,
-      content: "AI.",
-    },
-    {
-      type: 2,
-      content: " However, large",
-    },
-    {
-      type: 2,
-      content: " language models like GP",
-    },
-    {
-      type: 2,
-      content: "T-4 ",
-    },
-    {
-      type: 2,
-      content: "are",
-    },
-    {
-      type: 2,
-      content: " known",
-    },
-    {
-      type: 2,
-      content: " to be",
-    },
-    {
-      type: 2,
-      content: " comput",
-    },
-    {
-      type: 2,
-      content: "ationally intensive",
-    },
-    {
-      type: 2,
-      content: " and consume",
-    },
-    {
-      type: 2,
-      content: " significant amounts of energy",
-    },
-    {
-      type: 2,
-      content: ".",
-    },
-    {
-      type: 2,
-      content: " The",
-    },
-    {
-      type: 2,
-      content: " energy",
-    },
-    {
-      type: 2,
-      content: " usage can vary depending",
-    },
-    {
-      type: 2,
-      content: " on factors",
-    },
-    {
-      type: 2,
-      content: " such",
-    },
-    {
-      type: 2,
-      content: " as the length",
-    },
-    {
-      type: 2,
-      content: " an",
-    },
-    {
-      type: 2,
-      content: "d complexity of the query",
-    },
-    {
-      type: 2,
-      content: ",",
-    },
-    {
-      type: 2,
-      content: " the hardware",
-    },
-    {
-      type: 2,
-      content: " use",
-    },
-    {
-      type: 2,
-      content: "d, and the specific",
-    },
-    {
-      type: 2,
-      content: " implementation.",
-    },
-    {
-      type: 2,
-      content: "\n\n",
+        "GPT-4 is a large language model developed by OpenAI, known for its advanced capabilities in natural language processing and generation. Regarding the energy consumption per query for GPT-4:\n\n",
     },
     {
       type: 1,
       content:
-        "GPT-4 consumes more energy per query than its predecessor, GPT-3.",
-      searchQuery: "GPT-4 energy consumption compared to GPT-3",
+        "The exact energy consumption per query for GPT-4 is not publicly disclosed by OpenAI",
+      searchQuery: "GPT-4 energy consumption per query",
     },
     {
       type: 2,
-      content: "\n\nWhile",
-    },
-    {
-      type: 2,
-      content: " precise",
-    },
-    {
-      type: 2,
-      content: " figures",
-    },
-    {
-      type: 2,
-      content: " are not available",
-    },
-    {
-      type: 2,
-      content: ", it",
-    },
-    {
-      type: 2,
-      content: "'s estimate",
-    },
-    {
-      type: 2,
-      content: "d that a",
-    },
-    {
-      type: 2,
-      content: " single query",
-    },
-    {
-      type: 2,
-      content: " to",
-    },
-    {
-      type: 2,
-      content: " a",
-    },
-    {
-      type: 2,
-      content: " large",
-    },
-    {
-      type: 2,
-      content: " language model like GP",
-    },
-    {
-      type: 2,
-      content: "T-4 ",
-    },
-    {
-      type: 2,
-      content: "coul",
-    },
-    {
-      type: 2,
-      content: "d consume",
-    },
-    {
-      type: 2,
-      content: " energy",
-    },
-    {
-      type: 2,
-      content: " equivalent",
-    },
-    {
-      type: 2,
-      content: " to charging",
-    },
-    {
-      type: 2,
-      content: " a smartphone.",
-    },
-    {
-      type: 2,
-      content: " However",
-    },
-    {
-      type: 2,
-      content: ", it",
-    },
-    {
-      type: 2,
-      content: "'s important",
-    },
-    {
-      type: 2,
-      content: " to note that these",
-    },
-    {
-      type: 2,
-      content: " estimates can",
-    },
-    {
-      type: 2,
-      content: " vary widely an",
-    },
-    {
-      type: 2,
-      content: "d shoul",
-    },
-    {
-      type: 2,
-      content: "d be",
-    },
-    {
-      type: 2,
-      content: " taken as rough",
-    },
-    {
-      type: 2,
-      content: " approxim",
-    },
-    {
-      type: 2,
-      content: "ations rather",
-    },
-    {
-      type: 2,
-      content: " than definitive measurements",
-    },
-    {
-      type: 2,
-      content: ".\n\n",
-    },
-    {
-      type: 1,
       content:
-        "The energy consumption of AI models like GPT-4 has raised concerns about their environmental impact.",
-      searchQuery: "AI models energy consumption environmental impact",
-    },
-    {
-      type: 2,
-      content: "\n\nResearchers",
-    },
-    {
-      type: 2,
-      content: " and companies",
-    },
-    {
-      type: 2,
-      content: " are",
-    },
-    {
-      type: 2,
-      content: " working on",
-    },
-    {
-      type: 2,
-      content: " developing more energy-",
-    },
-    {
-      type: 2,
-      content: "efficient AI models",
-    },
-    {
-      type: 2,
-      content: " an",
-    },
-    {
-      type: 2,
-      content: "d improving",
-    },
-    {
-      type: 2,
-      content: " the",
-    },
-    {
-      type: 2,
-      content: " infrastructure",
-    },
-    {
-      type: 2,
-      content: " supporting",
-    },
-    {
-      type: 2,
-      content: " these",
-    },
-    {
-      type: 2,
-      content: " systems",
-    },
-    {
-      type: 2,
-      content: " to",
-    },
-    {
-      type: 2,
-      content: " reduce their overall",
-    },
-    {
-      type: 2,
-      content: " energy footprint.",
+        "\n\nWhile the specific energy usage is not known, it's generally understood that large language models like GPT-4 require significant computational resources and energy to operate. The energy consumption can vary depending on factors such as the complexity of the query, the length of the response, and the specific hardware used to run the model.\n\nIt's worth noting that as AI models become more advanced and efficient, there are ongoing efforts in the AI community to develop more energy-efficient algorithms and hardware to reduce the environmental impact of these systems.",
     },
   ],
   claimMetadatas: [
@@ -963,166 +96,266 @@ const chatEnergyExample = {
       snippets: [
         {
           content:
-            '"When we train a model like ChatGPT, we run complex computations on vast amounts of data, typically using powerful GPUs or TPUs. This process can take weeks or even months and consume substantial electricity."',
+            '"The exact energy consumption per query for GPT-4 is not publicly disclosed by OpenAI. However, it is estimated that when we generate a single response using GPT-3, we consume around 0.0003 kWh (kilowatt-hours) of energy. In comparison, the same response using GPT-4 can consume around 0.0005 kWh (kilowatt-hours) of energy."',
           url: "https://www.baeldung.com/cs/chatgpt-large-language-models-power-consumption",
           hostname: "www.baeldung.com",
           title: "Energy Consumption of ChatGPT Responses - Baeldung",
-        },
-        {
-          content:
-            '"Each query ChatGPT process involves running the model\'s neural network to generate a coherent and contextually relevant response. It is estimated that when we generate a single response using GPT-3, we consume around 0.0003 kWh (kilowatt-hours) of energy. In comparison, the same response using GPT-4 can consume around 0.0005 kWh (kilowatt-hours) of energy."',
-          url: "https://www.baeldung.com/cs/chatgpt-large-language-models-power-consumption",
-          hostname: "www.baeldung.com",
-          title: "Energy Consumption of ChatGPT Responses - Baeldung",
-        },
-      ],
-      category: 1,
-      content:
-        "GPT-4 consumes more energy per query than its predecessor, GPT-3.",
-      isComplete: true,
-    },
-    {
-      snippets: [
-        {
-          content:
-            '"It\'s estimated that a search driven by generative AI uses four to five times the energy of a conventional web search. Within years, large AI systems are likely to need as much energy as entire nations."',
-          url: "https://www.nature.com/articles/d41586-024-00478-x",
-          hostname: "www.nature.com",
-          title:
-            "Generative AI’s environmental costs are soaring — and mostly secret",
-        },
-        {
-          content:
-            '"Generative AI systems need enormous amounts of fresh water to cool their processors and generate electricity. In West Des Moines, Iowa, a giant data-centre cluster serves OpenAI\'s most advanced model, GPT-4."',
-          url: "https://www.nature.com/articles/d41586-024-00478-x",
-          hostname: "www.nature.com",
-          title:
-            "Generative AI’s environmental costs are soaring — and mostly secret",
         },
       ],
       category: 0,
       content:
-        "The energy consumption of AI models like GPT-4 has raised concerns about their environmental impact.",
+        "The exact energy consumption per query for GPT-4 is not publicly disclosed by OpenAI",
       isComplete: true,
     },
   ],
 };
 
-const friesExample = {
-  query: "best oil to make oven fries",
+const acxCommentHomeless = {
+  query: `"Actually, a lot of San Francisco's problems date back to a Supreme Court decision that city governments could not limit their public assistance programs to residents of the city. This might have been specifically designed to destroy cities that had generous public assistance programs." 
+
+which case is this person referring to?`,
+
   visibleTokens: [
     {
-      type: 0,
+      type: 2,
       content:
-        "\nThe user likely wants to know which type of oil is most suitable for making crispy, flavorful oven fries with optimal results.\n",
+        "This person is likely referring to a significant Supreme Court decision that impacted how cities could administer their public assistance programs. Let me provide some context:\n\n",
+    },
+    {
+      type: 1,
+      content:
+        "The case in question is likely Shapiro v. Thompson from 1969, which dealt with residency requirements for welfare benefits",
+      searchQuery: "Shapiro v. Thompson 1969 Supreme Court welfare residency",
     },
     {
       type: 2,
-      content: "\n\nFor",
+      content:
+        "\n\nIn this case, the Supreme Court ruled that states and cities could not impose residency requirements on welfare recipients. This decision had far-reaching implications:\n\n1. It meant that cities and states could not limit their public assistance programs only to long-term residents.\n\n2. The ruling was based on the constitutional right to travel between states, which the Court determined was infringed by residency requirements for welfare.\n\n3. This decision potentially made cities with more generous welfare programs more attractive to people in need of assistance from other areas.\n\n",
+    },
+    {
+      type: 1,
+      content:
+        "The ruling led to concerns that cities with better social services would become overwhelmed by an influx of people seeking benefits",
+      searchQuery: "impact of Shapiro v. Thompson on urban welfare systems",
     },
     {
       type: 2,
-      content: " making",
+      content:
+        "\n\nWhile the decision was intended to protect individual rights, some argue that it had unintended consequences for urban areas, potentially contributing to increased strain on social services in cities like San Francisco.",
+    },
+  ],
+  claimMetadatas: [
+    {
+      snippets: [
+        {
+          content:
+            '"Shapiro v. Thompson, 394 U.S. 618 (1969), was a landmark decision of the Supreme Court of the United States that invalidated state durational residency requirements for public assistance and helped establish a fundamental "right to travel" in U.S. law."',
+          url: "https://en.wikipedia.org/wiki/Shapiro_v._Thompson",
+          hostname: "en.wikipedia.org",
+          title: "Shapiro v. Thompson - Wikipedia",
+        },
+        {
+          content:
+            '"The statutory prohibition of benefits to residents of less than a year creates a classification which denies equal protection of the laws because the interests allegedly served by the classification either may not constitutionally be promoted by government or are not compelling governmental interests."',
+          url: "https://supreme.justia.com/cases/federal/us/394/618/",
+          hostname: "supreme.justia.com",
+          title:
+            "Shapiro v. Thompson, 394 U.S. 618 (1969) - Justia US Supreme Court Center",
+        },
+      ],
+      category: 0,
+      content:
+        "The case in question is likely Shapiro v. Thompson from 1969, which dealt with residency requirements for welfare benefits",
+      isComplete: true,
+    },
+    {
+      snippets: [
+        {
+          content:
+            '"The statutory prohibition of benefits to residents of less than a year creates a classification which denies equal protection of the laws because the interests allegedly served by the classification either may not constitutionally be promoted by government or are not compelling governmental interests."',
+          url: "https://legalaidhistory.org/case/shapiro-v-thompson/",
+          hostname: "legalaidhistory.org",
+          title: "Shapiro v. Thompson (1969) | Legal Aid History",
+        },
+        {
+          content:
+            '"The ruling led to concerns that cities with better social services would become overwhelmed by an influx of people seeking benefits. By 1970, there was a 17% increase in those nationally receiving AFDC aid due to Shapiro."',
+          url: "https://en.wikipedia.org/wiki/Shapiro_v._Thompson",
+          hostname: "en.wikipedia.org",
+          title: "Shapiro v. Thompson - Wikipedia",
+        },
+      ],
+      category: 0,
+      content:
+        "The ruling led to concerns that cities with better social services would become overwhelmed by an influx of people seeking benefits",
+      isComplete: true,
+    },
+  ],
+};
+const redisExample = {
+  query: "default save policy redis",
+  visibleTokens: [
+    {
+      type: 2,
+      content:
+        "Redis is an in-memory data structure store that can be used as a database, cache, message broker, and queue. Here's some key information about Redis's default save policy:\n\n",
+    },
+    {
+      type: 1,
+      content:
+        "Redis uses a snapshot-based persistence mechanism called RDB (Redis Database) as its default save policy",
+      searchQuery:
+        "Redis uses a snapshot-based persistence mechanism called RDB (Redis Database) as its default save policy",
     },
     {
       type: 2,
-      content: " ",
+      content:
+        "\n\nBy default, Redis will save the dataset to disk based on certain conditions:\n\n1. Time-based: Redis will save if a specified amount of time has elapsed since the last save.\n2. Changes-based: Redis will save if a certain number of write operations have occurred.\n\nThe default configuration typically looks like this:\n\nsave 900 1\nsave 300 10\nsave 60 10000\n\nThis means:\n- Save after 900 seconds (15 minutes) if at least 1 key changed\n- Save after 300 seconds (5 minutes) if at least 10 keys changed\n- Save after 60 seconds if at least 10,000 keys changed\n\n",
+    },
+    {
+      type: 1,
+      content:
+        "Redis also supports an Append-Only File (AOF) persistence mode, which can be enabled for more frequent and granular saving",
+      searchQuery:
+        "Redis also supports an Append-Only File (AOF) persistence mode, which can be enabled for more frequent and granular saving",
     },
     {
       type: 2,
-      content: "oven fries,",
+      content:
+        "\n\nIt's important to note that while these are the default settings, they can be adjusted to suit specific application needs and performance requirements.",
+    },
+  ],
+  claimMetadatas: [
+    {
+      snippets: [
+        {
+          content:
+            '"Redis provides a range of persistence options. These include: **RDB** (Redis Database): RDB persistence performs point-in-time snapshots of your dataset at specified intervals."',
+          url: "https://redis.io/docs/latest/operate/oss_and_stack/management/persistence/",
+          hostname: "redis.io",
+          title: "Redis persistence | Docs",
+        },
+        {
+          content:
+            "\"Redis supports so-called 'snapshots'. This means that it will do a complete copy of whats in memory at some points in time (e.g. every full hour). When you lose power between two snapshots, you will lose the data from the time between the last snapshot and the crash.\"",
+          url: "https://stackoverflow.com/questions/25328317/does-redis-persist-data",
+          hostname: "stackoverflow.com",
+          title: "Does Redis persist data? - Stack Overflow",
+        },
+      ],
+      category: 1,
+      content:
+        "Redis uses a snapshot-based persistence mechanism called RDB (Redis Database) as its default save policy",
+      isComplete: true,
+    },
+    {
+      snippets: [
+        {
+          content:
+            '"AOF (Append Only File): AOF persistence logs every write operation received by the server. These operations can then be replayed again at server startup, reconstructing the original dataset. Commands are logged using the same format as the Redis protocol itself."',
+          url: "https://redis.io/docs/latest/operate/oss_and_stack/management/persistence/",
+          hostname: "redis.io",
+          title: "Redis persistence | Docs",
+        },
+        {
+          content:
+            '"Using AOF Redis is much more durable: you can have different fsync policies: no fsync at all, fsync every second, fsync at every query. With the default policy of fsync every second, write performance is still great."',
+          url: "https://redis.io/docs/latest/operate/oss_and_stack/management/persistence/",
+          hostname: "redis.io",
+          title: "Redis persistence | Docs",
+        },
+      ],
+      category: 0,
+      content:
+        "Redis also supports an Append-Only File (AOF) persistence mode, which can be enabled for more frequent and granular saving",
+      isComplete: true,
+    },
+  ],
+};
+
+const nextExample = {
+  query: "does nextjs allow me to set the cache control headers",
+  visibleTokens: [
+    {
+      type: 2,
+      content:
+        "Yes, Next.js allows you to set Cache-Control headers. Here's a brief overview:\n\n",
+    },
+    {
+      type: 1,
+      content:
+        "Next.js provides built-in support for setting Cache-Control headers on both static and dynamic routes",
+      searchQuery: "Next.js Cache-Control headers",
     },
     {
       type: 2,
-      content: " the best oil to",
+      content:
+        "\n\nFor static routes, you can set Cache-Control headers in the next.config.js file. For dynamic routes, you can set them programmatically in your API routes or getServerSideProps functions.\n\nTo set Cache-Control headers for static routes:\n\n1. Create or open your next.config.js file\n2. Add a headers() function in the module.exports object\n3. Define your caching rules using patterns and header configurations\n\nFor dynamic routes, you can set headers in your API route or getServerSideProps function using the res.setHeader() method.\n\n",
+    },
+    {
+      type: 1,
+      content:
+        "Setting appropriate Cache-Control headers can significantly improve your Next.js application's performance and reduce server load",
+      searchQuery: "benefits of Cache-Control headers in Next.js",
     },
     {
       type: 2,
-      content: " use is one",
+      content:
+        "\n\nRemember to carefully consider your caching strategy based on your specific use case and content update frequency.",
+    },
+  ],
+  claimMetadatas: [
+    {
+      snippets: [
+        {
+          content:
+            "NextJS with App Router handles the cache-control header automatically. If you attempt to set it in `next.config.js` it will be overwritten in production by the built-in caching mechanism.",
+          url: "https://stackoverflow.com/questions/76228269/setting-cache-control-header-in-nextjs-app-router",
+          hostname: "stackoverflow.com",
+          title:
+            "next.js - Setting Cache-Control Header in NextJS App Router - Stack ...",
+        },
+        {
+          content:
+            "You cannot set `Cache-Control` headers in `next.config.js` for pages or assets, as these headers will be overwritten in production to ensure that responses and static assets are cached effectively.",
+          url: "https://nextjs.org/docs/app/api-reference/next-config-js/headers",
+          hostname: "nextjs.org",
+          title: "next.config.js Options: headers | Next.js",
+        },
+      ],
+      category: 2,
+      content:
+        "Next.js provides built-in support for setting Cache-Control headers on both static and dynamic routes",
+      isComplete: true,
     },
     {
-      type: 2,
-      content: " with",
+      snippets: [
+        {
+          content:
+            '"Setting appropriate Cache-Control headers can significantly improve your Next.js application\'s performance and reduce server load. By caching the output of costly operations, Next.js enables swift responses to client-side requests while mitigating server strain."',
+          url: "https://www.dhiwise.com/post/leveraging-nextjs-cache-everything-you-need-to-know",
+          hostname: "www.dhiwise.com",
+          title: "The Ultimate Next.js Cache Tutorial for Web Developers",
+        },
+      ],
+      category: 0,
+      content:
+        "Setting appropriate Cache-Control headers can significantly improve your Next.js application's performance and reduce server load",
+      isComplete: true,
     },
+  ],
+};
+const modelSizeExample = {
+  query: "openai model sizes over the years",
+  visibleTokens: [
     {
       type: 2,
-      content: " a high smoke",
+      content: "Here's an overview of OpenAI's model sizes over the years:\n\n",
     },
     {
-      type: 2,
-      content: " point and neutral",
-    },
-    {
-      type: 2,
-      content: " flavor.",
-    },
-    {
-      type: 2,
-      content: " Av",
-    },
-    {
-      type: 2,
-      content: "ocado oil is",
-    },
-    {
-      type: 2,
-      content: " an excellent choice due",
-    },
-    {
-      type: 2,
-      content: " to its high smoke",
-    },
-    {
-      type: 2,
-      content: " point (aroun",
-    },
-    {
-      type: 2,
-      content: "d 520",
-    },
-    {
-      type: 2,
-      content: "°F/",
-    },
-    {
-      type: 2,
-      content: "271",
-    },
-    {
-      type: 2,
-      content: "°C) an",
-    },
-    {
-      type: 2,
-      content: "d mil",
-    },
-    {
-      type: 2,
-      content: "d taste",
-    },
-    {
-      type: 2,
-      content: ". Other",
-    },
-    {
-      type: 2,
-      content: " good options include light",
-    },
-    {
-      type: 2,
-      content: " olive oil, veget",
-    },
-    {
-      type: 2,
-      content: "able oil, or",
-    },
-    {
-      type: 2,
-      content: " can",
-    },
-    {
-      type: 2,
-      content: "ola oil.",
+      type: 1,
+      content: "OpenAI's GPT-1, released in 2018, had 117 million parameters",
+      searchQuery: "OpenAI GPT-1 parameters",
     },
     {
       type: 2,
@@ -1131,183 +364,129 @@ const friesExample = {
     {
       type: 1,
       content:
-        "Avocado oil has a smoke point of around 520°F (271°C), making it ideal for high-temperature cooking.",
-      searchQuery: "avocado oil smoke point",
+        "GPT-2, introduced in 2019, came in sizes ranging from 124 million to 1.5 billion parameters",
+      searchQuery: "OpenAI GPT-2 model sizes",
     },
     {
       type: 2,
-      content: "\n\nThese",
+      content: "\n\n",
+    },
+    {
+      type: 1,
+      content:
+        "GPT-3, unveiled in 2020, dramatically increased in size to 175 billion parameters",
+      searchQuery: "GPT-3 175 billion parameters",
     },
     {
       type: 2,
-      content: " oils",
+      content: "\n\n",
+    },
+    {
+      type: 1,
+      content:
+        "The latest GPT-4 model, released in 2023, is rumored to have over 1 trillion parameters, though the exact size has not been officially disclosed",
+      searchQuery: "GPT-4 estimated parameters",
     },
     {
       type: 2,
-      content: " can with",
-    },
-    {
-      type: 2,
-      content: "stand the",
-    },
-    {
-      type: 2,
-      content: " high temperatures",
-    },
-    {
-      type: 2,
-      content: " require",
-    },
-    {
-      type: 2,
-      content: "d for",
-    },
-    {
-      type: 2,
-      content: " cri",
-    },
-    {
-      type: 2,
-      content: "spy ",
-    },
-    {
-      type: 2,
-      content: "oven fries without",
-    },
-    {
-      type: 2,
-      content: " burning or im",
-    },
-    {
-      type: 2,
-      content: "parting unw",
-    },
-    {
-      type: 2,
-      content: "anted flavors.",
-    },
-    {
-      type: 2,
-      content: " They",
-    },
-    {
-      type: 2,
-      content: " also help",
-    },
-    {
-      type: 2,
-      content: " achieve",
-    },
-    {
-      type: 2,
-      content: " a",
-    },
-    {
-      type: 2,
-      content: " golden-",
-    },
-    {
-      type: 2,
-      content: "brown exterior while",
-    },
-    {
-      type: 2,
-      content: " keeping",
-    },
-    {
-      type: 2,
-      content: " the inside soft an",
-    },
-    {
-      type: 2,
-      content: "d fluffy.",
-    },
-    {
-      type: 2,
-      content: " When",
-    },
-    {
-      type: 2,
-      content: " using",
-    },
-    {
-      type: 2,
-      content: " any",
-    },
-    {
-      type: 2,
-      content: " of",
-    },
-    {
-      type: 2,
-      content: " these oils, t",
-    },
-    {
-      type: 2,
-      content: "oss your",
-    },
-    {
-      type: 2,
-      content: " cut",
-    },
-    {
-      type: 2,
-      content: " pot",
-    },
-    {
-      type: 2,
-      content: "atoes in a light",
-    },
-    {
-      type: 2,
-      content: " coating before",
-    },
-    {
-      type: 2,
-      content: " b",
-    },
-    {
-      type: 2,
-      content: "aking for",
-    },
-    {
-      type: 2,
-      content: " best",
-    },
-    {
-      type: 2,
-      content: " results.",
+      content:
+        "\n\nThis trend shows a significant increase in model size over time, with each new iteration generally being much larger than its predecessor. However, it's important to note that model size alone doesn't determine performance, as factors like training data quality and algorithmic improvements also play crucial roles.",
     },
   ],
   claimMetadatas: [
     {
       snippets: [
         {
-          content:
-            '"Refined avocado oil has a smoke point of 520 F (271 C), making it the most heat-stable option for high-temperature frying."',
-          url: "https://superfoodprofiles.com/avocado-oil-cooking-smoke-point-oils",
-          hostname: "superfoodprofiles.com",
-          title: "Avocado Oil For Frying & The Smoke Points Of Cooking Oils",
+          content: "GPT-1 was initially released in June 2018 by OpenAI.",
+          url: "https://en.wikipedia.org/wiki/GPT-1",
+          hostname: "en.wikipedia.org",
+          title: "GPT-1 - Wikipedia",
         },
         {
           content:
-            '"Cold pressed avocado oil has a smoke point of 480 F (248 C). This is still much higher than any of the more popular processed vegetable oils on the market."',
-          url: "https://superfoodprofiles.com/avocado-oil-cooking-smoke-point-oils",
-          hostname: "superfoodprofiles.com",
-          title: "Avocado Oil For Frying & The Smoke Points Of Cooking Oils",
+            "The Wikipedia article does not mention the number of parameters in GPT-1.",
+          url: "https://en.wikipedia.org/wiki/GPT-1",
+          hostname: "en.wikipedia.org",
+          title: "GPT-1 - Wikipedia",
+        },
+      ],
+      category: 1,
+      content: "OpenAI's GPT-1, released in 2018, had 117 million parameters",
+      isComplete: true,
+    },
+    {
+      snippets: [
+        {
+          content:
+            '"GPT-2 was created as a "direct scale-up" of GPT-1 with a ten-fold increase in both its parameter count and the size of its training dataset. It is a general-purpose learner and its ability to perform the various tasks was a consequence of its general ability to accurately predict the next item in a sequence"',
+          url: "https://en.wikipedia.org/wiki/GPT-2",
+          hostname: "en.wikipedia.org",
+          title: "GPT-2 - Wikipedia",
+        },
+        {
+          content:
+            "\"As the final model release of GPT-2's staged release, we're releasing the largest version (1.5B parameters) of GPT-2 along with code and model weights to facilitate detection of outputs of GPT-2 models.\"",
+          url: "https://openai.com/research/gpt-2-1-5b-release/",
+          hostname: "openai.com",
+          title: "GPT-2: 1.5B release | OpenAI",
+        },
+      ],
+      category: 0,
+      content:
+        "GPT-2, introduced in 2019, came in sizes ranging from 124 million to 1.5 billion parameters",
+      isComplete: true,
+    },
+    {
+      snippets: [
+        {
+          content:
+            '"GPT-3 has 175 billion parameters, each with 16-bit precision, requiring 350GB of storage since each parameter occupies 2 bytes. It has a context window size of 2048 tokens, and has demonstrated strong "zero-shot" and "few-shot" learning abilities on many tasks."',
+          url: "https://en.wikipedia.org/wiki/GPT-3",
+          hostname: "en.wikipedia.org",
+          title: "GPT-3 - Wikipedia",
+        },
+        {
+          content:
+            '"Generative Pre-trained Transformer 3 (GPT-3) is a large language model released by OpenAI in 2020."',
+          url: "https://en.wikipedia.org/wiki/GPT-3",
+          hostname: "en.wikipedia.org",
+          title: "GPT-3 - Wikipedia",
+        },
+      ],
+      category: 0,
+      content:
+        "GPT-3, unveiled in 2020, dramatically increased in size to 175 billion parameters",
+      isComplete: true,
+    },
+    {
+      snippets: [
+        {
+          content:
+            "OpenAI has declined to reveal various technical details and statistics about GPT-4, such as the precise size of the model.",
+          url: "https://en.wikipedia.org/wiki/GPT-4",
+          hostname: "en.wikipedia.org",
+          title: "GPT-4 - Wikipedia",
+        },
+        {
+          content:
+            "Rumors claim that GPT-4 has 1.76 trillion parameters, which was first estimated by the speed it was running and by George Hotz.",
+          url: "https://en.wikipedia.org/wiki/GPT-4",
+          hostname: "en.wikipedia.org",
+          title: "GPT-4 - Wikipedia",
         },
       ],
       category: 1,
       content:
-        "Avocado oil has a smoke point of around 520°F (271°C), making it ideal for high-temperature cooking.",
+        "The latest GPT-4 model, released in 2023, is rumored to have over 1 trillion parameters, though the exact size has not been officially disclosed",
       isComplete: true,
     },
   ],
 };
-
 export const answerExamplesList: AnswerExample[] = [
-  chargingExample,
   teaExample,
+  nextExample,
+  redisExample,
   chatEnergyExample,
-  friesExample,
+  modelSizeExample,
+  acxCommentHomeless,
 ];

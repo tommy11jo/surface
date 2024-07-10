@@ -25,16 +25,12 @@ const numToEmoji = (num: number): string => {
 };
 const categoryWithEmoji = (category: ClaimCategory): string => {
   switch (category) {
-    case ClaimCategory.Correct:
-      return "probably correct";
-    case ClaimCategory.MaybeCorrect:
-      return "maybe correct";
-    case ClaimCategory.Incorrect:
-      return "incorrect";
-    case ClaimCategory.Uncertain:
-      return "unverified";
-    case ClaimCategory.Undefined:
-      return "unknown";
+    case ClaimCategory.EvalSupported:
+      return "supported";
+    case ClaimCategory.EvalDoubted:
+      return "doubted";
+    case ClaimCategory.EvalUncertain:
+      return "not verified";
     default:
       throw new Error("Unknown claim category.");
   }
@@ -42,18 +38,14 @@ const categoryWithEmoji = (category: ClaimCategory): string => {
 
 const getCategoryStyle = (category: ClaimCategory): string => {
   switch (category) {
-    case ClaimCategory.Correct:
+    case ClaimCategory.EvalSupported:
       return "bg-gray-200 underline decoration-dashed decoration-gray-500";
-    case ClaimCategory.MaybeCorrect:
+    case ClaimCategory.EvalUncertain:
       return "underline decoration-yellow-400 decoration-wavy underline-offset-4";
-    case ClaimCategory.Incorrect:
+    case ClaimCategory.EvalDoubted:
       return "underline decoration-red-300 decoration-wavy underline-offset-4";
-    case ClaimCategory.Uncertain:
-      return "underline decoration-wavy decoration-amber-800 underline-offset-4";
-    case ClaimCategory.Undefined:
-      return "underline decoration-dotted underline-offset-4 decoration-yellow-500";
     default:
-      console.error("category is ", category);
+      console.error("category is", category);
       throw new Error("Unknown category type");
   }
 };
@@ -96,7 +88,7 @@ export function AnswerDisplay({
   };
   const renderCitations = (claimMetadatas: (ClaimMetadata | null)[]) => {
     return claimMetadatas.map((metadata, mIndex) => {
-      if (metadata === null || metadata.snippets.length === 0)
+      if (metadata === null)
         return <React.Fragment key={`empty-${mIndex}`}></React.Fragment>;
       return (
         <div key={`citation-${mIndex}`}>

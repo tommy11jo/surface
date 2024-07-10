@@ -10,8 +10,8 @@ import { generateFireworkResponse, generateLLMResponse } from "./llmService"
 export const generateClaimEval = async (
   toSearch: string,
   claim: string,
-  numSources: number = 3,
-  approxWordsCutoff: number = 1800,
+  numSources: number = 2,
+  approxWordsCutoff: number = 2200,
   jinaTimeout: number = 7000,
   log = true
 ): Promise<ClaimMetadata | null> => {
@@ -62,47 +62,48 @@ Content: ${metadata.textContent}
 
   // TODO: for now, i'm not using 'context' at all. need to test this out later.
   const prompt = `Your job is to help determine whether the provided claim is true or false. 
-Act like every word costs you money. 
-Be purely informational.
+Be concise.
 
-Output 0 to 3 pieces of evidence from the sources that support or counter the provided claim.
-Each piece of evidence should be 1-2 sentences.
-Most pieces of evidence should be a direct quote but paraphasing is allowed when it adds clarity.
+Output 0 to 2 pieces of **directly relevant** evidence from the sources.
+Each piece of evidence:
+- clearly supports or counters the provided claim.
+- is 1-2 sentences, concise, and somewhat self-contained.
+- is high-quality, informational text, since the user will be shown it directly.
 
-You should emphasize evidence that subtly counters the claim or adds nuance.
-Only show evidence that clearly adds informational value.
-If you do not see any directly relevant info, output "No proof found" in the Proof section.
+Use direct quotations as much as possible.
+But use paraphrasing to add clarity, when needed.
 
-Then, based solely on the pieces of evidence, you will categorize the claim as one of these four categories:
-- UNCERTAIN
-- CORRECT
-- SOMEWHAT CORRECT
-- INCORRECT
+Then, based solely on the pieces of evidence, categorize the claim as:
+- SUPPORTED
+- DOUBTED
+- UNKNOWN
 
-Let's review the four categories:
-- UNCERTAIN - The pieces of evidence do not sufficiently prove or disprove the claim. The evidence might be related but it is not direct.
-- CORRECT - The claim is definitely true and is directly proved by very specific evidence.
-- SOMEWHAT CORRECT - The claim is true as a whole but is a bit off. It might be slightly misleading or inaccurate.
-- INCORRECT - The claim is false or strongly misleading. The evidence is directly relevant to the situation implied by the claim and the evidence directly contradicts the claim. You must be **very confident** to choose this category.
+Let's clarify these three categories:
+- UNKNOWN - As a whole, the evidence cannot be directly applied to support or counter the claim. The evidence is not directly relevant or is unclear. When you are not sure, choose this category.
+- SUPPORTED - The evidence directly shows the claim is true. Only output this if you are very confident the evidence applies to this particular context.
+- DOUBTED - The evidence shows the claim is false or strongly misleading. Only output this if you are very confident the evidence applies to this particular context.
 
 Example format:
 ## Claim to verify
-<claim>
+{claim}
 
 ## Sources
-<source texts>
+{source texts}
  
-## Proof
+## Pieces of Evidence
 ### Evidence 1
-Content: <content>
+Content: {content}
 Source: 0
 
 ### Evidence 2
-Content: <content>
+Content: {content}
 Source: 3
 
+## Evaluation
+{identify potential ways the evidence might not be relevant or state clearly why it is. then judge the evidence. use 2-4 very short sentences.}
+
 ## Category
-<one of the four categories>
+{one of the three categories}
 
 Now, let's try it out:
 ## Claim to verify
@@ -127,12 +128,12 @@ const extractClaimData = (
   sourceMetadatas: SourceMetadata[]
 ): { snippets: AnswerSnippet[]; category: ClaimCategory } => {
   const snippets: AnswerSnippet[] = []
-  let category: ClaimCategory = ClaimCategory.Uncertain
+  let category: ClaimCategory = ClaimCategory.EvalUncertain
 
   const sections = response.split(/^##\s/m).filter((section) => section.trim())
 
   const snippetsSection = sections.find((section) =>
-    section.trim().startsWith("Proof")
+    section.trim().startsWith("Pieces of Evidence")
   )
 
   if (snippetsSection) {
@@ -160,22 +161,26 @@ const extractClaimData = (
     if (categoryMatch) {
       const categoryString = categoryMatch[1].trim().toUpperCase()
       switch (categoryString) {
-        case "CORRECT":
-          category = ClaimCategory.Correct
+        case "SUPPORTED":
+          category = ClaimCategory.EvalSupported
           break
-        case "INCORRECT":
-          category = ClaimCategory.Incorrect
+        case "DOUBTED":
+          category = ClaimCategory.EvalDoubted
           break
-        case "SOMEWHAT CORRECT":
-          category = ClaimCategory.MaybeCorrect
-          break
-        case "UNCERTAIN":
-          category = ClaimCategory.Uncertain
+        case "UNKNOWN":
+          category = ClaimCategory.EvalUncertain
           break
         default:
-          category = ClaimCategory.Undefined
+          console.error(
+            `Got an unexpected category from LLM response: ${categoryString}`
+          )
+          category = ClaimCategory.EvalUncertain
           break
       }
+    } else {
+      throw new Error(
+        `Could not match category in category section: ${categorySection}`
+      )
     }
   }
 

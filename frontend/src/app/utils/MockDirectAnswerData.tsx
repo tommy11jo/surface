@@ -184,7 +184,7 @@ export const useMockDirectAnswerData = () => {
           content: "Snippet 3 content",
         },
       ],
-      category: ClaimCategory.Correct,
+      category: ClaimCategory.EvalSupported,
     },
     {
       content:
@@ -203,7 +203,7 @@ export const useMockDirectAnswerData = () => {
           content: "Snippet 2 content",
         },
       ],
-      category: ClaimCategory.MaybeCorrect,
+      category: ClaimCategory.EvalUncertain,
     },
   ]);
   return { visibleTokens, setVisibleTokens, claimMetadatas, setClaimMetadatas };
