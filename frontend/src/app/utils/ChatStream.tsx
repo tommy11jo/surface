@@ -122,7 +122,7 @@ export default class ChatStream {
       if (type === TokenType.Claim) {
         if (!searchQuery) {
           console.error(
-            "Claim found without an an associated search query. Using claim content as the query...",
+            `Claim found without an an associated search query. Using claim content as the quer. Content is: \n${content}`,
           );
           query = content;
         } else {

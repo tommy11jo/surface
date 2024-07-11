@@ -4,40 +4,73 @@ Andrej Karpathy [writes](https://twitter.com/karpathy/status/1804187473167421798
 "One built-in UI/UX feature of LLM interfaces I'd love is proof... A feature that automatically brings in original material / reputable sources and highlights relevant sections as proof alongside factual generations would be very cool."
 
 [Surface](https://surface-omega.vercel.app/) is a website for quick AI answers, verified using web resources.
-It also demonstrates an interface and prompting approach for verifying claims in model responses, which could be integrated into conversational interfaces like [claude.ai](https://claude.ai) and [chatgpt.com](https://chatgpt.com).
+It also demonstrates an interface and prompting approach for verifying claims in model responses, which could be integrated into conversational interfaces like [claude.ai](https://claude.ai) and [chatgpt.com](https://chatgpt.com). With those interfaces, a user typically has to do a manual web search to verify a fact.
 
-This project focuses on mitigating factual errors, which are hard for users to spot and evaluate.
-The status quo is high-effort manual web searches.
+![NextJS Example](/public/nextjs-example.png)
 
-![Scrape Example](/public/scrape-example.png)
 See more examples on the [website](https://surface-omega.vercel.app/).
-TODO: dev setup
 
-**Prompting Approach**  
-Unlike tools like Perplexity which use RAG, Surface allows the model to generate facts directly from its weights.
-These facts are then verified using snippets from web resources.
+**Prompting Approach**
 
 1. The model responds directly, while identifying the claims it wishes to check and suggesting a search query to investigate each claim. Then, for each claim and search query pair:
 2. The search query is searched using Bing Search API to get URLs.
 3. The URLs are used to get webpage text using [Jina AI's Reader](https://jina.ai/reader/).
 4. The webpage texts are used to identify direct evidence and evaluate the truth of each claim.
 
-**UI/UX Approach**  
-To the right of the model response, Surface shows proof of the core claims.
-Each claim has 1-3 relevant snippets and is categorized as supported, doubted, or not verified.
-The user doesn't have to trust this categorization; they can read the snippets to come to a conclusion themselves.
-These snippets often provide detailed supporting context for a claim and act as entrypoints for a user to visit a webpage and learn more.
+**Dev Setup**
 
-Adjacent approaches include:
+0. Env vars
 
-1. Perplexity: Inserts the quotations in the response.
-2. Gemini's double-check feature: Overlays the response with highlights that require interaction to see one piece of evidence.
+In the backend, you will need an anthropic api key and a bing search api key:
+
+```env
+# backend/.env
+NODE_ENV=development
+ANTHROPIC_API_KEY=...
+SECRET_CODES_ANSWER=exampleKey1, exampleKey2
+BING_SEARCH_V7_SUBSCRIPTION_KEY=...
+TUNNEL_TOKEN=dummy_value
+```
+
+In the frontend:
+
+```env
+# frontend/.env
+NEXT_PUBLIC_API_PREFIX=http://localhost:80
+```
+
+1. Install deps in `frontend/`
+
+```bash
+npm run install
+```
+
+2. Install deps in `backend/`
+
+```bash
+npm run install
+```
+
+3. Start the nextjs frontend in `frontend/`
+
+```bash
+npm run dev
+```
+
+4. Start the docker backend in `backend/`.
+
+```bash
+npm run dev
+```
+
+5. Navigate to `http://localhost:3000` in your browser. Enter one of the secret codes from the .env file above.
 
 **Known Issues**
 
-- Doing the parsing of the model response with claims on the frontend instead of the backend.
+- I should have done the parsing of the model response with claims on the backend, not the frontend
+- Backend docker does not refresh
 
 **Next Steps**
 
 - Present the option to regenerate the response, with the relevant webpage text included in the context.
-- Have the model output search queries when it needs specific facts, rather than responding directly each time.
+- The model sometimes recognizes when it needs more information. In that case, do the typical RAG approach (like Perplexity). This is an approach to mitigate no

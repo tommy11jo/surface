@@ -7,87 +7,6 @@ type AnswerExample = {
   claimMetadatas: ClaimMetadata[];
 };
 
-const webScrapeExample = {
-  query: "court cases related to web scraping",
-  visibleTokens: [
-    {
-      type: 2,
-      content:
-        "Web scraping, the practice of automatically extracting data from websites, has been the subject of several notable court cases. Here's an overview of some key legal issues and cases related to web scraping:\n\n",
-    },
-    {
-      type: 1,
-      content:
-        "The legality of web scraping often depends on the specific circumstances, including the data being scraped and how it's used",
-      searchQuery: "web scraping legality court cases",
-    },
-    {
-      type: 2,
-      content:
-        "\n\nOne of the most significant cases is hiQ Labs v. LinkedIn. In this case, hiQ Labs was scraping publicly available data from LinkedIn profiles. LinkedIn attempted to stop this practice, but the Ninth Circuit Court of Appeals ruled that scraping publicly accessible data likely does not violate the Computer Fraud and Abuse Act (CFAA).\n\nAnother important case is Facebook v. Power Ventures, where the court ruled that continuing to access Facebook's servers after receiving a cease-and-desist letter violated the CFAA. This highlights the importance of respecting a website's terms of service and any direct communications from the site owner.\n\n",
-    },
-    {
-      type: 1,
-      content:
-        "Violating a website's terms of service or ignoring cease-and-desist notices can potentially make web scraping illegal",
-      searchQuery: "web scraping terms of service violation court cases",
-    },
-    {
-      type: 2,
-      content:
-        "\n\nOther relevant cases include:\n\n1. eBay v. Bidder's Edge: eBay successfully argued that Bidder's Edge's scraping activities constituted trespass to chattels.\n\n2. Craigslist v. 3Taps: The court ruled that continuing to scrape after receiving a cease-and-desist letter and IP address blocks violated the CFAA.\n\n3. Associated Press v. Meltwater: This case dealt with copyright issues related to scraping news content.\n\nThese cases demonstrate that while web scraping itself isn't inherently illegal, it can become problematic depending on how it's conducted and what data is being collected. Factors such as respecting robots.txt files, not overloading servers, and adhering to terms of service are important considerations for those engaging in web scraping activities.",
-    },
-  ],
-  claimMetadatas: [
-    {
-      snippets: [
-        {
-          content:
-            '"The Ninth Circuit reaffirmed its original decision and found that scraping data that is publicly accessible on the internet is not a violation of the Computer Fraud and Abuse Act, or CFAA, which governs what constitutes computer hacking under U.S. law."',
-          url: "https://techcrunch.com/2022/04/18/web-scraping-legal-court/",
-          hostname: "techcrunch.com",
-          title:
-            "Web scraping is legal, US appeals court reaffirms | TechCrunch",
-        },
-        {
-          content:
-            '"Scraping public data is legal, the U.S. Ninth Circuit of Appeals has ruled in a potentially landmark decision. The decision follows a ruling by a federal court of appeals that reaffirmed its earlier decision, notably that web scraping (data harvesting, en masse) of data that\'s made available to the general public, does not violate the Computer Fraud and Abuse Act (CFAA)."',
-          url: "https://www.techradar.com/news/us-court-says-web-scraping-is-officially-legal",
-          hostname: "www.techradar.com",
-          title: "US court says web scraping is officially legal | TechRadar",
-        },
-      ],
-      category: 0,
-      content:
-        "The legality of web scraping often depends on the specific circumstances, including the data being scraped and how it's used",
-      isComplete: true,
-    },
-    {
-      snippets: [
-        {
-          content:
-            "\"The Ninth Circuit determined that Van Buren supported its previous holding and '[i]t is likely that when a computer network generally permits public access to its data, a user's accessing that publicly available data will not constitute access without authorization under the CFAA.'\"",
-          url: "https://www.whitecase.com/insight-our-thinking/web-scraping-website-terms-and-cfaa-hiqs-preliminary-injunction-affirmed-again",
-          hostname: "www.whitecase.com",
-          title:
-            "Web scraping, website terms and the CFAA: hiQ’s ... - White & Case",
-        },
-        {
-          content:
-            '"Based on this finding, accessing publicly available website data in violation of terms of service or a cease-and-desist notice is unlikely to constitute a violation of the CFAA. However, the Court emphasized that its analysis was limited in scope to the CFAA and did not apply to potential claims against web scrapers under other theories, including trespass to chattels, copyright infringement, misappropriation, unjust enrichment, conversion, breach of contract or breach of privacy claims."',
-          url: "https://www.whitecase.com/insight-our-thinking/web-scraping-website-terms-and-cfaa-hiqs-preliminary-injunction-affirmed-again",
-          hostname: "www.whitecase.com",
-          title:
-            "Web scraping, website terms and the CFAA: hiQ’s ... - White & Case",
-        },
-      ],
-      category: 2,
-      content:
-        "Violating a website's terms of service or ignoring cease-and-desist notices can potentially make web scraping illegal",
-      isComplete: true,
-    },
-  ],
-};
 const chatEnergyExample = {
   query: "energy per query for gpt-4",
   visibleTokens: [
@@ -500,7 +419,6 @@ const modelSizeExample = {
   ],
 };
 export const answerExamplesList: AnswerExample[] = [
-  webScrapeExample,
   nextExample,
   redisExample,
   chatEnergyExample,

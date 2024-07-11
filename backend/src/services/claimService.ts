@@ -74,9 +74,9 @@ Use direct quotations as much as possible.
 But use paraphrasing to add clarity, when needed.
 
 Then, based solely on the pieces of evidence, categorize the claim as:
+- UNKNOWN
 - SUPPORTED
 - DOUBTED
-- UNKNOWN
 
 Let's clarify these three categories:
 - UNKNOWN - As a whole, the evidence cannot be directly applied to support or counter the claim. The evidence is not directly relevant or is unclear. When you are not sure, choose this category.
