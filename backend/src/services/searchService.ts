@@ -107,8 +107,8 @@ export const getTextContent = async (
     data = data.replace(/!\[([^\[\]]*)\]\((.*?)\)/gm, "")
 
     if (trim && data.length > approxWordsCutoff * 6) {
-      const firstPart = data.slice(0, approxWordsCutoff * 3)
-      const lastPart = data.slice(-approxWordsCutoff * 3)
+      const firstPart = data.slice(0, approxWordsCutoff * 5)
+      const lastPart = data.slice(-approxWordsCutoff * 1)
       return firstPart + "\n\n[CONTENT REMOVED]\n\n" + lastPart
     }
 

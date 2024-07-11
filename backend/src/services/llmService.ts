@@ -103,15 +103,16 @@ export const generateOpenAIResponse = async (
     return textContent ?? ""
   } catch (error) {
     console.error("Error calling OpenAI API:", error)
-    throw error
+    return null
   }
 }
 
 export const generateClaudeResponse = async (
   prompt: string,
   maxTokens: number = 1000,
+  temperature: number = 1.0,
   log: boolean = false
-): Promise<string> => {
+): Promise<string | null> => {
   const apiKey = process.env.ANTHROPIC_API_KEY
   const apiUrl = "https://api.anthropic.com/v1/messages"
 
@@ -119,6 +120,7 @@ export const generateClaudeResponse = async (
     model: "claude-3-5-sonnet-20240620",
     max_tokens: maxTokens,
     messages: [{ role: "user", content: prompt }],
+    temperature: temperature,
   }
 
   try {
@@ -134,7 +136,7 @@ export const generateClaudeResponse = async (
     return textContent
   } catch (error) {
     console.error("Error calling Claude API:", error)
-    throw error
+    return null
   }
 }
 // export const generateLLMResponse = generateFireworkResponse

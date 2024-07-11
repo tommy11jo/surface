@@ -11,7 +11,7 @@ export const generateClaimEval = async (
   toSearch: string,
   claim: string,
   numSources: number = 2,
-  approxWordsCutoff: number = 2200,
+  approxWordsCutoff: number = 2300,
   jinaTimeout: number = 7000,
   log = true
 ): Promise<ClaimMetadata | null> => {
@@ -114,6 +114,7 @@ ${sourceMetadatasStr}
 
 `
   const response = await generateLLMResponse(prompt)
+  if (response === null) return null
   const { snippets, category } = extractClaimData(response, sourceMetadatas)
 
   return {

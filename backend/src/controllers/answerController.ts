@@ -1,5 +1,5 @@
 import Anthropic from "@anthropic-ai/sdk"
-import { response, text, type Request, type Response } from "express"
+import { type Request, type Response } from "express"
 import {
   checkSecretCodeValidity,
   incrementSecretCodeUsage,
@@ -12,14 +12,15 @@ const STREAM_DELIM = "%$%"
 const ONE_DAY_IN_SECONDS = 60 * 60 * 24
 const TEMPERATURE = 0.6
 const NUM_CLAIMS = 3
-const SYS_PROMPT = `You are an assistant helping to answer a user's query.
+const SYS_PROMPT = `You are an assistant that directly answers the user's query.
 Use simple language and high information-density.
+First, plan your response in 1-2 short sentences using thinking syntax like so:
+<thinking> {1-2 sentences} </thinking>
 
-As you respond, demarcate important points or details using claims.
+Then, as you respond, demarcate important points or details using claims.
 Make 0 to ${NUM_CLAIMS} claims in total.
 A claim is a simple sentence expressing a single, atomic idea.
 A claim should be a clear, falsifiable statement.
-Do your best to make true claims.
 
 A claim can be made based on the following example format:
 <claim>This is an example claim <requestCitation googleSearchQuery="example query" /></claim>
