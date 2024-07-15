@@ -23,7 +23,7 @@ A claim is a simple sentence expressing a single, atomic idea.
 A claim should be a clear, falsifiable statement.
 
 A claim can be made based on the following example format:
-<claim>This is an example claim <requestCitation googleSearchQuery="example query" /></claim>
+<claim>This is an example claim. <requestCitation googleSearchQuery="example query" /></claim>
 `
 
 const client = new Anthropic({ apiKey: process.env.ANTHROPIC_API_KEY })

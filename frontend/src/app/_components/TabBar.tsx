@@ -1,3 +1,4 @@
+import { Globe, Zap } from "lucide-react";
 import Link from "next/link";
 
 type TabBarProps = {
@@ -17,7 +18,7 @@ export function TabBar({ activeTab }: TabBarProps) {
           href="/answer"
           className={`${activeTab === TabType.Answer ? "underline decoration-gray-500 decoration-dashed" : ""} hover:underline`}
         >
-          Verified Answers
+          Answers with Evidence
         </Link>
         {/* <Link
           href="/search"
@@ -29,10 +30,14 @@ export function TabBar({ activeTab }: TabBarProps) {
       <div className="mx-4">
         <div className="text-sm text-gray-500 sm:text-base">
           {activeTab === TabType.Answer && (
-            <span>⚡ AI answers, verified using web sources</span>
+            <span className="inline-flex">
+              AI answers, fact-checked using web sources
+            </span>
           )}
           {activeTab === TabType.Search && (
-            <span>🌐 High-quality, info-packed search results</span>
+            <span className="inline-flex">
+              High-quality, info-packed search results
+            </span>
           )}
         </div>
       </div>

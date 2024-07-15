@@ -1,7 +1,18 @@
 "use client";
 
+import { CircleDot, Search } from "lucide-react";
 import { type ChangeEvent, useEffect, useRef } from "react";
 import TextareaAutosize from "react-textarea-autosize";
+
+export enum ResponseStatus {
+  Loading,
+  Ready,
+  ErrorRequiresCode,
+  ErrorQueryTooLong,
+  ErrorQueryEmpty,
+  ErrorStreaming,
+  ErrorCodeOutOfUses,
+}
 
 type AnswerInputProps = {
   query: string;
@@ -9,12 +20,59 @@ type AnswerInputProps = {
   secretCode: string;
   streamingError: Error | null;
   isStreaming: boolean;
-  statusText: string;
-  setStatusText: (value: string) => void;
+  responseStatus: ResponseStatus;
+  setResponseStatus: (value: ResponseStatus) => void;
   showRetry: boolean;
 };
-export const LOADING_STATE = "🟡 Loading";
-export const IDLE_STATE = "🟢 Ready";
+
+export const responseStatusToJSX = (status: ResponseStatus) => {
+  switch (status) {
+    case ResponseStatus.Ready:
+      return (
+        <span className="inline-flex items-center gap-1">
+          <CircleDot size={18} fill={"#32CD32"} color={"#32CD32"} />
+          Ready
+        </span>
+      );
+    case ResponseStatus.Loading:
+      return (
+        <span className="inline-flex items-center gap-1">
+          <CircleDot size={18} fill={"#FFEF00"} color={"#FFEF00"} />
+          Loading
+        </span>
+      );
+    case ResponseStatus.ErrorQueryEmpty:
+      return (
+        <span className="inline-flex items-center gap-1">
+          <CircleDot size={18} fill={"#DC143C"} color={"#DC143C"} />
+          Query cannot be empty
+        </span>
+      );
+    case ResponseStatus.ErrorRequiresCode:
+      return (
+        <span className="inline-flex items-center gap-1">
+          <CircleDot size={18} fill={"#DC143C"} color={"#DC143C"} />
+          Requires Code
+        </span>
+      );
+    case ResponseStatus.ErrorStreaming:
+      return (
+        <span className="inline-flex items-center gap-1">
+          <CircleDot size={18} fill={"#DC143C"} color={"#DC143C"} />
+          Error while streaming (check console)
+        </span>
+      );
+    case ResponseStatus.ErrorCodeOutOfUses:
+      return (
+        <span className="inline-flex items-center gap-1">
+          <CircleDot size={18} fill={"#DC143C"} color={"#DC143C"} />
+          Code out of uses
+        </span>
+      );
+    default:
+      throw new Error("Invalid response status");
+  }
+};
 
 export function AnswerInput({
   query,
@@ -22,8 +80,8 @@ export function AnswerInput({
   secretCode,
   streamingError,
   isStreaming,
-  statusText,
-  setStatusText,
+  responseStatus,
+  setResponseStatus,
   showRetry,
 }: AnswerInputProps) {
   const textareaRef = useRef<HTMLTextAreaElement>(null);
@@ -34,8 +92,8 @@ export function AnswerInput({
     }
   }, []);
   useEffect(() => {
-    if (secretCode === "") setStatusText("🔴 Enter a code to use");
-    else setStatusText(IDLE_STATE);
+    if (secretCode === "") setResponseStatus(ResponseStatus.ErrorRequiresCode);
+    else setResponseStatus(ResponseStatus.Ready);
   }, [secretCode]);
 
   const handleClear = () => {
@@ -47,10 +105,10 @@ export function AnswerInput({
 
   const handleAnswer = (retry = false) => {
     if (query.length >= 1000) {
-      setStatusText("🔴 Query must be <1000 chars.");
+      setResponseStatus(ResponseStatus.ErrorQueryTooLong);
       return;
     } else if (query.length === 0) {
-      setStatusText("🔴 Query cannot be empty");
+      setResponseStatus(ResponseStatus.ErrorQueryEmpty);
       return;
     }
     const encodedQuery = encodeURIComponent(query);
@@ -70,11 +128,12 @@ export function AnswerInput({
 
   useEffect(() => {
     if (streamingError !== null) {
-      setStatusText(`🔴 Error: ${streamingError.message}`);
+      console.error(`Error while streaming: ${streamingError.message}`);
+      setResponseStatus(ResponseStatus.ErrorStreaming);
       return;
     }
     if (isStreaming) {
-      setStatusText(LOADING_STATE);
+      setResponseStatus(ResponseStatus.Loading);
     }
   }, [streamingError, isStreaming]);
 
@@ -90,7 +149,9 @@ export function AnswerInput({
       )}
       <div className="relative m-0 flex w-full">
         <div className="relative flex grow sm:grow-0">
-          <span className="absolute left-3 top-2 text-gray-500">🔎</span>
+          <span className="absolute left-2 top-2 text-gray-500">
+            <Search />
+          </span>
           <TextareaAutosize
             value={query}
             onChange={(e: ChangeEvent<HTMLTextAreaElement>) => {
@@ -126,9 +187,9 @@ export function AnswerInput({
       </div>
       <div className="flex w-full flex-row items-end justify-between">
         <div
-          className={`mt-2 text-base text-gray-400 ${statusText === LOADING_STATE ? "animate-pulse" : ""}`}
+          className={`mt-2 text-base text-gray-400 ${responseStatus === ResponseStatus.Loading ? "animate-pulse" : ""}`}
         >
-          {statusText}
+          {responseStatusToJSX(responseStatus)}
         </div>
       </div>
     </div>

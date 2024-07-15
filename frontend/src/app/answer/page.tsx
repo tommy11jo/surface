@@ -1,7 +1,7 @@
 "use client";
 import React, { useEffect, useState, useCallback, useRef } from "react";
 import { useSecretCode } from "../secretContext";
-import { AnswerInput, IDLE_STATE } from "../_components/AnswerInput";
+import { AnswerInput, ResponseStatus } from "../_components/AnswerInput";
 import { useSearchParams } from "next/navigation";
 import { AnswerDisplay } from "../_components/AnswerDisplay";
 import ChatStream, { TokenType, type Token } from "../utils/ChatStream";
@@ -25,7 +25,9 @@ export default function DirectAnswerPage() {
   const [claimMetadatas, setClaimMetadatas] = useState<
     (ClaimMetadata | null)[]
   >(Array(MAX_NUM_CLAIMS).fill(null));
-  const [statusText, setStatusText] = useState(IDLE_STATE);
+  const [responseStatus, setResponseStatus] = useState<ResponseStatus>(
+    ResponseStatus.Ready,
+  );
 
   // for testing the interface
   // const { visibleTokens, setVisibleTokens, claimMetadatas, setClaimMetadatas } =
@@ -82,9 +84,10 @@ export default function DirectAnswerPage() {
             errorOccurred = true;
             if (error instanceof AxiosError) {
               if (error.response?.status === 429) {
-                setStatusText("🔴 Error: code is out of uses");
+                setResponseStatus(ResponseStatus.ErrorCodeOutOfUses);
               } else {
-                setStatusText("🔴 Error during verification");
+                console.error("An error occurred during verification");
+                setResponseStatus(ResponseStatus.ErrorStreaming);
               }
               console.error(error);
             } else {
@@ -94,7 +97,7 @@ export default function DirectAnswerPage() {
           }
         }),
       );
-      if (!errorOccurred) setStatusText("🟢 Verification Complete");
+      if (!errorOccurred) setResponseStatus(ResponseStatus.Ready);
       setClaimMetadatas((metadatas) => {
         const newMetadatas = [...metadatas];
         claimDatas.forEach((data, ind) => {
@@ -113,8 +116,9 @@ export default function DirectAnswerPage() {
       setVisibleTokens(newTokens);
       setIsStreaming(state.isStreaming);
       setError(state.error);
-      if (!state.isStreaming && !state.error)
-        setStatusText("🟢 Initial Answer Complete");
+      if (!state.isStreaming && !state.error) {
+        setResponseStatus(ResponseStatus.Ready);
+      }
 
       const claims = newTokens.filter(
         (token) => token.type === TokenType.Claim,
@@ -195,8 +199,8 @@ export default function DirectAnswerPage() {
         isStreaming={isStreaming}
         streamingError={error}
         secretCode={secretCode}
-        statusText={statusText}
-        setStatusText={setStatusText}
+        responseStatus={responseStatus}
+        setResponseStatus={setResponseStatus}
         showRetry={visibleTokens.length > 0}
       />
       {query !== "" ? (

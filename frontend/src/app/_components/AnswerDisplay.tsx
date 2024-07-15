@@ -2,27 +2,12 @@
 import React from "react";
 import { type Token, TokenType } from "../utils/ChatStream";
 import { ClaimCategory, type ClaimMetadata } from "./types";
-
+import { Info } from "lucide-react";
 interface AnswerDisplayProps {
   visibleTokens: Token[];
   claimMetadatas: (ClaimMetadata | null)[];
 }
-const numToEmoji = (num: number): string => {
-  switch (num) {
-    case 0:
-      return "0️⃣";
-    case 1:
-      return "1️⃣";
-    case 2:
-      return "2️⃣";
-    case 3:
-      return "3️⃣";
-    case 4:
-      return "4️⃣";
-    default:
-      throw new Error("Only handle emoji nums up to 4");
-  }
-};
+
 const categoryWithEmoji = (category: ClaimCategory): string => {
   switch (category) {
     case ClaimCategory.EvalSupported:
@@ -69,9 +54,11 @@ export function AnswerDisplay({
             return (
               <span key={`claim-${index}`}>
                 <span className={`${statusStyle}`}>{token.content} </span>
-                <span className="inline-flex items-center text-sm">
-                  {numToEmoji(claimIndex++)}
-                </span>
+                <div
+                  className={`mx-1 inline-flex h-5 w-5 flex-shrink-0 items-center justify-center rounded-full bg-gray-300`}
+                >
+                  <span className="text-sm">{claimIndex++}</span>
+                </div>
               </span>
             );
           case TokenType.Thinking:
@@ -93,13 +80,19 @@ export function AnswerDisplay({
       return (
         <div key={`citation-${mIndex}`}>
           <div className="font-semibold">
-            → <span>Claim {numToEmoji(mIndex)} is </span>
+            →{" "}
+            <span>
+              Claim{" "}
+              <div className="inline-flex h-5 w-5 flex-shrink-0 items-center justify-center rounded-full bg-gray-300">
+                <span className="text-sm">{mIndex}</span>
+              </div>{" "}
+              is{" "}
+            </span>
             <span className={`${getCategoryStyle(metadata.category)}`}>
               {categoryWithEmoji(metadata.category)}
             </span>
           </div>
           <div className="pl-2 sm:pl-4">
-            <span className="italic">{metadata.content}</span>
             {metadata.snippets.map((snippet, sIndex) => (
               <div
                 key={`snippet-${mIndex}-${sIndex}`}
@@ -110,7 +103,11 @@ export function AnswerDisplay({
                     href={snippet.url}
                     className="inline break-words text-gray-500 group-hover:underline"
                   >
-                    <span>ℹ️ {snippet.hostname}</span>
+                    <span className="inline-flex gap-2">
+                      ️
+                      <Info size={16} />
+                      {snippet.hostname}
+                    </span>
                     <span className="pl-1 text-gray-500 group-hover:underline">
                       • {snippet.title}
                     </span>
